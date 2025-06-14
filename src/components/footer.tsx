@@ -26,7 +26,7 @@ export default function Footer() {
   const companyLinks = [
     { name: "About Us", href: "/company" },
     { name: "Roadmap", href: "/roadmap" },
-    { name: "Blog", href: "/blog" },
+    // { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/contact" },
   ];
   const legalLinks = [
