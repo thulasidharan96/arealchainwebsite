@@ -47,7 +47,7 @@ export default function Contact() {
       await sendVerificationEmail(email, fullName, verificationToken, updateme);
 
       setLoading(false);
-      setSuccess("Successfully joined the waitlist! Please check your email.");
+      setSuccess("Successfully joined the waitlist! Please check your email");
 
       // Show the success notification popup
       setShowSuccessPopup(true);

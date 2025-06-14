@@ -1,15 +1,14 @@
-// components/AuthProviderWrapper.tsx
 "use client";
 
 import { ReactNode } from "react";
 import { AuthProvider } from "react-oidc-context";
 
 const oidcConfig = {
-  authority: "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_gzWkpMKtT",
-  client_id: "1qqfmi8fvhptckbuuinkkehiu1",
-  redirect_uri: "http://localhost:3000/dashboard",
-  response_type: "code",
-  scope: "phone openid email",
+  authority: process.env.NEXT_PUBLIC_OIDC_AUTHORITY,
+  client_id: process.env.NEXT_PUBLIC_OIDC_CLIENT_ID,
+  redirect_uri: process.env.NEXT_PUBLIC_OIDC_REDIRECT_URI,
+  response_type: process.env.NEXT_PUBLIC_OIDC_RESPONSE_TYPE,
+  scope: process.env.NEXT_PUBLIC_OIDC_SCOPE,
 };
 
 export default function AuthProviderWrapper({
