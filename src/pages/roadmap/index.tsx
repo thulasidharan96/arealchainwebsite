@@ -339,7 +339,7 @@ export default function Roadmap() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 mt-16">
+        {/* <div className="max-w-7xl mx-auto px-4 mt-16">
           <div className="text-center">
             <div className="bg-gray-900/50 rounded-xl p-12 border border-gray-800">
               <h2 className="text-3xl font-bold text-white mb-6">
@@ -359,7 +359,7 @@ export default function Roadmap() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );
