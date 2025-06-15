@@ -7,31 +7,148 @@ import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [otp, setOtp] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [success, setSuccess] = useState<string>("");
+  const [showOtpStep, setShowOtpStep] = useState<boolean>(false);
 
-  const handleLogin = async (e: FormEvent) => {
+  const validateCredentials = (): boolean => {
+    if (!email.trim() || !password.trim()) {
+      setError("Please fill in all required fields");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateOtp = (): boolean => {
+    if (!otp.trim()) {
+      setError("Please enter the OTP code");
+      return false;
+    }
+
+    if (otp.length < 4) {
+      setError("Please enter a valid OTP code");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleCredentialSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!validateCredentials()) return;
+
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
-      // Your login logic here
-      console.log({ email, password, rememberMe });
+      const result = await signIn("credentials", {
+        email,
+        password,
+        // rememberMe: rememberMe.toString(),
+        step: "credentials",
+        redirect: false,
+      });
 
-      // Simulate login
-      await new Promise((res) => setTimeout(res, 1000));
-    } catch (err) {
-      setError("Login failed. Please try again.");
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        setShowOtpStep(true);
+        setSuccess("Please enter the OTP sent to your email");
+      }
+    } catch (error) {
+      setError("Failed to process login request");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOtpSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!validateOtp()) return;
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        // rememberMe: rememberMe.toString(),
+        verifyCode: otp,
+        step: "otp",
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setError("Failed to verify OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange =
+    (setter: (value: string) => void) => (e: ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+      if (error) setError("");
+      if (success) setSuccess("");
+    };
+
+  const handleBackToCredentials = () => {
+    setShowOtpStep(false);
+    setOtp("");
+    setError("");
+    setSuccess("");
+  };
+
+  const resendOtp = async () => {
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        // rememberMe: rememberMe.toString(),
+        step: "credentials",
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Failed to resend OTP. Please try again.");
+      } else {
+        setSuccess("OTP resent to your email!");
+      }
+    } catch (error) {
+      setError("Failed to resend OTP. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -44,95 +161,203 @@ export default function Login() {
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                Welcome Back 👋
+                {showOtpStep ? "Verify OTP 🔐" : "Welcome Back 👋"}
               </h1>
               <p className="text-gray-400 text-lg">
-                Log in to access your Areal account and manage your activities
-                securely.
+                {showOtpStep
+                  ? `We've sent a verification code to ${email}. Please enter it below to complete your login.`
+                  : "Log in to access your Areal account and manage your activities securely."}
               </p>
             </div>
 
             <div className="p-8 md:p-12 border-t md:border-t-0 md:border-l border-gray-800">
-              <form onSubmit={handleLogin} className="space-y-6">
-                <div>
-                  <Label
-                    htmlFor="email"
-                    className="text-white font-medium mb-2 block"
-                  >
-                    Email<span className="text-[#F4B448]">*</span>
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setEmail(e.target.value)
-                    }
-                    className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-[#F4B448] focus:ring-[#F4B448]"
-                    placeholder="username@example.com"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label
-                    htmlFor="password"
-                    className="text-white font-medium mb-2 block"
-                  >
-                    Password<span className="text-[#F4B448]">*</span>
-                  </Label>
-                  <div className="relative">
+              {!showOtpStep ? (
+                // Credentials Form
+                <form onSubmit={handleCredentialSubmit} className="space-y-6">
+                  <div>
+                    <Label
+                      htmlFor="email"
+                      className="text-white font-medium mb-2 block"
+                    >
+                      Email<span className="text-[#F4B448]">*</span>
+                    </Label>
                     <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        setPassword(e.target.value)
-                      }
-                      className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 pr-10 focus:border-[#F4B448] focus:ring-[#F4B448]"
-                      placeholder="Enter your password"
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={handleInputChange(setEmail)}
+                      className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-[#F4B448] focus:ring-[#F4B448] transition-colors"
+                      placeholder="username@example.com"
                       required
+                      disabled={loading}
+                      autoComplete="email"
                     />
+                  </div>
+
+                  <div>
+                    <Label
+                      htmlFor="password"
+                      className="text-white font-medium mb-2 block"
+                    >
+                      Password<span className="text-[#F4B448]">*</span>
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={handleInputChange(setPassword)}
+                        className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 pr-10 focus:border-[#F4B448] focus:ring-[#F4B448] transition-colors"
+                        placeholder="Enter your password"
+                        required
+                        disabled={loading}
+                        autoComplete="current-password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
+                        disabled={loading}
+                        tabIndex={-1}
+                      >
+                        {showPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* <div className="flex items-center space-x-3">
+                    <Checkbox
+                      id="rememberMe"
+                      checked={rememberMe}
+                      onCheckedChange={(checked: boolean) =>
+                        setRememberMe(checked)
+                      }
+                      disabled={loading}
+                    />
+                    <Label
+                      htmlFor="rememberMe"
+                      className="text-sm text-gray-400 font-medium leading-none cursor-pointer"
+                    >
+                      Remember me
+                    </Label>
+                  </div> */}
+
+                  {/* Error Message */}
+                  {error && (
+                    <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+                      <p className="text-red-400 text-sm">{error}</p>
+                    </div>
+                  )}
+
+                  {/* Success Message */}
+                  {success && (
+                    <div className="p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+                      <p className="text-green-400 text-sm">{success}</p>
+                    </div>
+                  )}
+
+                  <Button
+                    className="w-full bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? "Verifying..." : "Continue"}
+                  </Button>
+                </form>
+              ) : (
+                // OTP Form
+                <form onSubmit={handleOtpSubmit} className="space-y-6">
+                  <div className="flex items-center space-x-3 mb-6">
                     <button
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-400"
+                      onClick={handleBackToCredentials}
+                      className="text-gray-400 hover:text-white transition-colors"
+                      disabled={loading}
                     >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                      <ArrowLeft size={20} />
+                    </button>
+                    <span className="text-gray-400 text-sm">Back to login</span>
+                  </div>
+
+                  <div>
+                    <Label
+                      htmlFor="otp"
+                      className="text-white font-medium mb-2 block"
+                    >
+                      Verification Code<span className="text-[#F4B448]">*</span>
+                    </Label>
+                    <Input
+                      id="otp"
+                      type="text"
+                      value={otp}
+                      onChange={handleInputChange(setOtp)}
+                      className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-[#F4B448] focus:ring-[#F4B448] transition-colors text-center text-lg tracking-widest"
+                      placeholder="Enter OTP"
+                      required
+                      disabled={loading}
+                      maxLength={6}
+                      autoComplete="one-time-code"
+                    />
+                    <p className="text-gray-500 text-xs mt-1">
+                      Enter the 4-6 digit code sent to your email
+                    </p>
+                  </div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
+                      <p className="text-red-400 text-sm">{error}</p>
+                    </div>
+                  )}
+
+                  {/* Success Message */}
+                  {success && (
+                    <div className="p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+                      <p className="text-green-400 text-sm">{success}</p>
+                    </div>
+                  )}
+
+                  <Button
+                    className="w-full bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    type="submit"
+                    disabled={loading}
+                  >
+                    {loading ? "Verifying..." : "Verify & Login"}
+                  </Button>
+
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={resendOtp}
+                      className="text-[#F4B448] hover:text-[#F4B448]/80 text-sm underline transition-colors"
+                      disabled={loading}
+                    >
+                      Didn't receive the code? Resend OTP
                     </button>
                   </div>
-                </div>
+                </form>
+              )}
 
-                <div className="flex items-center space-x-3">
-                  <Checkbox
-                    id="rememberMe"
-                    checked={rememberMe}
-                    onCheckedChange={(checked: boolean) =>
-                      setRememberMe(checked)
-                    }
-                  />
-                  <Label
-                    htmlFor="rememberMe"
-                    className="text-sm text-gray-400 font-medium leading-none cursor-pointer"
-                  >
-                    Remember Me
-                  </Label>
+              {/* Signup Link */}
+              {!showOtpStep && (
+                <div className="mt-6 text-center">
+                  <p className="text-gray-400 text-sm">
+                    Don't have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={() => router.push("/signup")}
+                      className="text-[#F4B448] hover:text-[#F4B448]/80 underline transition-colors"
+                      disabled={loading}
+                    >
+                      Sign up
+                    </button>
+                  </p>
                 </div>
-
-                {error && (
-                  <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
-                    <p className="text-red-400 text-sm">{error}</p>
-                  </div>
-                )}
-                <Button
-                  className="w-full bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold py-3 text-base"
-                  type="submit"
-                  disabled={loading}
-                  onClick={() => router.push("/dashboard")}
-                >
-                  {loading ? "Logging in..." : "Login"}
-                </Button>
-              </form>
+              )}
             </div>
           </div>
         </Card>

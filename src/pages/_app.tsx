@@ -4,16 +4,21 @@ import { ThemeProvider } from "@/src/components/theme-provider";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import SplashScreen from "@/src/components/SplashScreen";
-import AuthProviderWrapper from "@/src/components/AuthProviderWrapper";
 import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/wagmi.config";
+import { AuthProvider } from "../providers/auth-provider";
 
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   const [showSplash, setShowSplash] = useState(true);
   const [isFinishing, setIsFinishing] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Always show the splash screen on a hard reload.
@@ -92,8 +97,12 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [pageProps, showSplash]); // Re-run on page navigation or when splash is hidden
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <AuthProviderWrapper>
+    <AuthProvider>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider
@@ -115,6 +124,6 @@ export default function App({ Component, pageProps }: AppProps) {
           </ThemeProvider>
         </QueryClientProvider>
       </WagmiProvider>
-    </AuthProviderWrapper>
+    </AuthProvider>
   );
 }

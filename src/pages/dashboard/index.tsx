@@ -6,19 +6,19 @@ import {
   Waves,
   CircleDot,
   MoreHorizontal,
-
 } from "lucide-react";
 import LayoutMain from "@/src/components/dashboard/layoutMain";
-import { useAuth } from "react-oidc-context";
+// import { useAuth } from "react-oidc-context";
 import { useWallet } from "@/src/hooks/useWallet";
+import KYCForm from "@/src/components/KYCFORM";
 
 const dashboard = () => {
-  const auth = useAuth();
+  // const auth = useAuth();
 
-  if (auth.isLoading) return <p>Loading...</p>;
-  if (auth.error) return <p>Error: {auth.error.message}</p>;
-  if (!auth.isAuthenticated)
-    return <button onClick={() => auth.signinRedirect()}>Login</button>;
+  // if (auth.isLoading) return <p>Loading...</p>;
+  // if (auth.error) return <p>Error: {auth.error.message}</p>;
+  // if (!auth.isAuthenticated)
+  //   return <button onClick={() => auth.signinRedirect()}>Login</button>;
   const [activeTab, setActiveTab] = useState("chakra-pool");
   const { address, balance } = useWallet();
 
@@ -35,17 +35,16 @@ const dashboard = () => {
 
   return (
     <LayoutMain>
-      <div>Welcome to the Dashboard!</div>
-      <div className="p-4">
+      <div className="overflow-auto">
+        <div>Welcome to the Dashboard!</div>
+        {/* <div className="p-4">
         <h1 className="text-xl font-bold mb-2">Dashboard</h1>
         <p>Address: {address}</p>
         <p>
           Balance: {balance?.formatted} {balance?.symbol}
         </p>
-      </div>
-      <div>
-        <h1>Welcome, {auth.user?.profile.email}</h1>
-        <button onClick={() => auth.signoutRedirect()}>Logout</button>
+      </div> */}
+        <KYCForm />
       </div>
     </LayoutMain>
   );
