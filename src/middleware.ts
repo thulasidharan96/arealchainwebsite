@@ -5,7 +5,11 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  // Define public paths that don't require authentication
+  // Check cookie from request
+  const cookies = request.cookies;
+  const hasForgetSession = cookies.has("forgetSession");
+
+  // Public paths that don't require auth
   const publicPaths = [
     "/",
     "/login",
@@ -21,42 +25,43 @@ export async function middleware(request: NextRequest) {
     "/vip-member",
     "/nft",
     "/ecosystem",
+    "/forgetpassword",
   ];
 
-  // Check if the current path is public or API auth route
   const isPublicPath = publicPaths.some(
     (publicPath) => path === publicPath || path.startsWith(publicPath + "/")
   );
 
-  // Always allow NextAuth API routes
-  const isAuthApiRoute = path.startsWith("/api/auth/");
+  const isVerifyOrResetPath = path === "/verify" || path === "/resetpassword";
 
-  // Allow all API routes to pass through (you can restrict specific ones later)
+  const isAuthApiRoute = path.startsWith("/api/auth/");
   const isApiRoute = path.startsWith("/api/");
 
-  // Skip middleware for public paths, auth API routes, and other API routes
+  // Bypass for allowed routes
   if (isPublicPath || isAuthApiRoute || isApiRoute) {
+    // Restrict verify/resetpassword if forgetSession not present
+    if (isVerifyOrResetPath && !hasForgetSession) {
+      return NextResponse.redirect(new URL("/forgetpassword", request.url));
+    }
     return NextResponse.next();
   }
 
   try {
-    // Get the token from the request
+    // Get token
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
     });
 
-    // If accessing a protected route without a token, redirect to login
+    // Redirect unauthenticated users
     if (!token) {
       const loginUrl = new URL("/login", request.url);
-      // Add the current path as a callback URL
       loginUrl.searchParams.set("callbackUrl", path);
       return NextResponse.redirect(loginUrl);
     }
 
-    // If accessing login page while authenticated, redirect to dashboard
+    // Prevent logged-in user from accessing login again
     if (path === "/login" && token) {
-      // Check if there's a callback URL to redirect to
       const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
       const redirectUrl =
         callbackUrl && callbackUrl !== "/login"
@@ -66,22 +71,15 @@ export async function middleware(request: NextRequest) {
     }
   } catch (error) {
     console.error("Middleware error:", error);
-    // On error, redirect to login for protected routes
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
 
+// Matcher without locale-based routing
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public assets
-     */
     "/((?!_next/static|_next/image|favicon.ico|public|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)$).*)",
   ],
 };
