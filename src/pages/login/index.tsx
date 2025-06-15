@@ -106,10 +106,13 @@ export default function Login() {
 
       if (result?.error) {
         setError(result.error);
-      } else if (result?.url) {
-        router.push(result.url);
       } else {
-        router.push(callbackUrl);
+        // ✅ Fixed: redirect manually
+        if (result?.url) {
+          router.push(result.url);
+        } else {
+          router.push(callbackUrl); // Fallback
+        }
       }
     } catch (error) {
       setError("Failed to verify OTP");
@@ -117,6 +120,7 @@ export default function Login() {
       setLoading(false);
     }
   };
+  
 
   const handleInputChange =
     (setter: (value: string) => void) => (e: ChangeEvent<HTMLInputElement>) => {
