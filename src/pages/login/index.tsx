@@ -13,6 +13,8 @@ import { signIn } from "next-auth/react";
 
 export default function Login() {
   const router = useRouter();
+  const callbackUrl = (router.query.callbackUrl as string) || "/dashboard";
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
@@ -96,16 +98,18 @@ export default function Login() {
       const result = await signIn("credentials", {
         email,
         password,
-        // rememberMe: rememberMe.toString(),
         verifyCode: otp,
         step: "otp",
         redirect: false,
+        callbackUrl: callbackUrl,
       });
 
       if (result?.error) {
         setError(result.error);
+      } else if (result?.url) {
+        router.push(result.url);
       } else {
-        router.push("/dashboard");
+        router.push(callbackUrl);
       }
     } catch (error) {
       setError("Failed to verify OTP");

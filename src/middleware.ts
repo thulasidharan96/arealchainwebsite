@@ -47,27 +47,32 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    // Get token
     const token = await getToken({
       req: request,
       secret: process.env.NEXTAUTH_SECRET,
     });
 
-    // Redirect unauthenticated users
+    // If accessing a protected route without a token, redirect to login
     if (!token) {
       const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("callbackUrl", path);
+      // Add the requested URL as the callback
+      loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
       return NextResponse.redirect(loginUrl);
     }
 
-    // Prevent logged-in user from accessing login again
+    // If accessing login page while authenticated
     if (path === "/login" && token) {
       const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
-      const redirectUrl =
-        callbackUrl && callbackUrl !== "/login"
-          ? new URL(callbackUrl, request.url)
-          : new URL("/dashboard", request.url);
-      return NextResponse.redirect(redirectUrl);
+      // Ensure callback URL is internal and safe
+      if (
+        callbackUrl &&
+        callbackUrl.startsWith("/") &&
+        !callbackUrl.startsWith("//")
+      ) {
+        return NextResponse.redirect(new URL(callbackUrl, request.url));
+      }
+      // Default to dashboard if no valid callback URL
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   } catch (error) {
     console.error("Middleware error:", error);
