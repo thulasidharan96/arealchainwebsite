@@ -26,23 +26,23 @@ const Sidebar: React.FC = () => {
 
   const sidebarItems: SidebarItem[] = [
     { id: "home", icon: Home, label: "Home", href: "/dashboard" },
-    { id: "overview", icon: Grid3X3, label: "My Overview", href: "/overview" },
-    { id: "bridge", icon: ArrowRightLeft, label: "Bridge", href: "/bridge" },
-    { id: "stake", icon: CircleDot, label: "Stake", href: "/stake" },
-    { id: "swap", icon: ArrowRightLeft, label: "Swap", href: "/swap" },
+    { id: "overview", icon: Grid3X3, label: "My Overview", href: "/buy" },
+    { id: "bridge", icon: ArrowRightLeft, label: "Bridge", href: "/buy" },
+    { id: "stake", icon: CircleDot, label: "Stake", href: "/but" },
+    { id: "swap", icon: ArrowRightLeft, label: "Swap", href: "/buy" },
     {
       id: "liquidity",
       icon: Waves,
       label: "Liquidity Pools",
-      href: "/liquidity",
+      href: "/buy",
     },
     {
       id: "chakra-pool",
       icon: CircleDot,
       label: "Chakra Pool",
-      href: "/chakra-pool",
+      href: "/buy",
     },
-    { id: "more", icon: MoreHorizontal, label: "More", href: "/more" },
+    { id: "more", icon: MoreHorizontal, label: "More", href: "/buy" },
   ];
 
   const handleNavigation = (href: string) => {
