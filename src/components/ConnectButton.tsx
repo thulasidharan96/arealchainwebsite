@@ -1,34 +1,39 @@
-"use client";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useMetaMask } from "@/src/hooks/useMetaMask";
 
-export default function ConnectButton() {
-  const { address, isConnected } = useAccount();
-  const { connectors, connect } = useConnect();
-  const { disconnect } = useDisconnect();
+export default function YourComponent() {
+  const { isInstalled, isConnecting, error, account, connect } = useMetaMask();
 
   return (
     <div>
-      {isConnected ? (
-        <div>
-          <p className="text-green-600">Connected: {address}</p>
-          <button
-            onClick={() => disconnect()}
-            className="bg-red-500 text-white px-4 py-2 rounded"
+      {!isInstalled && (
+        <div className="p-4 bg-yellow-100 text-yellow-800 rounded-lg">
+          <p>MetaMask is not installed. Please install MetaMask to continue.</p>
+          <a
+            href="https://metamask.io/download/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:underline"
           >
-            Disconnect
-          </button>
+            Install MetaMask
+          </a>
         </div>
-      ) : (
-        connectors.map((connector) => (
-          <button
-            key={connector.uid}
-            onClick={() => connect({ connector })}
-            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-          >
-            Connect with {connector.name}
-          </button>
-        ))
       )}
+
+      {error && (
+        <div className="p-4 bg-red-100 text-red-800 rounded-lg">{error}</div>
+      )}
+
+      <button
+        onClick={connect}
+        disabled={!isInstalled || isConnecting}
+        className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isConnecting
+          ? "Connecting..."
+          : account
+          ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
+          : "Connect Wallet"}
+      </button>
     </div>
   );
 }

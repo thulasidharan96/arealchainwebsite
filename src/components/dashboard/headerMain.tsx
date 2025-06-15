@@ -13,6 +13,7 @@ import {
   AlertTriangle,
   XCircle,
 } from "lucide-react";
+import Image from "next/image";
 
 interface WalletInfo {
   name: string;
@@ -101,7 +102,7 @@ const HeaderMain: React.FC = () => {
   return (
     <header className="bg-black border-b border-gray-800 px-6 py-4 flex justify-between items-center">
       <div className="flex items-center space-x-4">
-        <h1 className="text-2xl font-bold">AREAL</h1>
+        <Image src="/coin/text.png" alt="Logo" width={100} height={100} />
       </div>
 
       <div>

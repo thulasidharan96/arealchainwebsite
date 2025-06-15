@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import LayoutMain from "@/src/components/dashboard/layoutMain";
 // import { useAuth } from "react-oidc-context";
-import { useWallet } from "@/src/hooks/useWallet";
+// import { useWallet } from "@/src/hooks/useWallet";
 import KYCForm from "@/src/components/KYCFORM";
 
 const dashboard = () => {
@@ -20,7 +20,7 @@ const dashboard = () => {
   // if (!auth.isAuthenticated)
   //   return <button onClick={() => auth.signinRedirect()}>Login</button>;
   const [activeTab, setActiveTab] = useState("chakra-pool");
-  const { address, balance } = useWallet();
+  // const { address, balance } = useWallet();
 
   const sidebarItems = [
     { id: "home", icon: Home, label: "Home", active: false },
