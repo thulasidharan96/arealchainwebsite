@@ -10,6 +10,8 @@ import { Label } from "@/src/components/ui/label";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 export default function Login() {
   const router = useRouter();
@@ -120,7 +122,6 @@ export default function Login() {
       setLoading(false);
     }
   };
-  
 
   const handleInputChange =
     (setter: (value: string) => void) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -161,6 +162,12 @@ export default function Login() {
       setLoading(false);
     }
   };
+  const { data: session, status } = useSession();
+  useEffect(() => {
+    if (session && status === "authenticated") {
+      router.replace("/dashboard");
+    }
+  }, [session, status, router]);
 
   return (
     <Layout>
