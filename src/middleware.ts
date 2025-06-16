@@ -31,23 +31,24 @@ export async function middleware(request: NextRequest) {
   );
 
   const isVerifyOrResetPath = path === "/verify" || path === "/resetpassword";
-
   const isAuthApiRoute = path.startsWith("/api/auth/");
   const isApiRoute = path.startsWith("/api/");
 
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
+    raw: true, // ✅ Helps identify parsing or header issues
   });
+
+  console.log("✅ Middleware Log → Token:", token);
+  console.log("✅ Middleware Log → Path:", path);
 
   // ✅ Redirect logged-in users away from /login
   if (token && path === "/login") {
-    console.log("Redirecting logged-in user away from /login");
-    console.log(token);
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // ✅ Let public + API routes pass through
+  // ✅ Allow access to public + API routes
   if (isPublicPath || isAuthApiRoute || isApiRoute) {
     if (isVerifyOrResetPath && !hasForgetSession) {
       return NextResponse.redirect(new URL("/forgetpassword", request.url));
@@ -55,19 +56,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // ✅ Protect private routes
+  // ✅ Block private routes for unauthenticated users
   if (!token) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
+    loginUrl.searchParams.set("callbackUrl", path);
     return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
-// Matcher without locale-based routing
+// ✅ Safe and Vercel-compatible matcher
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|public|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)$).*)",
-  ],
+  matcher: ["/((?!api|_next|favicon.ico).*)"],
 };
