@@ -66,17 +66,18 @@ export default function KYCForm() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!fullName || !country || !idType || !frontImage || !backImage) {
-      return alert("Please fill all fields and upload both ID images.");
+      setError("Please fill all fields and upload both ID images.");
+      return;
     }
 
     const formData = new FormData();
     formData.append("name", fullName);
     formData.append("country", country);
-    formData.append("idType", idType); // Changed from "idProof" to "idType"
+    formData.append("idProof", idType);
 
-    // Try with array notation
-    formData.append("images[0]", frontImage); // Front image at index 0
-    formData.append("images[1]", backImage); // Back image at index 1
+    // Append images as an array
+    formData.append("images", frontImage);
+    formData.append("images", backImage);
 
     mutate(formData);
   };
