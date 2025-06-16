@@ -41,12 +41,12 @@ export async function middleware(request: NextRequest) {
   });
 
   // ✅ Redirect logged-in users away from /login
-  if (token && path === "/login") {
-    const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
-    return NextResponse.redirect(
-      new URL(callbackUrl || "/dashboard", request.url)
-    );
-  }
+  // if (token && path === "/login") {
+  //   const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
+  //   return NextResponse.redirect(
+  //     new URL(callbackUrl || "/dashboard", request.url)
+  //   );
+  // }
 
   // ✅ Let public + API routes pass through
   if (isPublicPath || isAuthApiRoute || isApiRoute) {
