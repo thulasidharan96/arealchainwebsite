@@ -5,7 +5,6 @@ import Layout from "@/src/components/layout";
 import { Card } from "@/src/components/ui/card";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
-import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/router";
@@ -18,7 +17,6 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
-  const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -67,19 +65,31 @@ export default function Login() {
       const result = await signIn("credentials", {
         email,
         password,
-        // rememberMe: rememberMe.toString(),
         step: "credentials",
         redirect: false,
       });
 
       if (result?.error) {
-        setError(result.error);
+        switch (result.error) {
+          case "CredentialsSignin":
+          case "InvalidCredentials":
+            setError("Invalid email or password");
+            break;
+          case "UserNotFound":
+            setError("No account found with this email");
+            break;
+          case "TooManyRequests":
+            setError("Too many login attempts. Please try again later");
+            break;
+          default:
+            setError("Invalid email or password");
+        }
       } else {
         setShowOtpStep(true);
         setSuccess("Please enter the OTP sent to your email");
       }
     } catch (error) {
-      setError("Failed to process login request");
+      setError("Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -101,21 +111,32 @@ export default function Login() {
         verifyCode: otp,
         step: "otp",
         redirect: false,
-        callbackUrl: callbackUrl,
       });
 
       if (result?.error) {
-        setError(result.error);
-      } else {
-        // ✅ Fixed: redirect manually
-        if (result?.url) {
-          router.push(result.url);
-        } else {
-          router.push(callbackUrl); // Fallback
+        switch (result.error) {
+          case "InvalidOTP":
+            setError("Invalid verification code");
+            break;
+          case "OTPExpired":
+            setError("Verification code has expired. Please request a new one");
+            break;
+          case "TooManyAttempts":
+            setError("Too many invalid attempts. Please request a new code");
+            break;
+          default:
+            setError("Invalid verification code");
         }
+      } else if (result?.ok) {
+        setSuccess("Login successful! Redirecting...");
+        setTimeout(() => {
+          window.location.href = callbackUrl;
+        }, 1000);
+      } else {
+        setError("Invalid verification code");
       }
     } catch (error) {
-      setError("Failed to verify OTP");
+      setError("Invalid verification code");
     } finally {
       setLoading(false);
     }
@@ -144,7 +165,6 @@ export default function Login() {
       const result = await signIn("credentials", {
         email,
         password,
-        // rememberMe: rememberMe.toString(),
         step: "credentials",
         redirect: false,
       });
@@ -179,7 +199,6 @@ export default function Login() {
 
             <div className="p-8 md:p-12 border-t md:border-t-0 md:border-l border-gray-800">
               {!showOtpStep ? (
-                // Credentials Form
                 <form onSubmit={handleCredentialSubmit} className="space-y-6">
                   <div>
                     <Label
@@ -236,31 +255,12 @@ export default function Login() {
                     </div>
                   </div>
 
-                  {/* <div className="flex items-center space-x-3">
-                    <Checkbox
-                      id="rememberMe"
-                      checked={rememberMe}
-                      onCheckedChange={(checked: boolean) =>
-                        setRememberMe(checked)
-                      }
-                      disabled={loading}
-                    />
-                    <Label
-                      htmlFor="rememberMe"
-                      className="text-sm text-gray-400 font-medium leading-none cursor-pointer"
-                    >
-                      Remember me
-                    </Label>
-                  </div> */}
-
-                  {/* Error Message */}
                   {error && (
                     <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
                       <p className="text-red-400 text-sm">{error}</p>
                     </div>
                   )}
 
-                  {/* Success Message */}
                   {success && (
                     <div className="p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
                       <p className="text-green-400 text-sm">{success}</p>
@@ -276,7 +276,6 @@ export default function Login() {
                   </Button>
                 </form>
               ) : (
-                // OTP Form
                 <form onSubmit={handleOtpSubmit} className="space-y-6">
                   <div className="flex items-center space-x-3 mb-6">
                     <button
@@ -314,14 +313,12 @@ export default function Login() {
                     </p>
                   </div>
 
-                  {/* Error Message */}
                   {error && (
                     <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg">
                       <p className="text-red-400 text-sm">{error}</p>
                     </div>
                   )}
 
-                  {/* Success Message */}
                   {success && (
                     <div className="p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
                       <p className="text-green-400 text-sm">{success}</p>
@@ -349,7 +346,6 @@ export default function Login() {
                 </form>
               )}
 
-              {/* Signup Link */}
               {!showOtpStep && (
                 <div className="mt-6 text-center">
                   <p className="text-gray-400 text-sm">
