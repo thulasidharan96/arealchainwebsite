@@ -15,8 +15,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <HeaderMain />
-        <main className="flex-1 p-6">
-          <div className="mx-auto">{children}</div>
+        <main className="flex-1">
+          <div className="mx-auto rounded-l-lg">{children}</div>
         </main>
       </div>
     </div>
