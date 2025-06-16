@@ -36,14 +36,6 @@ const dashboard = () => {
   return (
     <LayoutMain>
       <div className="overflow-auto">
-        <div>Welcome to the Dashboard!</div>
-        {/* <div className="p-4">
-          <h1 className="text-xl font-bold mb-2">Dashboard</h1>
-          <p>Address: {address}</p>
-          <p>
-            Balance: {balance?.formatted} {balance?.symbol}
-          </p>
-        </div> */}
         <KYCForm />
       </div>
     </LayoutMain>

@@ -100,7 +100,7 @@ const HeaderMain: React.FC = () => {
   const kycInfo = kycStatus !== undefined ? getKycLabel(kycStatus) : null;
 
   return (
-    <header className="bg-black border-b border-gray-800 px-6 py-4 flex justify-between items-center">
+    <header className="bg-gray-900 border-gray-800 border-b  px-6 py-4 flex justify-between items-center">
       <div className="flex items-center space-x-4">
         <Image src="/coin/text.png" alt="Logo" width={100} height={100} />
       </div>
