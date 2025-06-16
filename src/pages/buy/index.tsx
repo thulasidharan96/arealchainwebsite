@@ -57,7 +57,9 @@ const BuyPage = () => {
     // alert(
     //   `Purchase initiated: ${usdtAmount} USDT for ${arealAmount} AREAL tokens`
     // );
-    const txHash = buyTokenExt(usdtAmount);
+    const txHash = await buyTokenExt(usdtAmount);
+    console.log({txHash}, "apiCall")
+    // api need to call - v1/user/token/buy - post method - payload {txHash} with auth
     setIsLoading(false);
   };
 

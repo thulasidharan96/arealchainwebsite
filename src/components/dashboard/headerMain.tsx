@@ -119,7 +119,7 @@ const HeaderMain: React.FC = () => {
       </div>
 
       <div className="flex items-center space-x-4">
-        <ConnectButton />
+        {/* <ConnectButton /> */}
       </div>
     </header>
   );
