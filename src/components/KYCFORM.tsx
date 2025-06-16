@@ -1,7 +1,7 @@
 // components/KYCForm.tsx
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/router";
 import { Card } from "@/src/components/ui/card";
 import { Input } from "@/src/components/ui/input";
@@ -17,14 +17,39 @@ export default function KYCForm() {
   const [frontImage, setFrontImage] = useState<File | null>(null);
   const [backImage, setBackImage] = useState<File | null>(null);
   const [error, setError] = useState<string>("");
+  const [isKycAlreadySubmitted, setIsKycAlreadySubmitted] = useState(false);
+  const [kycStatus, setKycStatus] = useState<string>("");
+
   const {
     mutate,
     isPending,
     isSuccess,
     isError,
     error: mutationError,
+    data: mutationData,
   } = useKycSubmission();
   const router = useRouter();
+
+  // Handle mutation response
+  useEffect(() => {
+    if (mutationData) {
+      if (mutationData.isAlreadySubmitted) {
+        setIsKycAlreadySubmitted(true);
+        setKycStatus(mutationData.status || "Waiting for approval");
+        setError("");
+      } else if (mutationData.success) {
+        // Handle successful submission
+        setError("");
+      }
+    }
+  }, [mutationData]);
+
+  // Handle mutation error (for actual errors, not "already submitted")
+  useEffect(() => {
+    if (mutationError) {
+      setError(mutationError.message);
+    }
+  }, [mutationError]);
 
   const validateFile = (file: File): boolean => {
     const maxSize = 5 * 1024 * 1024; // 5MB
@@ -65,6 +90,11 @@ export default function KYCForm() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+
+    // Reset previous states
+    setError("");
+    setIsKycAlreadySubmitted(false);
+
     if (!fullName || !country || !idType || !frontImage || !backImage) {
       setError("Please fill all fields and upload both ID images.");
       return;
@@ -81,6 +111,59 @@ export default function KYCForm() {
 
     mutate(formData);
   };
+
+  const handleGoToDashboard = () => {
+    router.push("/dashboard");
+  };
+
+  // If KYC is already submitted, show a different UI
+  if (isKycAlreadySubmitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-24 pb-12 px-4">
+        <Card className="w-full max-w-2xl bg-gray-900/80 border border-gray-800 rounded-2xl shadow-lg shadow-[#F4B448]/10 backdrop-blur-sm p-8 md:p-12 text-center">
+          <div className="mb-6">
+            <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="w-8 h-8 text-yellow-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              KYC Already Submitted
+            </h1>
+            <p className="text-gray-300 mb-2">
+              Your KYC details have already been submitted and are currently
+              being reviewed.
+            </p>
+            <p className="text-yellow-400 font-medium">Status: {kycStatus}</p>
+          </div>
+
+          <div className="space-y-4">
+            <p className="text-gray-400 text-sm">
+              We'll notify you once your KYC verification is complete. This
+              process typically takes 1-3 business days.
+            </p>
+
+            <Button
+              onClick={handleGoToDashboard}
+              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold py-3 text-base transition-colors"
+            >
+              Go to Dashboard
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-24 pb-12 px-4">
@@ -190,7 +273,7 @@ export default function KYCForm() {
               {error || "Something went wrong. Please try again."}
             </div>
           )}
-          {isSuccess && (
+          {isSuccess && mutationData?.success && (
             <div className="p-3 bg-green-900/20 border border-green-500/30 rounded-lg text-sm text-green-400">
               KYC submitted successfully!
             </div>

@@ -70,13 +70,26 @@ export default function Login() {
       });
 
       if (result?.error) {
-        setError(result.error);
+        switch (result.error) {
+          case "CredentialsSignin":
+          case "InvalidCredentials":
+            setError("Invalid email or password");
+            break;
+          case "UserNotFound":
+            setError("No account found with this email");
+            break;
+          case "TooManyRequests":
+            setError("Too many login attempts. Please try again later");
+            break;
+          default:
+            setError("Invalid email or password");
+        }
       } else {
         setShowOtpStep(true);
         setSuccess("Please enter the OTP sent to your email");
       }
     } catch (error) {
-      setError("Failed to process login request");
+      setError("Invalid email or password");
     } finally {
       setLoading(false);
     }
@@ -101,20 +114,29 @@ export default function Login() {
       });
 
       if (result?.error) {
-        setError(result.error);
+        switch (result.error) {
+          case "InvalidOTP":
+            setError("Invalid verification code");
+            break;
+          case "OTPExpired":
+            setError("Verification code has expired. Please request a new one");
+            break;
+          case "TooManyAttempts":
+            setError("Too many invalid attempts. Please request a new code");
+            break;
+          default:
+            setError("Invalid verification code");
+        }
       } else if (result?.ok) {
-        // 🔥 FIX: Better redirect handling
         setSuccess("Login successful! Redirecting...");
-
-        // Small delay to show success message, then redirect
         setTimeout(() => {
-          window.location.href = callbackUrl; // Force a full page reload
+          window.location.href = callbackUrl;
         }, 1000);
       } else {
-        setError("Login failed. Please try again.");
+        setError("Invalid verification code");
       }
     } catch (error) {
-      setError("Failed to verify OTP");
+      setError("Invalid verification code");
     } finally {
       setLoading(false);
     }
