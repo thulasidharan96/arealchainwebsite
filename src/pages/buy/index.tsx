@@ -3,14 +3,25 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 import { useMetaMask } from "@/src/hooks/useMetaMask";
+import { useBuyTokenSubmission } from "@/src/hooks/useBuyTokenSubmission";
 
 const BuyPage = () => {
+
+  const {
+    mutate,
+    isPending,
+    isSuccess,
+    isError,
+    error: mutationError,
+    data: mutationData,
+  } = useBuyTokenSubmission();
 
   const { isInstalled, isConnecting, error, account, connect, buyTokenExt } = useMetaMask();
 
   const [usdtAmount, setUsdtAmount] = useState("1");
   const [arealAmount, setArealAmount] = useState("10");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   // Conversion rate: 1 USDT = 10 AREAL
   const conversionRate = 10;
@@ -49,6 +60,12 @@ const BuyPage = () => {
     );
   };
 
+  useEffect(() => {
+    if (mutationError) {
+      setErrorMsg(mutationError.message);
+    }
+  }, [mutationError]);
+
   const handleBuyNow = async () => {
     setIsLoading(true);
     // Simulate transaction processing
@@ -59,6 +76,14 @@ const BuyPage = () => {
     // );
     const txHash = await buyTokenExt(usdtAmount);
     console.log({txHash}, "apiCall")
+
+    // const txHash = "test123";
+
+    const payloadData: any = {
+      txHash
+    };
+
+    mutate(payloadData);
     // api need to call - v1/user/token/buy - post method - payload {txHash} with auth
     setIsLoading(false);
   };
@@ -76,8 +101,8 @@ const BuyPage = () => {
 
   return (
     <Layout>
-      {error && (
-        <div className="p-4 bg-red-100 text-red-800 rounded-lg">{error}</div>
+      {error || errorMsg && (
+        <div className="p-4 bg-red-100 text-red-800 rounded-lg">{error ? error : errorMsg}</div>
       )}
       <button
         onClick={connect}
