@@ -206,18 +206,33 @@ export const useMetaMask = () => {
         await window.ethereum.request({
           method: 'wallet_addEthereumChain',
           params: [{
-            // chainId: '8001',
-            chainId: '0x1F41',
+            // chainId: '9473',
+            chainId: '0x2501',
             chainName: 'Areal Mainnet',
             nativeCurrency: {
               name: 'Areal',
               symbol: 'ARL',
               decimals: 18
             },
-            rpcUrls: ['https://d2vi20sflkgy7k.cloudfront.net/'],
+            rpcUrls: ['https://d2fys1j6b8bnjm.cloudfront.net/'],
             // blockExplorerUrls: []
           }]
         });
+        // await window.ethereum.request({
+        //   method: 'wallet_addEthereumChain',
+        //   params: [{
+        //     // chainId: '8001',
+        //     chainId: '0x1F41',
+        //     chainName: 'Areal Mainnet',
+        //     nativeCurrency: {
+        //       name: 'Areal',
+        //       symbol: 'ARL',
+        //       decimals: 18
+        //     },
+        //     rpcUrls: ['https://d2vi20sflkgy7k.cloudfront.net/'],
+        //     // blockExplorerUrls: []
+        //   }]
+        // });
         setError("Areal Network added.");
       }
     } catch(err) {
