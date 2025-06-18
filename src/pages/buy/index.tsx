@@ -2,10 +2,26 @@ import Layout from "@/src/components/dashboard/layoutMain";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
+import { useMetaMask } from "@/src/hooks/useMetaMask";
+import { useBuyTokenSubmission } from "@/src/hooks/useBuyTokenSubmission";
+
 const BuyPage = () => {
+
+  const {
+    mutate,
+    isPending,
+    isSuccess,
+    isError,
+    error: mutationError,
+    data: mutationData,
+  } = useBuyTokenSubmission();
+
+  const { isInstalled, isConnecting, error, account, connect, buyTokenExt } = useMetaMask();
+
   const [usdtAmount, setUsdtAmount] = useState("1");
   const [arealAmount, setArealAmount] = useState("10");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
 
   // Conversion rate: 1 USDT = 10 AREAL
   const conversionRate = 10;
@@ -44,15 +60,32 @@ const BuyPage = () => {
     );
   };
 
+  useEffect(() => {
+    if (mutationError) {
+      setErrorMsg(mutationError.message);
+    }
+  }, [mutationError]);
+
   const handleBuyNow = async () => {
     setIsLoading(true);
     // Simulate transaction processing
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    setIsLoading(false);
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
     // Here you would integrate with your payment processor
-    alert(
-      `Purchase initiated: ${usdtAmount} USDT for ${arealAmount} AREAL tokens`
-    );
+    // alert(
+    //   `Purchase initiated: ${usdtAmount} USDT for ${arealAmount} AREAL tokens`
+    // );
+    const txHash = await buyTokenExt(usdtAmount);
+    console.log({txHash}, "apiCall")
+
+    // const txHash = "test123";
+
+    const payloadData: any = {
+      txHash
+    };
+
+    mutate(payloadData);
+    // api need to call - v1/user/token/buy - post method - payload {txHash} with auth
+    setIsLoading(false);
   };
 
   const quickAmounts = [10, 50, 100, 500, 1000];
@@ -68,6 +101,20 @@ const BuyPage = () => {
 
   return (
     <Layout>
+      {error || errorMsg && (
+        <div className="p-4 bg-red-100 text-red-800 rounded-lg">{error ? error : errorMsg}</div>
+      )}
+      <button
+        onClick={connect}
+        disabled={!isInstalled || isConnecting}
+        className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isConnecting
+          ? "Connecting..."
+          : account
+          ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
+          : "Connect Wallet"}
+      </button>
       <div className="min-h-screen bg-transparent flex items-center justify-center p-4">
         <div className="bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-sm rounded-3xl p-8 w-full max-w-lg border border-gray-700/50 shadow-2xl">
           {/* Header */}

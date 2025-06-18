@@ -225,7 +225,7 @@ export default function KYCForm() {
             >
               <option value="passport">Passport</option>
               <option value="driving_licence">Driving Licence</option>
-              <option value="other">Other</option>
+              {/* <option value="other">Other</option> */}
             </select>
           </div>
 
