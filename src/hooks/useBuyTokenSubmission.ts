@@ -1,11 +1,24 @@
 import { useMutation } from "@tanstack/react-query";
-import { postBuyTokenDetails, BuyTokenResponse } from "@/src/services/buyTokenService";
+import {
+  postBuyTokenDetails,
+  BuyTokenResponse,
+  getTokenPrice,
+} from "@/src/services/buyTokenService";
 
 export const useBuyTokenSubmission = () => {
   return useMutation<BuyTokenResponse, Error, FormData>({
     mutationFn: postBuyTokenDetails,
     onError: (error: Error) => {
       console.error("BuyToken Error:", error);
+    },
+  });
+};
+
+export const UseTokenPrice = () => {
+  return useMutation<BuyTokenResponse, Error, FormData>({
+    mutationFn: getTokenPrice,
+    onError: (error: Error) => {
+      console.error("TokenPrice Error:", error);
     },
   });
 };

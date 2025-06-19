@@ -3,10 +3,12 @@ import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
 import { useMetaMask } from "@/src/hooks/useMetaMask";
-import { useBuyTokenSubmission } from "@/src/hooks/useBuyTokenSubmission";
+import {
+  useBuyTokenSubmission,
+  UseTokenPrice,
+} from "@/src/hooks/useBuyTokenSubmission";
 
 const BuyPage = () => {
-
   const {
     mutate,
     isPending,
@@ -16,7 +18,8 @@ const BuyPage = () => {
     data: mutationData,
   } = useBuyTokenSubmission();
 
-  const { isInstalled, isConnecting, error, account, connect, buyTokenExt } = useMetaMask();
+  const { isInstalled, isConnecting, error, account, connect, buyTokenExt } =
+    useMetaMask();
 
   const [usdtAmount, setUsdtAmount] = useState("1");
   const [arealAmount, setArealAmount] = useState("10");
@@ -75,12 +78,12 @@ const BuyPage = () => {
     //   `Purchase initiated: ${usdtAmount} USDT for ${arealAmount} AREAL tokens`
     // );
     const txHash = await buyTokenExt(usdtAmount);
-    console.log({txHash}, "apiCall")
+    console.log({ txHash }, "apiCall");
 
     // const txHash = "test123";
 
     const payloadData: any = {
-      txHash
+      txHash,
     };
 
     mutate(payloadData);
@@ -101,9 +104,12 @@ const BuyPage = () => {
 
   return (
     <Layout>
-      {error || errorMsg && (
-        <div className="p-4 bg-red-100 text-red-800 rounded-lg">{error ? error : errorMsg}</div>
-      )}
+      {error ||
+        (errorMsg && (
+          <div className="p-4 bg-red-100 text-red-800 rounded-lg">
+            {error ? error : errorMsg}
+          </div>
+        ))}
       <button
         onClick={connect}
         disabled={!isInstalled || isConnecting}

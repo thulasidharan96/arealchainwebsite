@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Navbar from "./navbar";
 import Footer from "./footer";
 import { BlobAnimation } from "./ui/BlobAnimation";
+import { Toaster } from "sonner";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,7 +13,10 @@ export default function Layout({ children }: LayoutProps) {
     <div className="min-h-screen bg-gray-900">
       <Navbar />
       <BlobAnimation />
-      <main>{children}</main>
+      <main>
+        {children}
+        <Toaster richColors position="top-right" />
+      </main>
       <Footer />
     </div>
   );
