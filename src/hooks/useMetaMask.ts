@@ -19,7 +19,7 @@ export const useMetaMask = () => {
     console.log({account})
     if (!isInstalled) {
       setError("MetaMask is not installed. Please install MetaMask to continue.");
-      return;
+      return false;
     }
 
     setIsConnecting(true);
@@ -35,7 +35,7 @@ export const useMetaMask = () => {
         if (networkId !== desiredNetworkId) {
           setError(`Please switch to the correct network (desired network ID: ${desiredNetworkId}). Current network ID: ${networkId}.`);
           setIsConnecting(false);
-          return;
+          return false;
         }
 
         // Check if MetaMask is unlocked
@@ -44,7 +44,7 @@ export const useMetaMask = () => {
           if (!isUnlocked) {
             setError("Please unlock your MetaMask wallet to continue.");
             setIsConnecting(false);
-            return;
+            return false;
           }
         }
 
@@ -116,7 +116,7 @@ export const useMetaMask = () => {
     if (!account) {
       console.log("Please connect your wallet first")
       setError("Please connect your wallet first.");
-      return;
+      return false;
     }
     else {
       console.log("sendUSDTToAdmin else")
@@ -128,7 +128,7 @@ export const useMetaMask = () => {
       const balance = await checkUSDTBalance();
       if (balance < amountInUSDT) {
         setError(`Insufficient USDT balance. You have ${balance} USDT, but need ${amountInUSDT} USDT.`);
-        return;
+        return false;
       }
 
       const amountInSmallestUnit = (BigInt(Math.floor(amountInUSDT * 10 ** usdtDecimal))).toString();
@@ -138,13 +138,13 @@ export const useMetaMask = () => {
 
       if (!/^[0-9a-fA-F]+$/.test(paddedAmount)) {
         setError("Invalid amount encoding. Amount must be a valid hex string.");
-        return;
+        return false;
       }
       const data = transferFunctionABI + paddedAdminAddress + paddedAmount;
       console.log("data (without 0x):", data);
       if (!/^[0-9a-fA-F]+$/.test(data)) {
         setError("Invalid transaction data. Data must be a valid hex string.");
-        return;
+        return false;
       }
       const transactionParameters = {
         from: account,
@@ -182,7 +182,7 @@ export const useMetaMask = () => {
     if (!account) {
       console.log("Please connect your wallet first")
       setError("Please connect your wallet first.");
-      return;
+      return false;
     }
     else {
       console.log("sendUSDTToAdmin else")
