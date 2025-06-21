@@ -1,8 +1,6 @@
-// components/Header.tsx
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useEffect } from "react";
 import ConnectButton from "@/src/components/ConnectButton";
 import { useUserDetails } from "@/src/hooks/useUserDetails";
 import { useUserStore } from "@/src/store/useUserStore";
@@ -15,49 +13,19 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-interface WalletInfo {
-  name: string;
-  connected: boolean;
-  address?: string;
-  balance?: string;
-}
-
 const HeaderMain: React.FC = () => {
-  const setUserDetail = useUserStore((state) => state.setUserDetail);
-  const [mantraWallet, setMantraWallet] = useState<WalletInfo>({
-    name: "MANTRA Wallet",
-    connected: false,
-  });
+  const { setUserDetail, setKycStatus, userDetail, kycStatus } = useUserStore();
+  const { data: apiData, isLoading, error } = useUserDetails();
 
-  const [ethWallet, setEthWallet] = useState<WalletInfo>({
-    name: "ETH MAINNET",
-    connected: false,
-  });
-
-  const connectMantraWallet = () => {
-    setMantraWallet({
-      name: "MANTRA Wallet",
-      connected: true,
-      address: "0x1234...5678",
-      balance: "1,234.56 OM",
-    });
-  };
-
-  const connectEthWallet = () => {
-    setEthWallet({
-      name: "ETH MAINNET",
-      connected: true,
-      address: "0xabcd...efgh",
-      balance: "2.34 ETH",
-    });
-  };
-
-  const { data: userDetail, isLoading, error } = useUserDetails();
   useEffect(() => {
-    if (userDetail) {
-      setUserDetail(userDetail);
+    if (apiData?.data?.userDetail) {
+      setUserDetail(apiData.data.userDetail);
+      setKycStatus(apiData.data.kycStatus);
     }
-  }, [userDetail, setUserDetail]);
+  }, [apiData, setUserDetail, setKycStatus]);
+
+  console.log("userDetail from store:", userDetail);
+  console.log("kycStatus from store:", kycStatus);
 
   function getKycLabel(status: number) {
     switch (status) {
@@ -94,27 +62,37 @@ const HeaderMain: React.FC = () => {
     }
   }
 
-  // Fix: Access the nested userDetail data correctly
-  const userData = userDetail;
-  const kycStatus = userData?.status?.kyc?.status;
-  const kycInfo = kycStatus !== undefined ? getKycLabel(kycStatus) : null;
+  // Use the stored kycStatus or fallback to userDetail status
+  const currentKycStatus =
+    kycStatus !== undefined ? kycStatus : userDetail?.status?.kyc?.status ?? 3;
+  const kycInfo = getKycLabel(currentKycStatus);
+
+  if (error) {
+    console.error("Error fetching user details:", error);
+  }
 
   return (
-    <header className="bg-gray-900 border-gray-800 border-b  px-6 py-4 flex justify-between items-center">
+    <header className="bg-gray-900 border-gray-800 border-b px-6 py-4 flex justify-between items-center">
       <div className="flex items-center space-x-4">
         <Image src="/coin/text.png" alt="Logo" width={100} height={100} />
       </div>
 
       <div>
-        <div className="flex items-center space-x-4 border-1 border-white">
-          {kycInfo && !isLoading && (
-            <div className="flex items-center space-x-1">
-              {kycInfo.icon}
-              <span className={`text-xs ${kycInfo.color}`}>
-                KYC: {kycInfo.label}
-              </span>
-            </div>
+        <div className="flex items-center space-x-4">
+          {!isLoading && userDetail && (
+            <>
+              <div className="flex items-center space-x-2 text-white">
+                <span className="text-sm">Welcome, {userDetail.username}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                {kycInfo.icon}
+                <span className={`text-xs ${kycInfo.color}`}>
+                  KYC: {kycInfo.label}
+                </span>
+              </div>
+            </>
           )}
+          {isLoading && <div className="text-gray-400 text-sm">Loading...</div>}
         </div>
       </div>
 

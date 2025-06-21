@@ -1,13 +1,20 @@
-// src/services/userService.ts
-import type { UserDetail } from "@/src/types/user";
 import api from "../pages/api/api";
 
-export const fetchUserDetails = async (): Promise<UserDetail> => {
+type ApiResponse = {
+  status: boolean;
+  data: {
+    userDetail: any; // Your UserDetail type
+    kycStatus: number;
+  };
+};
+
+export const fetchUserDetails = async (): Promise<ApiResponse> => {
   const response = await api("user/profile/details");
 
   if (response.status < 200 || response.status >= 300) {
     throw new Error("Failed to fetch user details");
   }
 
-  return response.data.userDetail;
+  // Return the full response data structure
+  return response.data;
 };

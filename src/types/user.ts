@@ -1,4 +1,11 @@
-// types/user.ts
+export type KycDetails = {
+  name: string;
+  country: string;
+  idProof: string;
+  frontImage: string;
+  backImage: string;
+};
+
 export type UserDetail = {
   userUid: string;
   userType: string;
@@ -8,13 +15,29 @@ export type UserDetail = {
   level: number;
   createdAt: string;
   updatedAt: string;
-  status: {
-    user: { active: number; date: string };
-    kyc: { status: number };
-  };
+  __v: number;
   lastLoginBy: {
     from: string;
     val: string;
     time: string;
+  };
+  status: {
+    user: {
+      active: number;
+      date: string;
+    };
+    kyc: {
+      status: number;
+      details?: KycDetails;
+      submitDate?: string;
+    };
+  };
+};
+
+export type ApiResponse = {
+  status: boolean;
+  data: {
+    userDetail: UserDetail;
+    kycStatus: number;
   };
 };

@@ -96,22 +96,31 @@ const BuyPage = () => {
   }, [tokenPriceError]);
 
   // Handle token price data response - ARL is the current price
+  // Handle token price data response - ARL is the current price
   useEffect(() => {
-    if (tokenPriceData && tokenPriceData.status && tokenPriceData.data) {
-      const { minted, sale, arl } = tokenPriceData.data;
-      setTokenData({ minted, sale, arl });
-      setCurrentPrice(arl); // ARL value from API is the current price
+    if (tokenPriceData?.success && tokenPriceData?.data?.status) {
+      const apiData = tokenPriceData.data.data;
+      if (
+        apiData &&
+        apiData.minted !== undefined &&
+        apiData.sale !== undefined &&
+        apiData.arl !== undefined
+      ) {
+        const { minted, sale, arl } = apiData;
+        setTokenData({ minted, sale, arl });
+        setCurrentPrice(arl);
 
-      // Recalculate AREAL amount with new price when price updates
-      if (usdtAmount) {
-        const calculatedAreal = (parseFloat(usdtAmount) / arl).toLocaleString(
-          "en-US",
-          {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }
-        );
-        setArealAmount(calculatedAreal);
+        // Recalculate AREAL amount with new price when price updates
+        if (usdtAmount) {
+          const calculatedAreal = (parseFloat(usdtAmount) / arl).toLocaleString(
+            "en-US",
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }
+          );
+          setArealAmount(calculatedAreal);
+        }
       }
     }
     console.log({ tokenPriceData });
