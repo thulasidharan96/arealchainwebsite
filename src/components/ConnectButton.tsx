@@ -1,7 +1,37 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { useMetaMask } from "@/src/hooks/useMetaMask";
+import { ErrorDialog } from "@/src/components/ErrorDialog"; // adjust the path if needed
 
 export default function YourComponent() {
-  const { isInstalled, isConnecting, error, account, connect, addNetwork } = useMetaMask();
+  const {
+    isInstalled,
+    isConnecting,
+    error,
+    account,
+    connect,
+    addNetwork,
+    addBnbTestNetwork,
+  } = useMetaMask();
+
+  const [showDialog, setShowDialog] = useState(false);
+
+  const addAllNetworks = async () => {
+    try {
+      await addNetwork();
+      await addBnbTestNetwork();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // Show dialog when error appears
+  useEffect(() => {
+    if (error) {
+      setShowDialog(true);
+    }
+  }, [error]);
 
   return (
     <div>
@@ -19,11 +49,18 @@ export default function YourComponent() {
         </div>
       )}
 
+      {/* Show ErrorDialog if there's an error */}
       {error && (
-        <div className="p-4 bg-red-100 text-red-800 rounded-lg">{error}</div>
+        <ErrorDialog
+          message={error}
+          open={showDialog}
+          onOpenChange={setShowDialog}
+        />
       )}
 
-      {/* <button
+      {/* Connect Wallet button (optional) */}
+      {/* 
+      <button
         onClick={connect}
         disabled={!isInstalled || isConnecting}
         className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
@@ -33,11 +70,12 @@ export default function YourComponent() {
           : account
           ? `Connected: ${account.slice(0, 6)}...${account.slice(-4)}`
           : "Connect Wallet"}
-      </button> */}
+      </button> 
+      */}
 
       <button
-        onClick={addNetwork}
-        className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+        onClick={addAllNetworks}
+        className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-2 rounded-lg mt-4"
       >
         Add Areal Network
       </button>

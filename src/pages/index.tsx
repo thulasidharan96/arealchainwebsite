@@ -105,7 +105,12 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      {/* Real World Assets Section */}
+      {/* <section>
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white mb-16">Partners</h2>
+        </div>
+      </section> */}
       {/* Areal Suite Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
@@ -232,7 +237,7 @@ export default function Home() {
                   alt={partner.name}
                   width={200}
                   height={200}
-                  className="max-h-10 object-contain"
+                  className="max-h-10 object-contain filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300"
                 />
               </div>
             ))}

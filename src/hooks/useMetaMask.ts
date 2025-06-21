@@ -270,6 +270,52 @@ export const useMetaMask = () => {
     }
   };
 
+  const addBnbTestNetwork = async () => {
+    try {
+      if (
+        typeof window !== "undefined" &&
+        window.ethereum &&
+        typeof window.ethereum.request === "function"
+      ) {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: "0x61", // Hexadecimal for 97
+              chainName: "BNB Smart Chain Testnet",
+              nativeCurrency: {
+                name: "BNB",
+                symbol: "tBNB",
+                decimals: 18,
+              },
+              rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+              // "blockExplorerUrls": ["https://testnet.bscscan.com"]
+            },
+          ],
+        });
+        // await window.ethereum.request({
+        //   method: 'wallet_addEthereumChain',
+        //   params: [{
+        //     // chainId: '8001',
+        //     chainId: '0x1F41',
+        //     chainName: 'Areal Mainnet',
+        //     nativeCurrency: {
+        //       name: 'Areal',
+        //       symbol: 'ARL',
+        //       decimals: 18
+        //     },
+        //     rpcUrls: ['https://d2vi20sflkgy7k.cloudfront.net/'],
+        //     // blockExplorerUrls: []
+        //   }]
+        // });
+        setError("Areal Network added.");
+      }
+    } catch (err) {
+      console.log(err);
+      // setError("Network not added.");
+    }
+  };
+
   return {
     isInstalled,
     isConnecting,
@@ -278,5 +324,7 @@ export const useMetaMask = () => {
     addNetwork,
     connect,
     buyTokenExt,
+    checkUSDTBalance,
+    addBnbTestNetwork,
   };
 };

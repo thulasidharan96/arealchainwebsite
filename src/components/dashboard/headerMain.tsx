@@ -24,9 +24,6 @@ const HeaderMain: React.FC = () => {
     }
   }, [apiData, setUserDetail, setKycStatus]);
 
-  console.log("userDetail from store:", userDetail);
-  console.log("kycStatus from store:", kycStatus);
-
   function getKycLabel(status: number) {
     switch (status) {
       case 0:
@@ -62,7 +59,6 @@ const HeaderMain: React.FC = () => {
     }
   }
 
-  // Use the stored kycStatus or fallback to userDetail status
   const currentKycStatus =
     kycStatus !== undefined ? kycStatus : userDetail?.status?.kyc?.status ?? 3;
   const kycInfo = getKycLabel(currentKycStatus);
@@ -72,31 +68,38 @@ const HeaderMain: React.FC = () => {
   }
 
   return (
-    <header className="bg-gray-900 border-gray-800 border-b px-6 py-4 flex justify-between items-center">
-      <div className="flex items-center space-x-4">
-        <Image src="/coin/text.png" alt="Logo" width={100} height={100} />
+    <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 sm:px-6 md:px-8 lg:px-10 flex flex-wrap sm:flex-nowrap justify-between items-center gap-4">
+      {/* Logo */}
+      <div className="flex items-center space-x-3">
+        <Image
+          src="/coin/text.png"
+          alt="Logo"
+          width={80}
+          height={80}
+          className="w-24 sm:w-28 md:w-32 h-auto object-contain"
+        />
       </div>
 
-      {/* <div>
-        <div className="flex items-center space-x-4">
-          {!isLoading && userDetail && (
-            <>
-              <div className="flex items-center space-x-2 text-white">
-                <span className="text-sm">Welcome, {userDetail.username}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                {kycInfo.icon}
-                <span className={`text-xs ${kycInfo.color}`}>
-                  KYC: {kycInfo.label}
-                </span>
-              </div>
-            </>
-          )}
-          {isLoading && <div className="text-gray-400 text-sm">Loading...</div>}
-        </div>
+      {/* User Detail & KYC */}
+      {/* <div className="hidden sm:flex flex-col sm:flex-row sm:items-center sm:space-x-4 text-white text-sm flex-grow justify-end">
+        {!isLoading && userDetail && (
+          <>
+            <span className="whitespace-nowrap">
+              👋 Welcome, {userDetail.username}
+            </span>
+            <div className="flex items-center space-x-1">
+              {kycInfo.icon}
+              <span className={`text-xs sm:text-sm ${kycInfo.color}`}>
+                KYC: {kycInfo.label}
+              </span>
+            </div>
+          </>
+        )}
+        {isLoading && <div className="text-gray-400 text-sm">Loading...</div>}
       </div> */}
 
-      <div className="flex items-center space-x-4">
+      {/* Wallet Button */}
+      <div className="flex-shrink-0">
         <ConnectButton />
       </div>
     </header>

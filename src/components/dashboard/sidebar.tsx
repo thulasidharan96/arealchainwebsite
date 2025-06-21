@@ -38,9 +38,9 @@ const Sidebar: React.FC = () => {
 
   return (
     <>
-      <div className="w-25 lg:w-[94px] py-3 flex flex-col items-center bg-gray-900 border-gray-800 border-2 static overflow-hidden">
+      <div className="w-20 lg:w-[74px] py-2 flex flex-col items-center bg-gray-900 border-gray-800 border-2 static overflow-hidden">
         {/* Logo */}
-        <div className="mb-6">
+        <div className="mb-4">
           <div className="w-14 h-14 flex items-center justify-center">
             <Image src="/coin/coin.png" alt="Logo" width={100} height={100} />
           </div>

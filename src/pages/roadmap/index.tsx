@@ -283,7 +283,7 @@ export default function Roadmap() {
         >
           <div className="relative inline-flex items-center h-[600px] py-10 px-20 min-w-full">
             {/* Horizontal line */}
-            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-800 -translate-y-1/2"></div>
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-900 -translate-y-1/2"></div>
 
             <div className="flex items-center">
               {timelineItems.map((item, index) => {

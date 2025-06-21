@@ -28,7 +28,7 @@ const Dashboard = () => {
 
   return (
     <LayoutMain>
-      <div className="p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      <div className="p-4 to-gray-900">
         <div className="text-center">
           <p className="text-md font-medium">KYC Status: {kycLabel}</p>
         </div>
