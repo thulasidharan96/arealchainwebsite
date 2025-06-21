@@ -19,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <main className="flex-1">
           <div className="mx-auto rounded-l-lg">
             {children}
-            <Toaster richColors position="top-right" />
+            <Toaster richColors position="top-center" />
           </div>
         </main>
       </div>

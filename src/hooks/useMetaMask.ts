@@ -8,17 +8,19 @@ export const useMetaMask = () => {
   const [account, setAccount] = useState<string | null>(null);
 
   const desiredNetworkId = 97;
-  const usdtDecimal = 18;
-  const usdtContractAddress = "0xeb7D09A69e9c00F3f65c294C6206F0b26163a38a";
+  const usdtDecimal = process.env.NEXT_PUBLIC_USDT_DECIMAL;
+  const usdtContractAddress = process.env.NEXT_PUBLIC_USDT_CONTRACT_ADDRESS;
 
   useEffect(() => {
     setIsInstalled(checkMetaMaskInstalled());
   }, []);
 
   const connect = async () => {
-    console.log({account})
+    console.log({ account });
     if (!isInstalled) {
-      setError("MetaMask is not installed. Please install MetaMask to continue.");
+      setError(
+        "MetaMask is not installed. Please install MetaMask to continue."
+      );
       return false;
     }
 
@@ -26,20 +28,29 @@ export const useMetaMask = () => {
     setError(null);
 
     try {
-      if (typeof window !== "undefined" && window.ethereum && typeof window.ethereum.request === "function") {
+      if (
+        typeof window !== "undefined" &&
+        window.ethereum &&
+        typeof window.ethereum.request === "function"
+      ) {
         // Check the network ID
         const chainId = await window.ethereum.request({
           method: "eth_chainId",
         });
         const networkId = parseInt(chainId, 16);
         if (networkId !== desiredNetworkId) {
-          setError(`Please switch to the correct network (desired network ID: ${desiredNetworkId}). Current network ID: ${networkId}.`);
+          setError(
+            `Please switch to the correct network (desired network ID: ${desiredNetworkId}). Current network ID: ${networkId}.`
+          );
           setIsConnecting(false);
           return false;
         }
 
         // Check if MetaMask is unlocked
-        if (window.ethereum._metamask && typeof window.ethereum._metamask.isUnlocked === "function") {
+        if (
+          window.ethereum._metamask &&
+          typeof window.ethereum._metamask.isUnlocked === "function"
+        ) {
           const isUnlocked = await window.ethereum._metamask.isUnlocked();
           if (!isUnlocked) {
             setError("Please unlock your MetaMask wallet to continue.");
@@ -66,7 +77,9 @@ export const useMetaMask = () => {
       if (err.code === 4001) {
         setError("Please connect your MetaMask wallet to continue.");
       } else if (err.code === -32603) {
-        setError("No active wallet found. Please log in to your wallet and try again.");
+        setError(
+          "No active wallet found. Please log in to your wallet and try again."
+        );
       } else {
         setError("Failed to connect to MetaMask. Please try again.");
       }
@@ -85,7 +98,10 @@ export const useMetaMask = () => {
     try {
       const userAddress = account;
       const balanceOfFunctionABI = "70a08231";
-      const paddedAddress = userAddress.toLowerCase().replace("0x", "").padStart(64, "0");
+      const paddedAddress = userAddress
+        .toLowerCase()
+        .replace("0x", "")
+        .padStart(64, "0");
       const data = `0x${balanceOfFunctionABI}${paddedAddress}`;
 
       const result = await window.ethereum.request({
@@ -98,10 +114,10 @@ export const useMetaMask = () => {
           "latest",
         ],
       });
-      
+
       const balanceInSmallestUnit = BigInt(result).toString();
       const balanceInUSDT = Number(balanceInSmallestUnit) / 10 ** usdtDecimal;
-      console.log({result, balanceInSmallestUnit, balanceInUSDT});
+      console.log({ result, balanceInSmallestUnit, balanceInUSDT });
       return balanceInUSDT;
     } catch (err) {
       console.log(err);
@@ -112,14 +128,13 @@ export const useMetaMask = () => {
 
   // Function to send USDT to admin address
   const sendUSDTToAdmin = async (adminAddress: string, amountInUSDT: any) => {
-    console.log("sendUSDTToAdmin")
+    console.log("sendUSDTToAdmin");
     if (!account) {
-      console.log("Please connect your wallet first")
+      console.log("Please connect your wallet first");
       setError("Please connect your wallet first.");
       return false;
-    }
-    else {
-      console.log("sendUSDTToAdmin else")
+    } else {
+      console.log("sendUSDTToAdmin else");
     }
 
     setError(null);
@@ -127,14 +142,22 @@ export const useMetaMask = () => {
     try {
       const balance = await checkUSDTBalance();
       if (balance < amountInUSDT) {
-        setError(`Insufficient USDT balance. You have ${balance} USDT, but need ${amountInUSDT} USDT.`);
+        setError(
+          `Insufficient USDT balance. You have ${balance} USDT, but need ${amountInUSDT} USDT.`
+        );
         return false;
       }
 
-      const amountInSmallestUnit = (BigInt(Math.floor(amountInUSDT * 10 ** usdtDecimal))).toString();
+      const amountInSmallestUnit = BigInt(
+        Math.floor(amountInUSDT * 10 ** usdtDecimal)
+      ).toString();
       const transferFunctionABI = "a9059cbb";
-      const paddedAdminAddress = adminAddress.replace("0x", "").padStart(64, "0");
-      const paddedAmount = BigInt(amountInSmallestUnit).toString(16).padStart(64, "0");
+      const paddedAdminAddress = adminAddress
+        .replace("0x", "")
+        .padStart(64, "0");
+      const paddedAmount = BigInt(amountInSmallestUnit)
+        .toString(16)
+        .padStart(64, "0");
 
       if (!/^[0-9a-fA-F]+$/.test(paddedAmount)) {
         setError("Invalid amount encoding. Amount must be a valid hex string.");
@@ -175,17 +198,17 @@ export const useMetaMask = () => {
 
   const buyTokenExt = async (amountToSendInUSDT: any) => {
     console.log("buyTokenExt");
-    const adminAddress: string | undefined = process.env.NEXT_PUBLIC_ADMIN_ADDRESS;
+    const adminAddress: string | undefined =
+      process.env.NEXT_PUBLIC_ADMIN_ADDRESS;
 
-    console.log("before sendUSDTToAdmin", {account});
+    console.log("before sendUSDTToAdmin", { account });
 
     if (!account) {
-      console.log("Please connect your wallet first")
+      console.log("Please connect your wallet first");
       setError("Please connect your wallet first.");
       return false;
-    }
-    else {
-      console.log("sendUSDTToAdmin else")
+    } else {
+      console.log("sendUSDTToAdmin else");
     }
 
     if (!adminAddress) {
@@ -198,25 +221,31 @@ export const useMetaMask = () => {
       console.log(`Successfully sent ${amountToSendInUSDT} USDT to admin`);
       return txHash;
     }
-  }
+  };
 
   const addNetwork = async () => {
     try {
-      if (typeof window !== "undefined" && window.ethereum && typeof window.ethereum.request === "function") {
+      if (
+        typeof window !== "undefined" &&
+        window.ethereum &&
+        typeof window.ethereum.request === "function"
+      ) {
         await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [{
-            // chainId: '9473',
-            chainId: '0x2501',
-            chainName: 'Areal Mainnet',
-            nativeCurrency: {
-              name: 'Areal',
-              symbol: 'ARL',
-              decimals: 18
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              // chainId: '9473',
+              chainId: "0x2501",
+              chainName: "Areal Mainnet",
+              nativeCurrency: {
+                name: "Areal",
+                symbol: "ARL",
+                decimals: 18,
+              },
+              rpcUrls: ["https://d2fys1j6b8bnjm.cloudfront.net/"],
+              // blockExplorerUrls: []
             },
-            rpcUrls: ['https://d2fys1j6b8bnjm.cloudfront.net/'],
-            // blockExplorerUrls: []
-          }]
+          ],
         });
         // await window.ethereum.request({
         //   method: 'wallet_addEthereumChain',
@@ -235,11 +264,11 @@ export const useMetaMask = () => {
         // });
         setError("Areal Network added.");
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err);
       // setError("Network not added.");
     }
-  }
+  };
 
   return {
     isInstalled,
@@ -248,6 +277,6 @@ export const useMetaMask = () => {
     account,
     addNetwork,
     connect,
-    buyTokenExt
+    buyTokenExt,
   };
 };
