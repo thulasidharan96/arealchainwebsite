@@ -1,45 +1,57 @@
-import React, { useState } from "react";
-import {
-  Home,
-  Grid3X3,
-  ArrowRightLeft,
-  Waves,
-  CircleDot,
-  MoreHorizontal,
-} from "lucide-react";
+import React from "react";
 import LayoutMain from "@/src/components/dashboard/layoutMain";
-// import { useAuth } from "react-oidc-context";
-// import { useWallet } from "@/src/hooks/useWallet";
+import { useUserStore } from "@/src/store/useUserStore";
 import KYCForm from "@/src/components/KYCFORM";
+import { useKycStatusLabel } from "@/src/hooks/useKycStatus";
+import { Button } from "react-day-picker";
+import { useRouter } from "next/router";
 
-const dashboard = () => {
-  // const auth = useAuth();
+const Dashboard = () => {
+  const router = useRouter();
+  const { userDetail, kycStatus } = useUserStore();
+  const kycLabel = useKycStatusLabel(kycStatus);
 
-  // if (auth.isLoading) return <p>Loading...</p>;
-  // if (auth.error) return <p>Error: {auth.error.message}</p>;
-  // if (!auth.isAuthenticated)
-  //   return <button onClick={() => auth.signinRedirect()}>Login</button>;
-  const [activeTab, setActiveTab] = useState("chakra-pool");
-  // const { address, balance } = useWallet();
-
-  const sidebarItems = [
-    { id: "home", icon: Home, label: "Home", active: false },
-    { id: "overview", icon: Grid3X3, label: "My Overview", active: false },
-    { id: "bridge", icon: ArrowRightLeft, label: "Bridge", active: false },
-    { id: "stake", icon: CircleDot, label: "Stake", active: false },
-    { id: "swap", icon: ArrowRightLeft, label: "Swap", active: false },
-    { id: "liquidity", icon: Waves, label: "Liquidity Pools", active: false },
-    { id: "chakra-pool", icon: CircleDot, label: "Chakra Pool", active: true },
-    { id: "more", icon: MoreHorizontal, label: "More", active: false },
-  ];
+  if (!userDetail || kycStatus === undefined) {
+    return (
+      <LayoutMain>
+        <div className="flex justify-center items-center h-screen">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Loading...</h1>
+            <p className="text-gray-500">
+              Please wait while we fetch your data.
+            </p>
+          </div>
+        </div>
+      </LayoutMain>
+    );
+  }
 
   return (
     <LayoutMain>
-      <div className="overflow-auto">
-        <KYCForm />
+      <div className="p-4 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="text-center">
+          <p className="text-md font-medium">KYC Status: {kycLabel}</p>
+        </div>
+
+        {/* Show KYC form only when status is 3 (Not verified) */}
+        {(kycStatus === 3 || kycStatus === 2) && (
+          <div className="">
+            <KYCForm />
+          </div>
+        )}
+
+        {kycStatus === 1 && (
+          <div className="">
+            <Button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              onClick={() => router.push("/buy")}
+            >
+              BUY ARL
+            </Button>
+          </div>
+        )}
       </div>
     </LayoutMain>
   );
 };
-
-export default dashboard;
+export default Dashboard;

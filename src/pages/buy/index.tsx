@@ -8,6 +8,7 @@ import {
   UseTokenPrice,
 } from "@/src/hooks/useBuyTokenSubmission";
 import { toast } from "sonner";
+import { ErrorDialog } from "@/src/components/ErrorDialog";
 
 const BuyPage = () => {
   const {
@@ -41,6 +42,8 @@ const BuyPage = () => {
     sale: number;
     arl: number;
   } | null>(null);
+  const [showDialog, setShowDialog] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleUsdtAmountChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -94,6 +97,13 @@ const BuyPage = () => {
       toast.error("Failed to fetch token price");
     }
   }, [tokenPriceError]);
+
+  useEffect(() => {
+    if (error || errorMsg) {
+      setMessage(error || errorMsg);
+      setShowDialog(true);
+    }
+  }, [error, errorMsg]);
 
   // Handle token price data response - ARL is the current price
   // Handle token price data response - ARL is the current price
@@ -192,12 +202,6 @@ const BuyPage = () => {
 
   return (
     <Layout>
-      {(error || errorMsg) && (
-        <div className="p-4 bg-red-100 text-red-800 rounded-lg">
-          {error ? error : errorMsg}
-        </div>
-      )}
-
       <div className="flex justify-between items-center mt-2 mr-2">
         <div className="flex flex-row gap-4 ml-2">
           <div className="text-base font-medium text-white">
@@ -444,6 +448,11 @@ const BuyPage = () => {
           </div>
         </div>
       </div>
+      <ErrorDialog
+        message={message}
+        open={showDialog}
+        onOpenChange={setShowDialog}
+      />
     </Layout>
   );
 };

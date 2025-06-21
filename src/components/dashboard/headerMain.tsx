@@ -77,7 +77,7 @@ const HeaderMain: React.FC = () => {
         <Image src="/coin/text.png" alt="Logo" width={100} height={100} />
       </div>
 
-      <div>
+      {/* <div>
         <div className="flex items-center space-x-4">
           {!isLoading && userDetail && (
             <>
@@ -94,7 +94,7 @@ const HeaderMain: React.FC = () => {
           )}
           {isLoading && <div className="text-gray-400 text-sm">Loading...</div>}
         </div>
-      </div>
+      </div> */}
 
       <div className="flex items-center space-x-4">
         <ConnectButton />
