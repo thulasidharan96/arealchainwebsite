@@ -80,14 +80,19 @@ const BuyPage = () => {
     const txHash = await buyTokenExt(usdtAmount);
     console.log({ txHash }, "apiCall");
 
-    // const txHash = "test123";
-
-    const payloadData: any = {
-      txHash,
-    };
-
-    mutate(payloadData);
-    // api need to call - v1/user/token/buy - post method - payload {txHash} with auth
+    // v1/user/token/buy - post method - payload {txHash} with auth
+    if(txHash) {
+      const payloadData: any = {
+        txHash
+      };
+      mutate(payloadData);
+    }
+    // else {
+    //   const payloadData: any = {
+    //     txHash: "test123"
+    //   };
+    //   mutate(payloadData);
+    // }
     setIsLoading(false);
   };
 
@@ -132,7 +137,6 @@ const BuyPage = () => {
             <p className="text-[#4ECDC4] text-lg font-semibold mb-1">
               Before Price Rises
             </p>
-            <p className="text-white text-xl font-bold">Stage 3 - Presale</p>
           </div>
 
           {/* Progress Bar */}
