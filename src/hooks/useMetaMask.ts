@@ -270,36 +270,6 @@ export const useMetaMask = () => {
     }
   };
 
-  const addBnbTestNetwork = async () => {
-    try {
-      if (
-        typeof window !== "undefined" &&
-        window.ethereum &&
-        typeof window.ethereum.request === "function"
-      ) {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0x61", // Hexadecimal for 97
-              chainName: "BNB Smart Chain Testnet",
-              nativeCurrency: {
-                name: "BNB",
-                symbol: "tBNB",
-                decimals: 18,
-              },
-              rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-              blockExplorerUrls: ["https://testnet.bscscan.com"], // ✅ Include this
-            },
-          ],
-        });
-        console.log("BNB Test Network added.");
-      }
-    } catch (err) {
-      console.error("Failed to add network:", err);
-    }
-  };
-
   return {
     isInstalled,
     isConnecting,
@@ -309,6 +279,5 @@ export const useMetaMask = () => {
     connect,
     buyTokenExt,
     checkUSDTBalance,
-    addBnbTestNetwork,
   };
 };
