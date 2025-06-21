@@ -19,7 +19,7 @@ export default function YourComponent() {
 
   const addAllNetworks = async () => {
     try {
-      await addNetwork();
+      // await addNetwork();
       await addBnbTestNetwork();
     } catch (err) {
       console.log(err);
