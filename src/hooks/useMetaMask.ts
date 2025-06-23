@@ -266,6 +266,8 @@ export const useMetaMask = () => {
 
     try {
       const userAddress = account;
+
+      // Method 1: Add proper gas estimation and block parameter
       const balanceOfFunctionABI = "70a08231";
       const paddedAddress = userAddress
         .toLowerCase()
@@ -273,26 +275,92 @@ export const useMetaMask = () => {
         .padStart(64, "0");
       const data = `0x${balanceOfFunctionABI}${paddedAddress}`;
 
-      const result = await window.ethereum.request({
-        method: "eth_call",
-        params: [
-          {
-            to: usdtContractAddress,
-            data: data,
-          },
-          "latest",
-        ],
-      });
+      // Try with different approaches
+      let result;
+
+      try {
+        // First attempt: Standard call with gas estimation
+        result = await window.ethereum.request({
+          method: "eth_call",
+          params: [
+            {
+              to: usdtContractAddress,
+              data: data,
+              gas: "0x5208", // 21000 in hex - minimum gas
+            },
+            "latest",
+          ],
+        });
+      } catch (firstError) {
+        console.log(
+          "First attempt failed, trying alternative approach:",
+          firstError
+        );
+
+        try {
+          // Second attempt: Use 'pending' block instead of 'latest'
+          result = await window.ethereum.request({
+            method: "eth_call",
+            params: [
+              {
+                to: usdtContractAddress,
+                data: data,
+              },
+              "pending",
+            ],
+          });
+        } catch (secondError) {
+          console.log(
+            "Second attempt failed, trying with specific block:",
+            secondError
+          );
+
+          // Third attempt: Get current block number and use it
+          const blockNumber = await window.ethereum.request({
+            method: "eth_blockNumber",
+          });
+
+          result = await window.ethereum.request({
+            method: "eth_call",
+            params: [
+              {
+                to: usdtContractAddress,
+                data: data,
+              },
+              blockNumber,
+            ],
+          });
+        }
+      }
+
+      // Validate result
+      if (!result || result === "0x") {
+        throw new Error("Invalid response from contract");
+      }
 
       const balanceInSmallestUnit = BigInt(result).toString();
       const balanceInUSDT = Number(balanceInSmallestUnit) / 10 ** usdtDecimal;
       console.log({ result, balanceInSmallestUnit, balanceInUSDT });
       return balanceInUSDT;
     } catch (err) {
-      console.log(err);
-      const errorMsg = "Failed to check USDT balance. Please try again.";
-      setError(errorMsg);
-      toast.error(errorMsg);
+      console.error("USDT Balance Check Error:", err);
+
+      // More specific error handling
+      if (err.code === -32603) {
+        const errorMsg =
+          "Network error. Please try again or check your connection.";
+        setError(errorMsg);
+        toast.error(errorMsg);
+      } else if (err.code === -32000) {
+        const errorMsg =
+          "Transaction simulation failed. Please check contract address.";
+        setError(errorMsg);
+        toast.error(errorMsg);
+      } else {
+        const errorMsg = "Failed to check USDT balance. Please try again.";
+        setError(errorMsg);
+        toast.error(errorMsg);
+      }
       return 0;
     }
   };

@@ -8,7 +8,7 @@ import {
   UseTokenPrice,
 } from "@/src/hooks/useBuyTokenSubmission";
 import { toast } from "sonner";
-import { ErrorDialog } from "@/src/components/ErrorDialog";
+// import { ErrorDialog } from "@/src/components/ErrorDialog";
 import { useUserStore } from "@/src/store/useUserStore";
 import { useKycStatusLabel } from "@/src/hooks/useKycStatus";
 
@@ -609,11 +609,11 @@ const BuyPage = () => {
         </div>
       </div>
 
-      <ErrorDialog
+      {/* <ErrorDialog
         message={message}
         open={showDialog}
         onOpenChange={setShowDialog}
-      />
+      /> */}
     </Layout>
   );
 };
