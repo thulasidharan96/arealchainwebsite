@@ -23,6 +23,7 @@ export async function middleware(request: NextRequest) {
     "/nft",
     "/ecosystem",
     "/forgetpassword",
+    "/property",
   ];
 
   const isPublicPath = publicPaths.some(

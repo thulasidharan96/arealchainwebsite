@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
+import { properties } from "@/src/data/properties";
 
 export default function Home() {
   const router = useRouter(); // Use the router for navigation
@@ -105,12 +106,40 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* Real World Assets Section */}
-      {/* <section>
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-16">Partners</h2>
+
+      {/* Real World Assets (RWA) Section */}
+      <section className="py-20 px-4 bg-gray-900/20">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white mb-12">
+            Featured Projects
+          </h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {properties.map((property) => (
+              <Link
+                href={`/property/${property.id}`}
+                key={property.id}
+                className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] hover:shadow-[0_0_20px_#F4B448] transition-all p-6 text-left"
+              >
+                <Image
+                  src={property.image}
+                  alt={property.title}
+                  width={400}
+                  height={250}
+                  className="rounded-lg object-cover mb-4"
+                />
+                <h3 className="text-xl font-bold text-white">
+                  {property.title}
+                </h3>
+                <p className="text-gray-400 text-sm mb-2">
+                  {property.location}
+                </p>
+                <p className="text-yellow-400 text-sm">{property.price}</p>
+              </Link>
+            ))}
+          </div>
         </div>
-      </section> */}
+      </section>
+
       {/* Areal Suite Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
@@ -237,7 +266,7 @@ export default function Home() {
                   alt={partner.name}
                   width={200}
                   height={200}
-                  className="max-h-10 object-contain filter grayscale hover:grayscale-0 hover:scale-105 transition-all duration-300"
+                  className="max-h-10 object-contain  hover:scale-105 transition-all duration-300"
                 />
               </div>
             ))}
