@@ -12,7 +12,7 @@ export const postBuyTokenDetails = async (
   formData: FormData
 ): Promise<BuyTokenResponse> => {
   try {
-    const response = await apiJSON.post(`user/token/buy/test`, formData);
+    const response = await apiJSON.post(`user/token/buy`, formData);
 
     return {
       success: true,
@@ -28,12 +28,8 @@ export const postBuyTokenDetails = async (
     return {
       success: false,
       message: errorMessage,
-      isAlreadySubmitted: true,
-      status: error.response?.data?.status || "Waiting for approval",
+      data: null,
     };
-
-    // For other errors, still throw
-    throw new Error(errorMessage);
   }
 };
 

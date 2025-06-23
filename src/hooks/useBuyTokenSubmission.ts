@@ -9,7 +9,7 @@ export const useBuyTokenSubmission = () => {
   return useMutation<BuyTokenResponse, Error, FormData>({
     mutationFn: postBuyTokenDetails,
     onError: (error: Error) => {
-      console.error("BuyToken Error:", error);
+      console.error("BuyToken Error:", error.message);
     },
   });
 };

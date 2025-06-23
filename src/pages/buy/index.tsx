@@ -30,7 +30,7 @@ const StatCard = ({
 
 const BuyPage = () => {
   const {
-    mutate,
+    mutateAsync,
     isPending,
     isSuccess,
     isError,
@@ -184,22 +184,27 @@ const BuyPage = () => {
     }
 
     setIsLoading(true);
+
     try {
       const txHash = await buyTokenExt(usdtAmount);
-      console.log({ txHash }, "apiCall");
-
-      if (txHash) {
-        const payloadData: any = {
-          txHash,
-        };
-        mutate(payloadData);
-        toast.success("Transaction successful");
-      } else {
+      if (!txHash) {
         toast.error("Transaction failed - no transaction hash received");
+        return;
       }
+
+      const payloadData: any = { txHash };
+
+      const result = await mutateAsync(payloadData); // Now returns the BuyTokenResponse
+
+      if (!result.success) {
+        toast.error(result.message || "Something went wrong");
+        return;
+      }
+
+      toast.success("Transaction successful");
     } catch (error: any) {
-      console.error("Transaction failed:", error);
-      toast.error(error?.message || "Transaction failed");
+      console.error("Buy Now Error:", error);
+      toast.error("Unexpected error occurred");
     } finally {
       setIsLoading(false);
     }
