@@ -23,7 +23,7 @@ const StatCard = ({
   subLabel: string;
   color?: string;
 }) => (
-  <div className="bg-gray-800/60 rounded-xl p-4 border border-gray-700/50">
+  <div className="bg-gray-800/60 rounded-xl p-4 border border-gray-700/45">
     <p className="text-gray-400 text-xs lg:text-sm mb-1">{label}</p>
     <p className={`${color} text-lg lg:text-xl font-bold`}>{value}</p>
     <p className="text-gray-500 text-xs">{subLabel}</p>
