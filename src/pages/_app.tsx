@@ -8,6 +8,7 @@ import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/wagmi.config";
 import { AuthProvider } from "../providers/auth-provider";
+import { WalletProvider } from "@/src/contexts/WalletContext";
 
 const queryClient = new QueryClient();
 
@@ -111,16 +112,18 @@ export default function App({ Component, pageProps }: AppProps) {
             enableSystem
             disableTransitionOnChange
           >
-            <Head>
-              <link rel="icon" href="/favicon.png" />
-              <title>Layer 1 Blockchain for RWA</title>
-            </Head>
+            <WalletProvider>
+              <Head>
+                <link rel="icon" href="/favicon.png" />
+                <title>Layer 1 Blockchain for RWA</title>
+              </Head>
 
-            {showSplash && <SplashScreen isFinishing={isFinishing} />}
+              {showSplash && <SplashScreen isFinishing={isFinishing} />}
 
-            <div style={{ visibility: showSplash ? "hidden" : "visible" }}>
-              <Component {...pageProps} />
-            </div>
+              <div style={{ visibility: showSplash ? "hidden" : "visible" }}>
+                <Component {...pageProps} />
+              </div>
+            </WalletProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </WagmiProvider>

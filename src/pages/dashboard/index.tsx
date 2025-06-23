@@ -3,7 +3,6 @@ import LayoutMain from "@/src/components/dashboard/layoutMain";
 import { useUserStore } from "@/src/store/useUserStore";
 import KYCForm from "@/src/components/KYCFORM";
 import { useKycStatusLabel } from "@/src/hooks/useKycStatus";
-import { Button } from "react-day-picker";
 import { useRouter } from "next/router";
 
 const Dashboard = () => {
@@ -41,13 +40,13 @@ const Dashboard = () => {
         )}
 
         {kycStatus === 1 && (
-          <div className="">
-            <Button
+          <div className="flex justify-center items-center mt-5">
+            <button
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
               onClick={() => router.push("/buy")}
             >
               BUY ARL
-            </Button>
+            </button>
           </div>
         )}
       </div>

@@ -2,13 +2,15 @@ import Layout from "@/src/components/dashboard/layoutMain";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 
-import { useMetaMask } from "@/src/hooks/useMetaMask";
+import { useWallet } from "@/src/contexts/WalletContext"; // Updated import
 import {
   useBuyTokenSubmission,
   UseTokenPrice,
 } from "@/src/hooks/useBuyTokenSubmission";
 import { toast } from "sonner";
 import { ErrorDialog } from "@/src/components/ErrorDialog";
+import { useUserStore } from "@/src/store/useUserStore";
+import { useKycStatusLabel } from "@/src/hooks/useKycStatus";
 
 const StatCard = ({
   label,
@@ -46,6 +48,11 @@ const BuyPage = () => {
     error: tokenPriceError,
   } = UseTokenPrice();
 
+  const { userDetail, kycStatus } = useUserStore();
+  const kycLabel = useKycStatusLabel(kycStatus);
+  console.log("kycStatus:", kycStatus);
+
+  // Using wallet context instead of useMetaMask hook
   const {
     isInstalled,
     isConnecting,
@@ -54,7 +61,7 @@ const BuyPage = () => {
     connect,
     buyTokenExt,
     checkUSDTBalance,
-  } = useMetaMask();
+  } = useWallet();
 
   const [usdtAmount, setUsdtAmount] = useState("1");
   const [arealAmount, setArealAmount] = useState("4.00");
@@ -140,7 +147,7 @@ const BuyPage = () => {
     if (account) {
       fetchBalance();
     }
-  }, [account]);
+  }, [account, checkUSDTBalance]);
 
   useEffect(() => {
     if (tokenPriceData?.success && tokenPriceData?.data?.status) {
@@ -178,6 +185,11 @@ const BuyPage = () => {
       return;
     }
 
+    if (kycStatus !== 1) {
+      toast.error("Please complete your KYC first");
+      return;
+    }
+
     if (!usdtAmount || parseFloat(usdtAmount) <= 0) {
       toast.error("Please enter a valid USDT amount");
       return;
@@ -209,7 +221,6 @@ const BuyPage = () => {
       setIsLoading(false);
     }
   };
-
   const quickAmounts = [10, 50, 100, 500, 1000];
 
   const handleQuickAmount = (amount: number) => {
@@ -288,11 +299,12 @@ const BuyPage = () => {
           </div>
         </div>
 
-        <div className="w-full sm:w-auto">
+        {/* Connect button moved to header, keeping this for mobile fallback */}
+        <div className="w-full sm:w-auto lg:hidden">
           <button
             onClick={connect}
             disabled={!isInstalled || isConnecting}
-            className="w-full sm:w-auto bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-4 lg:px-6 py-2 lg:py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-sm lg:text-base"
+            className="w-full bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-sm"
           >
             {isConnecting
               ? "Connecting..."
