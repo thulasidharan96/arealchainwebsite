@@ -116,24 +116,24 @@ const HeaderMain: React.FC = () => {
           )}
 
           {/* Network Buttons - Show only when connected but on wrong network */}
-          {showNetworkButtons && (
-            <div className="hidden md:flex space-x-2">
-              <button
-                onClick={addBSCNetwork}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm px-3 py-2 rounded-lg transition-colors font-medium"
-                title="Add BSC Testnet (Required for transactions)"
-              >
-                Add BSC Testnet
-              </button>
-              <button
-                onClick={addNetwork}
-                className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm px-3 py-2 rounded-lg transition-colors font-medium"
-                title="Add Areal Network (Optional)"
-              >
-                Add Areal Network
-              </button>
-            </div>
-          )}
+          {/* {showNetworkButtons && ( */}
+          <div className="hidden md:flex space-x-2">
+            <button
+              onClick={addBSCNetwork}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm px-3 py-2 rounded-lg transition-colors font-medium"
+              title="Add BSC Testnet (Required for transactions)"
+            >
+              Add BSC Testnet
+            </button>
+            <button
+              onClick={addNetwork}
+              className="bg-yellow-600 hover:bg-yellow-700 text-white text-sm px-3 py-2 rounded-lg transition-colors font-medium"
+              title="Add Areal Network (Optional)"
+            >
+              Add Areal Network
+            </button>
+          </div>
+          {/* )} */}
 
           {/* Mobile Network Buttons - Show only when connected but on wrong network */}
           {showNetworkButtons && (

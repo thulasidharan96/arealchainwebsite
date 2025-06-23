@@ -266,8 +266,6 @@ export const useMetaMask = () => {
 
     try {
       const userAddress = account;
-
-      // Method 1: Add proper gas estimation and block parameter
       const balanceOfFunctionABI = "70a08231";
       const paddedAddress = userAddress
         .toLowerCase()
@@ -275,92 +273,26 @@ export const useMetaMask = () => {
         .padStart(64, "0");
       const data = `0x${balanceOfFunctionABI}${paddedAddress}`;
 
-      // Try with different approaches
-      let result;
-
-      try {
-        // First attempt: Standard call with gas estimation
-        result = await window.ethereum.request({
-          method: "eth_call",
-          params: [
-            {
-              to: usdtContractAddress,
-              data: data,
-              gas: "0x5208", // 21000 in hex - minimum gas
-            },
-            "latest",
-          ],
-        });
-      } catch (firstError) {
-        console.log(
-          "First attempt failed, trying alternative approach:",
-          firstError
-        );
-
-        try {
-          // Second attempt: Use 'pending' block instead of 'latest'
-          result = await window.ethereum.request({
-            method: "eth_call",
-            params: [
-              {
-                to: usdtContractAddress,
-                data: data,
-              },
-              "pending",
-            ],
-          });
-        } catch (secondError) {
-          console.log(
-            "Second attempt failed, trying with specific block:",
-            secondError
-          );
-
-          // Third attempt: Get current block number and use it
-          const blockNumber = await window.ethereum.request({
-            method: "eth_blockNumber",
-          });
-
-          result = await window.ethereum.request({
-            method: "eth_call",
-            params: [
-              {
-                to: usdtContractAddress,
-                data: data,
-              },
-              blockNumber,
-            ],
-          });
-        }
-      }
-
-      // Validate result
-      if (!result || result === "0x") {
-        throw new Error("Invalid response from contract");
-      }
+      const result = await window.ethereum.request({
+        method: "eth_call",
+        params: [
+          {
+            to: usdtContractAddress,
+            data: data,
+          },
+          "latest",
+        ],
+      });
 
       const balanceInSmallestUnit = BigInt(result).toString();
       const balanceInUSDT = Number(balanceInSmallestUnit) / 10 ** usdtDecimal;
       console.log({ result, balanceInSmallestUnit, balanceInUSDT });
       return balanceInUSDT;
     } catch (err) {
-      console.error("USDT Balance Check Error:", err);
-
-      // More specific error handling
-      if (err.code === -32603) {
-        const errorMsg =
-          "Network error. Please try again or check your connection.";
-        setError(errorMsg);
-        toast.error(errorMsg);
-      } else if (err.code === -32000) {
-        const errorMsg =
-          "Transaction simulation failed. Please check contract address.";
-        setError(errorMsg);
-        toast.error(errorMsg);
-      } else {
-        const errorMsg = "Failed to check USDT balance. Please try again.";
-        setError(errorMsg);
-        toast.error(errorMsg);
-      }
+      console.log(err);
+      const errorMsg = "Failed to check USDT balance. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return 0;
     }
   };
@@ -541,46 +473,48 @@ export const useMetaMask = () => {
   };
 
   const addBSCNetwork = async () => {
-    if (!window.ethereum) {
-      const errorMsg = "MetaMask is not available";
-      setError(errorMsg);
-      toast.error(errorMsg);
-      return;
-    }
-
     try {
-      await window.ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: "0x61", // 97 in hexadecimal
-            chainName: "Binance Smart Chain Testnet",
-            nativeCurrency: {
-              name: "Binance Coin",
-              symbol: "tBNB",
-              decimals: 18,
+      if (
+        typeof window !== "undefined" &&
+        window.ethereum &&
+        typeof window.ethereum.request === "function"
+      ) {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: "0x61", // 97 in hexadecimal
+              chainName: "Binance Smart Chain Testnet",
+              nativeCurrency: {
+                name: "Binance Coin",
+                symbol: "tBNB",
+                decimals: 18,
+              },
+              rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+              blockExplorerUrls: ["https://testnet.bscscan.com"],
             },
-            rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-            blockExplorerUrls: ["https://testnet.bscscan.com"],
-          },
-        ],
-      });
-
-      setError(null);
-      toast.success("BSC Testnet added successfully!");
-      console.log("BSC Testnet added successfully");
-    } catch (err: any) {
-      console.log("Add BSC network error:", err);
-      let errorMsg = "Failed to add BSC network. Please try again.";
-
-      if (err.code === 4001) {
-        errorMsg = "User rejected adding BSC network";
-      } else if (err.code === -32602) {
-        errorMsg = "Invalid BSC network parameters";
+          ],
+        });
+        // await window.ethereum.request({
+        //   method: 'wallet_addEthereumChain',
+        //   params: [{
+        //     // chainId: '8001',
+        //     chainId: '0x1F41',
+        //     chainName: 'Areal Mainnet',
+        //     nativeCurrency: {
+        //       name: 'Areal',
+        //       symbol: 'ARL',
+        //       decimals: 18
+        //     },
+        //     rpcUrls: ['https://d2vi20sflkgy7k.cloudfront.net/'],
+        //     // blockExplorerUrls: []
+        //   }]
+        // });
+        setError("Areal Network added.");
       }
-
-      setError(errorMsg);
-      toast.error(errorMsg);
+    } catch (err) {
+      console.log(err);
+      // setError("Network not added.");
     }
   };
 
