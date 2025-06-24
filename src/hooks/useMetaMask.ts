@@ -252,12 +252,12 @@ export const useMetaMask = () => {
 
   // FIXED: Enhanced USDT balance checking function
   const checkUSDTBalance = async () => {
-    console.log("🔍 Starting USDT balance check...");
+    // console.log("🔍 Starting USDT balance check...");
 
     // Validate environment variables first
     if (!usdtContractAddress) {
       const errorMsg = "USDT contract address is not configured.";
-      console.error("❌ Environment Error:", errorMsg);
+      // console.error("❌ Environment Error:", errorMsg);
       setError(errorMsg);
       toast.error(errorMsg);
       return 0;
@@ -265,7 +265,7 @@ export const useMetaMask = () => {
 
     if (!account) {
       const errorMsg = "Please connect your wallet first.";
-      console.error("❌ Account Error:", errorMsg);
+      // console.error("❌ Account Error:", errorMsg);
       setError(errorMsg);
       toast.error(errorMsg);
       return 0;
@@ -273,20 +273,20 @@ export const useMetaMask = () => {
 
     if (!isCorrectNetwork) {
       const errorMsg = "Please switch to BSC Testnet to check balance.";
-      console.error("❌ Network Error:", errorMsg);
+      // console.error("❌ Network Error:", errorMsg);
       setError(errorMsg);
       toast.error(errorMsg);
       return 0;
     }
 
     try {
-      console.log("📋 Balance check params:", {
-        account,
-        usdtContractAddress,
-        usdtDecimal,
-        currentChainId,
-        isCorrectNetwork,
-      });
+      // console.log("📋 Balance check params:", {
+      //   account,
+      //   usdtContractAddress,
+      //   usdtDecimal,
+      //   currentChainId,
+      //   isCorrectNetwork,
+      // });
 
       // Validate account format
       if (!account.startsWith("0x") || account.length !== 42) {
@@ -309,12 +309,12 @@ export const useMetaMask = () => {
 
       const data = `0x${balanceOfFunctionABI}${paddedAddress}`;
 
-      console.log("🔧 Constructed call data:", {
-        userAddress,
-        paddedAddress,
-        data,
-        dataLength: data.length,
-      });
+      // console.log("🔧 Constructed call data:", {
+      //   userAddress,
+      //   paddedAddress,
+      //   data,
+      //   dataLength: data.length,
+      // });
 
       // Make the RPC call with additional error handling
       const callParams = {
@@ -322,17 +322,17 @@ export const useMetaMask = () => {
         data: data,
       };
 
-      console.log("📞 Making eth_call with params:", callParams);
+      // console.log("📞 Making eth_call with params:", callParams);
 
       const result = await window.ethereum.request({
         method: "eth_call",
         params: [callParams, "latest"],
       });
 
-      console.log("✅ Raw result from eth_call:", result);
+      // console.log("✅ Raw result from eth_call:", result);
 
       if (!result || result === "0x") {
-        console.log("⚠️ Empty result, assuming zero balance");
+        // console.log("⚠️ Empty result, assuming zero balance");
         return 0;
       }
 
@@ -341,31 +341,31 @@ export const useMetaMask = () => {
       try {
         balanceInSmallestUnit = BigInt(result).toString();
       } catch (conversionError) {
-        console.error("❌ BigInt conversion error:", conversionError);
+        // console.error("❌ BigInt conversion error:", conversionError);
         throw new Error("Failed to convert balance result");
       }
 
       const balanceInUSDT =
         Number(balanceInSmallestUnit) / Math.pow(10, usdtDecimal);
 
-      console.log("💰 Balance calculation:", {
-        result,
-        balanceInSmallestUnit,
-        usdtDecimal,
-        balanceInUSDT,
-      });
+      // console.log("💰 Balance calculation:", {
+      //   result,
+      //   balanceInSmallestUnit,
+      //   usdtDecimal,
+      //   balanceInUSDT,
+      // });
 
       return balanceInUSDT;
     } catch (err: any) {
-      console.error("❌ USDT Balance Error Details:", {
-        error: err,
-        code: err.code,
-        message: err.message,
-        data: err.data,
-        account,
-        usdtContractAddress,
-        currentChainId,
-      });
+      // console.error("❌ USDT Balance Error Details:", {
+      //   error: err,
+      //   code: err.code,
+      //   message: err.message,
+      //   data: err.data,
+      //   account,
+      //   usdtContractAddress,
+      //   currentChainId,
+      // });
 
       let errorMsg = "Failed to check USDT balance.";
 

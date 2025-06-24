@@ -119,7 +119,7 @@ export default function KYCForm() {
   // If KYC is already submitted, show a different UI
   if (isKycAlreadySubmitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-24 pb-12 px-4">
+      <div className="min-h-screen flex items-center justify-center pt-24 pb-12 px-4">
         <Card className="w-full max-w-2xl bg-gray-900/80 border border-gray-800 rounded-2xl shadow-lg shadow-[#F4B448]/10 backdrop-blur-sm p-8 md:p-12 text-center">
           <div className="mb-6">
             <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -166,7 +166,7 @@ export default function KYCForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 pt-24 pb-12 px-4">
+    <div className="flex items-center justify-center pt-12 pb-12 px-4">
       <Card className="w-full max-w-3xl bg-gray-900/80 border border-gray-800 rounded-2xl shadow-lg shadow-[#F4B448]/10 backdrop-blur-sm p-8 md:p-12">
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-8">
           Submit Your KYC
