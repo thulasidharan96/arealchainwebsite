@@ -11,7 +11,9 @@ export const useMetaMask = () => {
   const [isCorrectNetwork, setIsCorrectNetwork] = useState<boolean>(false);
 
   const desiredNetworkId = 97;
-  const usdtDecimal = process.env.NEXT_PUBLIC_USDT_DECIMAL;
+
+  // Fix environment variable type conversion and add fallbacks
+  const usdtDecimal = parseInt(process.env.NEXT_PUBLIC_USDT_DECIMAL || "18");
   const usdtContractAddress = process.env.NEXT_PUBLIC_USDT_CONTRACT_ADDRESS;
 
   useEffect(() => {
@@ -248,10 +250,22 @@ export const useMetaMask = () => {
     }
   };
 
-  // Function to check USDT balance
+  // FIXED: Enhanced USDT balance checking function
   const checkUSDTBalance = async () => {
+    console.log("🔍 Starting USDT balance check...");
+
+    // Validate environment variables first
+    if (!usdtContractAddress) {
+      const errorMsg = "USDT contract address is not configured.";
+      console.error("❌ Environment Error:", errorMsg);
+      setError(errorMsg);
+      toast.error(errorMsg);
+      return 0;
+    }
+
     if (!account) {
       const errorMsg = "Please connect your wallet first.";
+      console.error("❌ Account Error:", errorMsg);
       setError(errorMsg);
       toast.error(errorMsg);
       return 0;
@@ -259,38 +273,124 @@ export const useMetaMask = () => {
 
     if (!isCorrectNetwork) {
       const errorMsg = "Please switch to BSC Testnet to check balance.";
+      console.error("❌ Network Error:", errorMsg);
       setError(errorMsg);
       toast.error(errorMsg);
       return 0;
     }
 
     try {
-      const userAddress = account;
-      const balanceOfFunctionABI = "70a08231";
-      const paddedAddress = userAddress
-        .toLowerCase()
-        .replace("0x", "")
-        .padStart(64, "0");
+      console.log("📋 Balance check params:", {
+        account,
+        usdtContractAddress,
+        usdtDecimal,
+        currentChainId,
+        isCorrectNetwork,
+      });
+
+      // Validate account format
+      if (!account.startsWith("0x") || account.length !== 42) {
+        throw new Error("Invalid account address format");
+      }
+
+      // Validate contract address format
+      if (
+        !usdtContractAddress.startsWith("0x") ||
+        usdtContractAddress.length !== 42
+      ) {
+        throw new Error("Invalid USDT contract address format");
+      }
+
+      const userAddress = account.toLowerCase();
+      const balanceOfFunctionABI = "70a08231"; // balanceOf(address)
+
+      // Remove 0x prefix and pad to 64 characters
+      const paddedAddress = userAddress.replace("0x", "").padStart(64, "0");
+
       const data = `0x${balanceOfFunctionABI}${paddedAddress}`;
+
+      console.log("🔧 Constructed call data:", {
+        userAddress,
+        paddedAddress,
+        data,
+        dataLength: data.length,
+      });
+
+      // Make the RPC call with additional error handling
+      const callParams = {
+        to: usdtContractAddress.toLowerCase(),
+        data: data,
+      };
+
+      console.log("📞 Making eth_call with params:", callParams);
 
       const result = await window.ethereum.request({
         method: "eth_call",
-        params: [
-          {
-            to: usdtContractAddress,
-            data: data,
-          },
-          "latest",
-        ],
+        params: [callParams, "latest"],
       });
 
-      const balanceInSmallestUnit = BigInt(result).toString();
-      const balanceInUSDT = Number(balanceInSmallestUnit) / 10 ** usdtDecimal;
-      console.log({ result, balanceInSmallestUnit, balanceInUSDT });
+      console.log("✅ Raw result from eth_call:", result);
+
+      if (!result || result === "0x") {
+        console.log("⚠️ Empty result, assuming zero balance");
+        return 0;
+      }
+
+      // Convert hex result to decimal
+      let balanceInSmallestUnit;
+      try {
+        balanceInSmallestUnit = BigInt(result).toString();
+      } catch (conversionError) {
+        console.error("❌ BigInt conversion error:", conversionError);
+        throw new Error("Failed to convert balance result");
+      }
+
+      const balanceInUSDT =
+        Number(balanceInSmallestUnit) / Math.pow(10, usdtDecimal);
+
+      console.log("💰 Balance calculation:", {
+        result,
+        balanceInSmallestUnit,
+        usdtDecimal,
+        balanceInUSDT,
+      });
+
       return balanceInUSDT;
-    } catch (err) {
-      console.log(err);
-      const errorMsg = "Failed to check USDT balance. Please try again.";
+    } catch (err: any) {
+      console.error("❌ USDT Balance Error Details:", {
+        error: err,
+        code: err.code,
+        message: err.message,
+        data: err.data,
+        account,
+        usdtContractAddress,
+        currentChainId,
+      });
+
+      let errorMsg = "Failed to check USDT balance.";
+
+      // Handle specific error codes
+      switch (err.code) {
+        case -32603:
+          errorMsg =
+            "RPC internal error. The network might be congested or the contract address is invalid.";
+          break;
+        case -32602:
+          errorMsg = "Invalid parameters. Please check your wallet connection.";
+          break;
+        case -32601:
+          errorMsg =
+            "Method not found. Your wallet might not support this call.";
+          break;
+        case 4001:
+          errorMsg = "Request rejected by user.";
+          break;
+        default:
+          if (err.message) {
+            errorMsg = `Balance check failed: ${err.message}`;
+          }
+      }
+
       setError(errorMsg);
       toast.error(errorMsg);
       return 0;
@@ -328,7 +428,7 @@ export const useMetaMask = () => {
       }
 
       const amountInSmallestUnit = BigInt(
-        Math.floor(amountInUSDT * 10 ** usdtDecimal)
+        Math.floor(amountInUSDT * Math.pow(10, usdtDecimal))
       ).toString();
       const transferFunctionABI = "a9059cbb";
       const paddedAdminAddress = adminAddress
@@ -495,21 +595,6 @@ export const useMetaMask = () => {
             },
           ],
         });
-        // await window.ethereum.request({
-        //   method: 'wallet_addEthereumChain',
-        //   params: [{
-        //     // chainId: '8001',
-        //     chainId: '0x1F41',
-        //     chainName: 'Areal Mainnet',
-        //     nativeCurrency: {
-        //       name: 'Areal',
-        //       symbol: 'ARL',
-        //       decimals: 18
-        //     },
-        //     rpcUrls: ['https://d2vi20sflkgy7k.cloudfront.net/'],
-        //     // blockExplorerUrls: []
-        //   }]
-        // });
         setError("Areal Network added.");
       }
     } catch (err) {
