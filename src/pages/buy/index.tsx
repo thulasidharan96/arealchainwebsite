@@ -50,7 +50,7 @@ const BuyPage = () => {
 
   const { userDetail, kycStatus } = useUserStore();
   const kycLabel = useKycStatusLabel(kycStatus);
-  console.log("kycStatus:", kycStatus);
+  // console.log("kycStatus:", kycStatus);
 
   // Using wallet context instead of useMetaMask hook
   const {
@@ -141,6 +141,8 @@ const BuyPage = () => {
   useEffect(() => {
     const fetchBalance = async () => {
       const balance = await checkUSDTBalance();
+      console.log("USDT Balance:", balance);
+      console.log("Account:", account);
       setUsdtBalance(balance);
     };
 
@@ -175,8 +177,8 @@ const BuyPage = () => {
         }
       }
     }
-    console.log({ tokenPriceData });
-    console.log({ tokenData });
+    // console.log({ tokenPriceData });
+    // console.log({ tokenData });
   }, [tokenPriceData, usdtAmount]);
 
   const handleBuyNow = async () => {
