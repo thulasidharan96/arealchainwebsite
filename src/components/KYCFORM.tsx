@@ -8,6 +8,7 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Button } from "@/src/components/ui/button";
 import { useKycSubmission } from "@/src/hooks/useKycSubmission";
+import Image from "next/image";
 
 export default function KYCForm() {
   const [fullName, setFullName] = useState("");
@@ -18,6 +19,191 @@ export default function KYCForm() {
   const [error, setError] = useState<string>("");
   const [isKycAlreadySubmitted, setIsKycAlreadySubmitted] = useState(false);
   const [kycStatus, setKycStatus] = useState<string>("");
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] =
+    useState<boolean>(false);
+
+  const countries = [
+    {
+      code: "US",
+      name: "United States",
+      flag: "🇺🇸",
+      flagUrl: "https://flagcdn.com/us.svg",
+    },
+    {
+      code: "GB",
+      name: "United Kingdom",
+      flag: "🇬🇧",
+      flagUrl: "https://flagcdn.com/gb.svg",
+    },
+    {
+      code: "CA",
+      name: "Canada",
+      flag: "🇨🇦",
+      flagUrl: "https://flagcdn.com/ca.svg",
+    },
+    {
+      code: "AU",
+      name: "Australia",
+      flag: "🇦🇺",
+      flagUrl: "https://flagcdn.com/au.svg",
+    },
+    {
+      code: "DE",
+      name: "Germany",
+      flag: "🇩🇪",
+      flagUrl: "https://flagcdn.com/de.svg",
+    },
+    {
+      code: "FR",
+      name: "France",
+      flag: "🇫🇷",
+      flagUrl: "https://flagcdn.com/fr.svg",
+    },
+    {
+      code: "IT",
+      name: "Italy",
+      flag: "🇮🇹",
+      flagUrl: "https://flagcdn.com/it.svg",
+    },
+    {
+      code: "ES",
+      name: "Spain",
+      flag: "🇪🇸",
+      flagUrl: "https://flagcdn.com/es.svg",
+    },
+    {
+      code: "NL",
+      name: "Netherlands",
+      flag: "🇳🇱",
+      flagUrl: "https://flagcdn.com/nl.svg",
+    },
+    {
+      code: "SE",
+      name: "Sweden",
+      flag: "🇸🇪",
+      flagUrl: "https://flagcdn.com/se.svg",
+    },
+    {
+      code: "NO",
+      name: "Norway",
+      flag: "🇳🇴",
+      flagUrl: "https://flagcdn.com/no.svg",
+    },
+    {
+      code: "DK",
+      name: "Denmark",
+      flag: "🇩🇰",
+      flagUrl: "https://flagcdn.com/dk.svg",
+    },
+    {
+      code: "FI",
+      name: "Finland",
+      flag: "🇫🇮",
+      flagUrl: "https://flagcdn.com/fi.svg",
+    },
+    {
+      code: "CH",
+      name: "Switzerland",
+      flag: "🇨🇭",
+      flagUrl: "https://flagcdn.com/ch.svg",
+    },
+    {
+      code: "AT",
+      name: "Austria",
+      flag: "🇦🇹",
+      flagUrl: "https://flagcdn.com/at.svg",
+    },
+    {
+      code: "BE",
+      name: "Belgium",
+      flag: "🇧🇪",
+      flagUrl: "https://flagcdn.com/be.svg",
+    },
+    {
+      code: "JP",
+      name: "Japan",
+      flag: "🇯🇵",
+      flagUrl: "https://flagcdn.com/jp.svg",
+    },
+    {
+      code: "KR",
+      name: "South Korea",
+      flag: "🇰🇷",
+      flagUrl: "https://flagcdn.com/kr.svg",
+    },
+    {
+      code: "SG",
+      name: "Singapore",
+      flag: "🇸🇬",
+      flagUrl: "https://flagcdn.com/sg.svg",
+    },
+    {
+      code: "HK",
+      name: "Hong Kong",
+      flag: "🇭🇰",
+      flagUrl: "https://flagcdn.com/hk.svg",
+    },
+    {
+      code: "IN",
+      name: "India",
+      flag: "🇮🇳",
+      flagUrl: "https://flagcdn.com/in.svg",
+    },
+    {
+      code: "CN",
+      name: "China",
+      flag: "🇨🇳",
+      flagUrl: "https://flagcdn.com/cn.svg",
+    },
+    {
+      code: "BR",
+      name: "Brazil",
+      flag: "🇧🇷",
+      flagUrl: "https://flagcdn.com/br.svg",
+    },
+    {
+      code: "MX",
+      name: "Mexico",
+      flag: "🇲🇽",
+      flagUrl: "https://flagcdn.com/mx.svg",
+    },
+    {
+      code: "AR",
+      name: "Argentina",
+      flag: "🇦🇷",
+      flagUrl: "https://flagcdn.com/ar.svg",
+    },
+    {
+      code: "CL",
+      name: "Chile",
+      flag: "🇨🇱",
+      flagUrl: "https://flagcdn.com/cl.svg",
+    },
+    {
+      code: "ZA",
+      name: "South Africa",
+      flag: "🇿🇦",
+      flagUrl: "https://flagcdn.com/za.svg",
+    },
+    {
+      code: "AE",
+      name: "United Arab Emirates",
+      flag: "🇦🇪",
+      flagUrl: "https://flagcdn.com/ae.svg",
+    },
+    {
+      code: "SA",
+      name: "Saudi Arabia",
+      flag: "🇸🇦",
+      flagUrl: "https://flagcdn.com/sa.svg",
+    },
+    {
+      code: "IL",
+      name: "Israel",
+      flag: "🇮🇱",
+      flagUrl: "https://flagcdn.com/il.svg",
+    },
+  ];
 
   const {
     mutate,
@@ -86,6 +272,13 @@ export default function KYCForm() {
       setBackImage(null);
     }
   };
+
+  const handleCountrySelect = (selectedCountryCode: string) => {
+    setCountry(selectedCountryCode);
+    setIsCountryDropdownOpen(false);
+  };
+
+  const selectedCountryData = countries.find((c) => c.code === country);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -196,26 +389,76 @@ export default function KYCForm() {
               onChange={(e) => setFullName(e.target.value)}
               required
               placeholder="Enter your full name"
-              className="bg-gray-800 border-gray-700 text-white"
+              className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-[#F4B448] focus:ring-1 focus:ring-[#F4B448] rounded-lg px-4 py-3 transition-colors"
             />
           </div>
 
-          {/* Country */}
+          {/* Country Dropdown */}
           <div>
-            <Label
-              htmlFor="country"
-              className="text-white font-medium block mb-2"
-            >
+            <Label className="text-white font-medium mb-2 block">
               Country<span className="text-[#F4B448]">*</span>
             </Label>
-            <Input
-              id="country"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              required
-              placeholder="Enter your country"
-              className="bg-gray-800 border-gray-700 text-white"
-            />
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                className="w-full bg-gray-800 border border-gray-700 text-left text-white focus:border-[#F4B448] focus:ring-1 focus:ring-[#F4B448] rounded-lg px-4 py-3 transition-colors flex items-center justify-between"
+              >
+                <span className="flex items-center space-x-3">
+                  {selectedCountryData ? (
+                    <>
+                      <Image
+                        width={20}
+                        height={20}
+                        src={selectedCountryData.flagUrl}
+                        alt={`${selectedCountryData.name} flag`}
+                        className="w-6 h-4 object-cover rounded-sm"
+                      />
+                      <span>{selectedCountryData.name}</span>
+                    </>
+                  ) : (
+                    <span className="text-gray-500">Select your country</span>
+                  )}
+                </span>
+                <svg
+                  className={`w-5 h-5 transition-transform ${
+                    isCountryDropdownOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {isCountryDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-gray-800 border border-gray-700 rounded-lg backdrop-blur-sm z-50 max-h-60 overflow-y-auto shadow-xl">
+                  {countries.map((countryItem) => (
+                    <button
+                      key={countryItem.code}
+                      type="button"
+                      onClick={() => handleCountrySelect(countryItem.code)}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-700 transition-colors flex items-center space-x-3 text-white border-b border-gray-700 last:border-b-0"
+                    >
+                      <Image
+                        width={20}
+                        height={20}
+                        src={countryItem.flagUrl}
+                        alt={`${countryItem.name} flag`}
+                        className="w-6 h-4 object-cover rounded-sm"
+                      />
+                      <span>{countryItem.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* ID Type */}
@@ -230,7 +473,7 @@ export default function KYCForm() {
               id="idType"
               value={idType}
               onChange={(e) => setIdType(e.target.value)}
-              className="bg-gray-800 border border-gray-700 text-white p-2 rounded-md w-full"
+              className="w-full bg-gray-800 border border-gray-700 text-white focus:border-[#F4B448] focus:ring-1 focus:ring-[#F4B448] rounded-lg px-4 py-3 transition-colors"
             >
               <option value="passport">Passport</option>
               <option value="driving_licence">Driving Licence</option>
@@ -248,7 +491,7 @@ export default function KYCForm() {
               accept="image/jpeg,image/jpg,image/png"
               onChange={handleFrontImageChange}
               required
-              className="bg-gray-800 text-white border-gray-700"
+              className="bg-gray-800 text-white border-gray-700 focus:border-[#F4B448] focus:ring-1 focus:ring-[#F4B448] transition-colors"
             />
             {frontImage && (
               <p className="text-green-400 text-sm mt-1">
@@ -267,7 +510,7 @@ export default function KYCForm() {
               accept="image/jpeg,image/jpg,image/png"
               onChange={handleBackImageChange}
               required
-              className="bg-gray-800 text-white border-gray-700"
+              className="bg-gray-800 text-white border-gray-700 focus:border-[#F4B448] focus:ring-1 focus:ring-[#F4B448] transition-colors"
             />
             {backImage && (
               <p className="text-green-400 text-sm mt-1">
