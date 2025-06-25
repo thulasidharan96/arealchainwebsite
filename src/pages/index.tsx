@@ -239,7 +239,7 @@ export default function Home() {
       <section className="py-20 px-4 bg-gray-900/30">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-4">
-            Our trusted partners
+            Partner and Collaborators
           </h2>
           <p className="text-gray-400 mb-12">
             Building the Future of Crypto Real Estate with our Network of
@@ -250,11 +250,11 @@ export default function Home() {
               { name: "Google", src: "/partners/google.png" },
               { name: "Meta", src: "/partners/meta.png" },
               { name: "GitHub", src: "/partners/github.png" },
-              { name: "Binance", src: "/partners/binance.png" },
-              { name: "Chainlink", src: "/partners/chainlink.png" },
-              { name: "Polygon", src: "/partners/polygon.png" },
               { name: "AWS", src: "/partners/aws.png" },
               { name: "Microsoft", src: "/partners/microsoft.png" },
+              { name: "Binance", src: "/partners/binance.png" },
+              { name: "Chainlink", src: "/partners/chainlink.png" },
+              { name: "CoinGecko", src: "/partners/coingecko.png" },
               { name: "Solana", src: "/partners/solana.png" },
               { name: "Coinbase", src: "/partners/coinbase.png" },
             ].map((partner, i) => (
