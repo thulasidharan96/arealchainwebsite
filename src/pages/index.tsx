@@ -109,17 +109,16 @@ export default function Home() {
 
       {/* Real World Assets (RWA) Section */}
       <section className="py-20 px-4 bg-gray-900/20">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center  justify-center">
           <h2 className="text-3xl font-bold text-white mb-12">
             Featured Projects
           </h2>
-          {/* <div className="flex justify-center"></div> */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
             {properties.map((property) => (
               <Link
                 href={`/property/${property.id}`}
                 key={property.id}
-                className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] hover:shadow-[0_0_20px_#F4B448] transition-all p-6 text-left"
+                className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] hover:shadow-[0_0_20px_#F4B448] transition-all p-6 text-left w-full max-w-sm"
               >
                 <div className="aspect-[4/3] w-full overflow-hidden rounded-lg mb-4 relative">
                   <Image
@@ -129,7 +128,6 @@ export default function Home() {
                     className="object-cover"
                   />
                 </div>
-
                 <h3 className="text-xl font-bold text-white">
                   {property.title}
                 </h3>
