@@ -278,31 +278,33 @@ const BuyPage = () => {
     <Layout>
       {/* Top Header - Responsive */}
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mt-2 mx-2 mb-4">
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-          <div className="text-sm sm:text-base font-medium text-white bg-gray-800/50 rounded-lg px-3 py-2">
-            Current Price:{" "}
-            <span className="text-green-400 font-bold">
-              ${currentPrice.toFixed(4)}
-            </span>
-          </div>
-          <div className="text-sm sm:text-base font-medium text-white bg-gray-800/50 rounded-lg px-3 py-2">
-            Available:{" "}
-            <span className="text-blue-400 font-bold">
-              {tokenData ? formatTokensAvailable() : "Loading..."}
-            </span>
-          </div>
-          <div className="text-sm sm:text-base font-medium text-white bg-gray-800/50 rounded-lg px-3 py-2">
-            Wallet Balance:{" "}
-            <span className="text-yellow-400 font-bold">
-              {usdtBalance !== null
-                ? `${usdtBalance.toFixed(2)} USDT`
-                : "Wallet not connected"}
-            </span>
+        <div className="flex justify-center items-center w-full">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <div className="text-sm sm:text-base font-medium text-white bg-gray-800/50 rounded-lg px-3 py-2">
+              Current Price:{" "}
+              <span className="text-green-400 font-bold">
+                ${currentPrice.toFixed(4)}
+              </span>
+            </div>
+            <div className="text-sm sm:text-base font-medium text-white bg-gray-800/50 rounded-lg px-3 py-2">
+              Available:{" "}
+              <span className="text-blue-400 font-bold">
+                {tokenData ? formatTokensAvailable() : "Loading..."}
+              </span>
+            </div>
+            <div className="text-sm sm:text-base font-medium text-white bg-gray-800/50 rounded-lg px-3 py-2">
+              Wallet Balance:{" "}
+              <span className="text-yellow-400 font-bold">
+                {usdtBalance !== null
+                  ? `${usdtBalance.toFixed(2)} USDT`
+                  : "Wallet not connected"}
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Connect button moved to header, keeping this for mobile fallback */}
-        <div className="w-full sm:w-auto lg:hidden">
+        {/* <div className="w-full sm:w-auto lg:hidden">
           <button
             onClick={connect}
             disabled={!isInstalled || isConnecting}
@@ -314,7 +316,7 @@ const BuyPage = () => {
               ? `${account.slice(0, 6)}...${account.slice(-4)}`
               : "Connect Wallet"}
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Main Content - Responsive Grid */}
@@ -327,6 +329,13 @@ const BuyPage = () => {
                 <h2 className="text-lg lg:text-xl font-bold text-white">
                   Token Stats
                 </h2>
+                {/* Live Status */}
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-green-400 text-xs lg:text-sm font-medium">
+                    Live Data
+                  </span>
+                </div>
                 <button
                   onClick={() => setShowStats(!showStats)}
                   className="xl:hidden text-gray-400 hover:text-white transition-colors"
@@ -407,14 +416,6 @@ const BuyPage = () => {
                     subLabel="Remaining"
                     color="text-green-400"
                   />
-                </div>
-
-                {/* Live Status */}
-                <div className="flex items-center justify-center space-x-2 pt-4 border-t border-gray-700/50">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-green-400 text-xs lg:text-sm font-medium">
-                    Live Data
-                  </span>
                 </div>
               </div>
             </div>
@@ -505,7 +506,7 @@ const BuyPage = () => {
                 </div>
 
                 {/* Exchange Icon */}
-                <div className="flex justify-center">
+                {/* <div className="flex justify-center">
                   <div className="w-8 h-8 lg:w-10 lg:h-10 bg-[#F4B448] rounded-full flex items-center justify-center">
                     <svg
                       className="w-4 h-4 lg:w-5 lg:h-5 text-black"
@@ -521,7 +522,7 @@ const BuyPage = () => {
                       />
                     </svg>
                   </div>
-                </div>
+                </div> */}
 
                 {/* AREAL Output */}
                 <div>
@@ -537,10 +538,16 @@ const BuyPage = () => {
                       placeholder="4.00"
                     />
                     <div className="absolute right-3 lg:right-4 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-                      <div className="w-5 h-5 lg:w-6 lg:h-6 bg-gradient-to-r from-[#F4B448] to-[#4ECDC4] rounded-full flex items-center justify-center">
-                        <span className="text-black text-xs font-bold">A</span>
+                      <div className="w-8 h-8 lg:w-8 lg:h-8  rounded-full flex items-center justify-center">
+                        <Image
+                          src="/coin/coin.png"
+                          alt="Coin"
+                          width={24}
+                          height={24}
+                          className="w-8 h-8 lg:w-8 lg:h-8"
+                        />
                       </div>
-                      <span className="text-[#4ECDC4] font-bold text-sm lg:text-base">
+                      <span className="text-white font-bold text-sm lg:text-base">
                         ARL
                       </span>
                     </div>
@@ -586,7 +593,15 @@ const BuyPage = () => {
                   <span>Loading Price...</span>
                 ) : (
                   <span className="flex items-center justify-center space-x-2">
-                    <span>💎</span>
+                    <span>
+                      <Image
+                        src="/coin/coin.png"
+                        alt="Coin"
+                        width={24}
+                        height={24}
+                        className="w-8 h-8 lg:w-8 lg:h-8"
+                      />
+                    </span>
                     <span>Buy ARL Now</span>
                   </span>
                 )}

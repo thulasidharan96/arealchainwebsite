@@ -7,7 +7,6 @@ import { Card } from "@/src/components/ui/card";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Button } from "@/src/components/ui/button";
-import Layout from "@/src/components/layout";
 import { useKycSubmission } from "@/src/hooks/useKycSubmission";
 
 export default function KYCForm() {
@@ -116,10 +115,20 @@ export default function KYCForm() {
     router.push("/dashboard");
   };
 
+  useEffect(() => {
+    if (isSuccess && mutationData?.success) {
+      const timer = setTimeout(() => {
+        router.reload(); // Reload the page
+      }, 2000); // wait for 2 seconds before reload
+
+      return () => clearTimeout(timer); // cleanup
+    }
+  }, [isSuccess, mutationData, router]);
+
   // If KYC is already submitted, show a different UI
   if (isKycAlreadySubmitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-24 pb-12 px-4">
+      <div className="flex items-center justify-center mt-10 px-4">
         <Card className="w-full max-w-2xl bg-gray-900/80 border border-gray-800 rounded-2xl shadow-lg shadow-[#F4B448]/10 backdrop-blur-sm p-8 md:p-12 text-center">
           <div className="mb-6">
             <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">

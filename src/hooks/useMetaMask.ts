@@ -471,7 +471,7 @@ export const useMetaMask = () => {
       });
 
       console.log("USDT Transaction sent! Tx Hash:", txHash);
-      toast.success("Transaction sent successfully!");
+      // toast.success("Transaction sent successfully!");
       return txHash;
     } catch (err: any) {
       console.log(err);
