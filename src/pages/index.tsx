@@ -3,7 +3,9 @@ import Hero from "@/src/components/hero";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { motion, easeOut } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import {
   Accordion,
   AccordionContent,
@@ -11,10 +13,23 @@ import {
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
 import { properties } from "@/src/data/properties";
-import type { Variants } from "framer-motion";
+
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Home() {
   const router = useRouter();
+
+  // Refs for animation targets
+  const heroRef = useRef(null);
+  const statsRef = useRef(null);
+  const projectsRef = useRef(null);
+  const suiteRef = useRef(null);
+  const partnersRef = useRef(null);
+  const faqRef = useRef(null);
+  const ctaRef = useRef(null);
 
   const partners = [
     { name: "Google", src: "/partners/google.png" },
@@ -29,7 +44,11 @@ export default function Home() {
     { name: "Coinbase", src: "/partners/coinbase.png" },
   ];
 
-  const handleProductClick = (product: string) => {
+  interface ProductClickEvent {
+    (product: string): void;
+  }
+
+  const handleProductClick: ProductClickEvent = (product: string): void => {
     switch (product) {
       case "Areal TaaS":
         router.push("/areal-suite/taas");
@@ -79,232 +98,289 @@ export default function Home() {
     },
   ];
 
-  // Animation variants
-  const fadeInUp = {
-    initial: { opacity: 0, y: 60 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
-  };
+  useEffect(() => {
+    // Set initial states
+    gsap.set(
+      [
+        ".fade-in-up",
+        ".fade-in-left",
+        ".fade-in-right",
+        ".bounce-in",
+        ".stat-card",
+        ".project-card",
+        ".suite-card",
+        ".partner-logo",
+        ".faq-item",
+      ],
+      {
+        opacity: 0,
+        y: 30,
+      }
+    );
 
-  const fadeInLeft = {
-    initial: { opacity: 0, x: -60 },
-    animate: { opacity: 1, x: 0, transition: { duration: 0.6, ease: easeOut } },
-  };
-
-  const fadeInRight = {
-    initial: { opacity: 0, x: 60 },
-    animate: { opacity: 1, x: 0, transition: { duration: 0.6, ease: easeOut } },
-  };
-
-  const bounceIn: Variants = {
-    initial: { opacity: 0, scale: 0.3 },
-    animate: {
+    // Hero Animation
+    gsap.to(heroRef.current, {
       opacity: 1,
-      scale: 1,
-      transition: {
-        type: "spring" as const,
-        duration: 0.8,
-        bounce: 0.5,
-      },
-    },
-  };
+      duration: 1,
+      ease: "power2.out",
+    });
 
-  const staggerContainer = {
-    initial: {},
-    animate: {
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+    // Stats Section
+    ScrollTrigger.create({
+      trigger: statsRef.current,
+      start: "top 80%",
+      onEnter: () => {
+        gsap.to(statsRef.current.querySelector("h2"), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        });
 
-  const cardHover: Variants = {
-    rest: { scale: 1 },
-    hover: {
+        gsap.to(".stat-card", {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "back.out(1.2)",
+          delay: 0.2,
+        });
+      },
+    });
+
+    // Projects Section
+    ScrollTrigger.create({
+      trigger: projectsRef.current,
+      start: "top 80%",
+      onEnter: () => {
+        gsap.to(projectsRef.current.querySelector("h2"), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+        });
+
+        gsap.to(".project-card", {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+          delay: 0.2,
+        });
+      },
+    });
+
+    // Suite Section
+    ScrollTrigger.create({
+      trigger: suiteRef.current,
+      start: "top 80%",
+      onEnter: () => {
+        gsap.to(suiteRef.current.querySelectorAll("h2, p"), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+
+        gsap.to(".suite-card", {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+          delay: 0.3,
+        });
+      },
+    });
+
+    // Partners Section
+    ScrollTrigger.create({
+      trigger: partnersRef.current,
+      start: "top 80%",
+      onEnter: () => {
+        gsap.to(partnersRef.current.querySelectorAll("h2, p"), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+
+        gsap.to(".partner-logo", {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: "back.out(1.2)",
+          delay: 0.2,
+        });
+      },
+    });
+
+    // FAQ Section
+    ScrollTrigger.create({
+      trigger: faqRef.current,
+      start: "top 80%",
+      onEnter: () => {
+        gsap.to(faqRef.current.querySelectorAll("h2, p"), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+
+        gsap.to(".faq-item", {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+          delay: 0.2,
+        });
+      },
+    });
+
+    // CTA Section
+    ScrollTrigger.create({
+      trigger: ctaRef.current,
+      start: "top 80%",
+      onEnter: () => {
+        gsap.to(ctaRef.current.querySelectorAll("p, h2, button"), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+      },
+    });
+
+    // Cleanup
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
+  // Optimized hover handlers
+  const handleCardHover = (e) => {
+    gsap.to(e.currentTarget, {
       scale: 1.05,
-      transition: {
-        type: "spring" as const,
-        stiffness: 300,
-        damping: 20,
-      },
-    },
+      duration: 0.3,
+      ease: "power2.out",
+    });
   };
 
-  const textReveal: Variants = {
-    initial: { opacity: 0, y: 20 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: easeOut,
-      },
-    },
+  const handleCardLeave = (e) => {
+    gsap.to(e.currentTarget, {
+      scale: 1,
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+  const handleButtonHover = (e) => {
+    gsap.to(e.currentTarget, {
+      scale: 1.05,
+      duration: 0.2,
+      ease: "power2.out",
+    });
+  };
+
+  const handleButtonLeave = (e) => {
+    gsap.to(e.currentTarget, {
+      scale: 1,
+      duration: 0.2,
+      ease: "power2.out",
+    });
   };
 
   return (
     <Layout>
       {/* Hero Section */}
-      <motion.section
-        className="flex justify-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
+      <section ref={heroRef} className="flex justify-center opacity-0">
         <Hero />
-      </motion.section>
+      </section>
 
       {/* Special Stats Section */}
-      <motion.section
-        className="py-20 px-4 bg-gray-900/30"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
-      >
+      <section ref={statsRef} className="py-20 px-4 bg-gray-900/30">
         <div className="max-w-6xl mx-auto text-center">
-          <motion.h2
-            className="text-3xl font-bold text-white mb-16"
-            variants={fadeInUp}
-          >
+          <h2 className="text-3xl font-bold text-white mb-16 opacity-0">
             What makes AREAL Special?
-          </motion.h2>
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left"
-            variants={staggerContainer}
-          >
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left">
             {specialStats.map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                className="bg-gray-800/60 p-6 rounded-xl"
-                variants={bounceIn}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 10px 30px rgba(244, 180, 72, 0.3)",
-                  transition: { type: "spring", stiffness: 300 },
-                }}
+                className="stat-card bg-gray-800/60 p-6 rounded-xl cursor-pointer"
+                onMouseEnter={handleCardHover}
+                onMouseLeave={handleCardLeave}
               >
-                <motion.h3
-                  className="text-4xl font-extrabold text-[#F4B448] mb-2"
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    type: "spring",
-                    duration: 0.8,
-                    delay: i * 0.1,
-                    bounce: 0.6,
-                  }}
-                >
+                <h3 className="text-4xl font-extrabold text-[#F4B448] mb-2">
                   {item.prefix}
-                  <span className="counter" data-value={item.value}>
-                    {item.value}
-                  </span>
+                  <span className="counter">{item.value}</span>
                   {item.suffix}
-                </motion.h3>
-                <motion.p className="text-gray-300" variants={textReveal}>
-                  {item.label}
-                </motion.p>
-              </motion.div>
+                </h3>
+                <p className="text-gray-300">{item.label}</p>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Featured Projects Section */}
-      <motion.section
-        className="py-20 px-4 bg-gray-900/20"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
-      >
+      <section ref={projectsRef} className="py-20 px-4 bg-gray-900/20">
         <div className="max-w-7xl mx-auto text-center justify-center">
-          <motion.h2
-            className="text-3xl font-bold text-white mb-12"
-            variants={fadeInUp}
-          >
+          <h2 className="text-3xl font-bold text-white mb-12 opacity-0">
             Featured Projects
-          </motion.h2>
-          <motion.div
-            className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto"
-            variants={staggerContainer}
-          >
+          </h2>
+          <div className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
             {properties.map((property, i) => (
-              <motion.div
-                key={property.id}
-                variants={fadeInUp}
-                whileHover="hover"
-                initial="rest"
-                animate="rest"
-              >
+              <div key={property.id} className="project-card">
                 <Link
                   href={`/property/${property.id}`}
-                  className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] hover:shadow-[0_0_20px_#F4B448] transition-all p-6 text-left w-full max-w-sm block"
+                  className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] transition-colors p-6 text-left w-full max-w-sm block"
+                  onMouseEnter={handleCardHover}
+                  onMouseLeave={handleCardLeave}
                 >
-                  <motion.div
-                    className="aspect-[4/3] w-full overflow-hidden rounded-lg mb-4 relative"
-                    variants={cardHover}
-                  >
+                  <div className="aspect-[4/3] w-full overflow-hidden rounded-lg mb-4 relative">
                     <Image
                       src={property.image}
                       alt={property.title}
                       fill
                       className="object-cover"
                     />
-                  </motion.div>
-                  <motion.h3
-                    className="text-xl font-bold text-white"
-                    variants={textReveal}
-                  >
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
                     {property.title}
-                  </motion.h3>
-                  <motion.p
-                    className="text-gray-400 text-sm mb-2"
-                    variants={textReveal}
-                  >
+                  </h3>
+                  <p className="text-gray-400 text-sm mb-2">
                     {property.location}
-                  </motion.p>
-                  <motion.p
-                    className="text-yellow-400 text-sm"
-                    variants={textReveal}
-                  >
-                    {property.price}
-                  </motion.p>
+                  </p>
+                  <p className="text-yellow-400 text-sm">{property.price}</p>
                 </Link>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Areal Suite Section */}
-      <motion.section
-        className="py-20 px-4"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
-      >
+      <section ref={suiteRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <motion.h2
-              className="text-4xl font-bold text-white mb-6"
-              variants={fadeInUp}
-            >
+            <h2 className="text-4xl font-bold text-white mb-6 opacity-0">
               The Areal Suite
-            </motion.h2>
-            <motion.p
-              className="text-gray-400 text-lg max-w-3xl mx-auto mb-8"
-              variants={fadeInUp}
-            >
+            </h2>
+            <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-8 opacity-0">
               At AREAL, we provide more than just a platform - we offer a
               comprehensive suite of products designed to tokenize and
               democratize Real World Assets.
-            </motion.p>
-            <motion.div
-              className="flex flex-wrap justify-center gap-4 mb-8"
-              variants={staggerContainer}
-            >
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
               {[
                 "Areal TaaS",
                 "Areal Mortgage",
@@ -312,40 +388,27 @@ export default function Home() {
                 "ArealPay",
                 "Areal Marketplace",
               ].map((product, i) => (
-                <motion.button
+                <button
                   key={product}
                   onClick={() => handleProductClick(product)}
-                  className="bg-gray-800 text-white px-4 py-2 rounded-full"
-                  variants={bounceIn}
-                  whileHover={{
-                    scale: 1.1,
-                    backgroundColor: "#F4B448",
-                    color: "#000",
-                    transition: { type: "spring", stiffness: 400 },
-                  }}
-                  whileTap={{ scale: 0.95 }}
+                  className="bg-gray-800 text-white px-4 py-2 rounded-full transition-colors hover:bg-[#F4B448] hover:text-black"
+                  onMouseEnter={handleButtonHover}
+                  onMouseLeave={handleButtonLeave}
                 >
                   {product}
-                </motion.button>
+                </button>
               ))}
-            </motion.div>
-            <motion.button
-              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-3 rounded-lg"
-              variants={bounceIn}
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 10px 30px rgba(244, 180, 72, 0.4)",
-              }}
-              whileTap={{ scale: 0.95 }}
+            </div>
+            <button
+              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-3 rounded-lg opacity-0"
+              onMouseEnter={handleButtonHover}
+              onMouseLeave={handleButtonLeave}
             >
               Explore our Ecosystem →
-            </motion.button>
+            </button>
           </div>
 
-          <motion.div
-            className="grid md:grid-cols-3 gap-8"
-            variants={staggerContainer}
-          >
+          <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 title: "Turn Real Estate into Crypto",
@@ -366,22 +429,13 @@ export default function Home() {
                 icon: "M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zM14 6a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h6zM4 14a2 2 0 002 2h8a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2z",
               },
             ].map((feature, i) => (
-              <motion.div
+              <div
                 key={i}
-                className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 transition-all duration-500 ease-in-out hover:border-[#F4B448] hover:border-2 hover:scale-102 hover:shadow-[0_0_25px_#F4B448]"
-                variants={fadeInUp}
-                whileHover={{
-                  y: -10,
-                  transition: { type: "spring", stiffness: 300 },
-                }}
+                className="suite-card bg-gray-900/50 p-8 rounded-xl border border-gray-800 transition-all duration-300 hover:border-[#F4B448] cursor-pointer"
+                onMouseEnter={handleCardHover}
+                onMouseLeave={handleCardLeave}
               >
-                <motion.div
-                  className="w-12 h-12 bg-[#F4B448] rounded-lg mb-6 flex items-center justify-center"
-                  whileHover={{
-                    rotate: 360,
-                    transition: { duration: 0.8 },
-                  }}
-                >
+                <div className="w-12 h-12 bg-[#F4B448] rounded-lg mb-6 flex items-center justify-center">
                   <svg
                     className="w-6 h-6 text-black"
                     fill="currentColor"
@@ -389,45 +443,28 @@ export default function Home() {
                   >
                     <path d={feature.icon} />
                   </svg>
-                </motion.div>
-                <motion.h3
-                  className="text-xl font-semibold text-white mb-4"
-                  variants={textReveal}
-                >
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-4">
                   {feature.title}
-                </motion.h3>
-                <motion.p className="text-gray-400" variants={textReveal}>
-                  {feature.description}
-                </motion.p>
-              </motion.div>
+                </h3>
+                <p className="text-gray-400">{feature.description}</p>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Partners Section */}
-      <motion.section
-        className="py-20 px-4 bg-gray-900/30"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
-      >
+      <section ref={partnersRef} className="py-20 px-4 bg-gray-900/30">
         <div className="max-w-7xl mx-auto text-center">
-          <motion.h2
-            className="text-2xl font-bold text-white mb-4"
-            variants={fadeInUp}
-          >
+          <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
             Partner and Collaborators
-          </motion.h2>
-          <motion.p className="text-gray-400 mb-12" variants={fadeInUp}>
+          </h2>
+          <p className="text-gray-400 mb-12 opacity-0">
             Building the Future of Crypto Real Estate with our Network of
             Trusted Blockchain Partners
-          </motion.p>
-          <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-center"
-            variants={staggerContainer}
-          >
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-center">
             {[
               { name: "Google", src: "/partners/google.png" },
               { name: "Meta", src: "/partners/meta.png" },
@@ -440,54 +477,40 @@ export default function Home() {
               { name: "Solana", src: "/partners/solana.png" },
               { name: "Coinbase", src: "/partners/coinbase.png" },
             ].map((partner, i) => (
-              <motion.div
+              <div
                 key={i}
-                className="bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-20"
-                variants={bounceIn}
-                whileHover={{
-                  scale: 1.1,
-                  transition: {
-                    scale: { type: "spring", stiffness: 300 },
-                  },
-                }}
+                className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-20 cursor-pointer"
+                onMouseEnter={handleCardHover}
+                onMouseLeave={handleCardLeave}
               >
                 <Image
                   src={partner.src}
                   alt={partner.name}
                   width={200}
                   height={200}
-                  className="max-h-10 object-contain hover:scale-105 transition-all duration-300"
+                  className="max-h-10 object-contain transition-transform duration-300"
                 />
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* FAQ Section */}
-      <motion.section
-        className="py-20 px-4"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
-      >
+      <section ref={faqRef} className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <motion.h2
-              className="text-3xl font-bold text-white mb-4"
-              variants={fadeInUp}
-            >
+            <h2 className="text-3xl font-bold text-white mb-4 opacity-0">
               FAQ
-            </motion.h2>
-            <motion.p className="text-gray-400" variants={fadeInUp}>
+            </h2>
+            <p className="text-gray-400 opacity-0">
               Everything you need to know
-            </motion.p>
+            </p>
           </div>
-          <motion.div variants={staggerContainer}>
+          <div>
             <Accordion type="single" collapsible className="w-full space-y-4">
               {faqItems.map((item, i) => (
-                <motion.div key={i} variants={fadeInLeft}>
+                <div key={i} className="faq-item">
                   <AccordionItem
                     value={`item-${i}`}
                     className="bg-gray-800/50 rounded-lg border border-gray-700 data-[state=open]:border-[#F4B448]/50"
@@ -499,46 +522,32 @@ export default function Home() {
                       {item.answer}
                     </AccordionContent>
                   </AccordionItem>
-                </motion.div>
+                </div>
               ))}
             </Accordion>
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Final CTA Section */}
-      <motion.section
-        className="py-20 px-4 mb-10"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={staggerContainer}
-      >
+      <section ref={ctaRef} className="py-20 px-4 mb-10">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.p className="text-gray-400 mb-4" variants={fadeInUp}>
+          <p className="text-gray-400 mb-4 opacity-0">
             Don't miss out on the future of crypto real estate investment.
-          </motion.p>
-          <motion.h2
-            className="text-4xl font-bold text-white mb-8"
-            variants={fadeInUp}
-          >
+          </p>
+          <h2 className="text-4xl font-bold text-white mb-8 opacity-0">
             Ready to Start Your Crypto Real Estate Journey?
-          </motion.h2>
-          <motion.button
-            className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-4 rounded-lg text-lg"
+          </h2>
+          <button
+            className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-4 rounded-lg text-lg opacity-0"
             onClick={() => (window.location.href = "/contact")}
-            variants={bounceIn}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: "0 15px 40px rgba(244, 180, 72, 0.4)",
-              transition: { type: "spring", stiffness: 300 },
-            }}
-            whileTap={{ scale: 0.95 }}
+            onMouseEnter={handleButtonHover}
+            onMouseLeave={handleButtonLeave}
           >
             Join the Revolution →
-          </motion.button>
+          </button>
         </div>
-      </motion.section>
+      </section>
     </Layout>
   );
 }
