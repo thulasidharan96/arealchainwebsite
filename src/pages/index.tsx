@@ -13,6 +13,7 @@ import {
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
 import { properties } from "@/src/data/properties";
+import { motion, easeOut, Variants } from "framer-motion";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -130,12 +131,14 @@ export default function Home() {
       trigger: statsRef.current,
       start: "top 80%",
       onEnter: () => {
-        gsap.to(statsRef.current.querySelector("h2"), {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        });
+        if (statsRef.current) {
+          gsap.to(statsRef.current.querySelector("h2"), {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power2.out",
+          });
+        }
 
         gsap.to(".stat-card", {
           opacity: 1,
@@ -298,6 +301,46 @@ export default function Home() {
     });
   };
 
+  // Animation variants
+  const fadeInUp = {
+    initial: { opacity: 0, y: 60 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
+  };
+
+  const bounceIn: Variants = {
+    initial: { opacity: 0, scale: 0.3 },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring" as const,
+        duration: 0.8,
+        bounce: 0.5,
+      },
+    },
+  };
+
+  const staggerContainer = {
+    initial: {},
+    animate: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const textReveal: Variants = {
+    initial: { opacity: 0, y: 20 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: easeOut,
+      },
+    },
+  };
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -306,30 +349,61 @@ export default function Home() {
       </section>
 
       {/* Special Stats Section */}
-      <section ref={statsRef} className="py-20 px-4 bg-gray-900/30">
+      <motion.section
+        className="py-20 px-4 bg-gray-900/30"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+      >
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-16 opacity-0">
+          <motion.h2
+            className="text-3xl font-bold text-white mb-16"
+            variants={fadeInUp}
+          >
             What makes AREAL Special?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left">
+          </motion.h2>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left"
+            variants={staggerContainer}
+          >
             {specialStats.map((item, i) => (
-              <div
+              <motion.div
                 key={i}
-                className="stat-card bg-gray-800/60 p-6 rounded-xl cursor-pointer"
-                onMouseEnter={handleCardHover}
-                onMouseLeave={handleCardLeave}
+                className="bg-gray-800/60 p-6 rounded-xl"
+                variants={bounceIn}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 10px 30px rgba(244, 180, 72, 0.3)",
+                  transition: { type: "spring", stiffness: 300 },
+                }}
               >
-                <h3 className="text-4xl font-extrabold text-[#F4B448] mb-2">
+                <motion.h3
+                  className="text-4xl font-extrabold text-[#F4B448] mb-2"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    type: "spring",
+                    duration: 0.8,
+                    delay: i * 0.1,
+                    bounce: 0.6,
+                  }}
+                >
                   {item.prefix}
-                  <span className="counter">{item.value}</span>
+                  <span className="counter" data-value={item.value}>
+                    {item.value}
+                  </span>
                   {item.suffix}
-                </h3>
-                <p className="text-gray-300">{item.label}</p>
-              </div>
+                </motion.h3>
+                <motion.p className="text-gray-300" variants={textReveal}>
+                  {item.label}
+                </motion.p>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Projects Section */}
       <section ref={projectsRef} className="py-20 px-4 bg-gray-900/20">
