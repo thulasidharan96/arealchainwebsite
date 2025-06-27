@@ -17,6 +17,8 @@ import {
   Zap,
 } from "lucide-react";
 import Image from "next/image";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 interface TeamMember {
   name: string;
@@ -95,31 +97,146 @@ const mediaLogos = [
   { name: "CoinTelegraph", src: "/media/cointelegraph.png" },
 ];
 
-export default function Company() {
+// Scroll Animation variants
+const fadeInUp = {
+  initial: {
+    opacity: 0,
+    y: 60,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
+  },
+};
+
+const bounceUp = {
+  initial: {
+    opacity: 0,
+    y: 100,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.6, -0.05, 0.01, 0.99],
+      type: "spring",
+      damping: 12,
+      stiffness: 100,
+    },
+  },
+};
+
+const staggerContainer = {
+  initial: {},
+  animate: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const staggerItem = {
+  initial: {
+    opacity: 0,
+    y: 40,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.6, -0.05, 0.01, 0.99],
+    },
+  },
+};
+
+const scaleUp = {
+  initial: {
+    opacity: 0,
+    scale: 0.8,
+    y: 50,
+  },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 0.7,
+      ease: [0.6, -0.05, 0.01, 0.99],
+      type: "spring",
+      damping: 15,
+      stiffness: 120,
+    },
+  },
+};
+
+export default function Company(): JSX.Element {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const missionRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<HTMLDivElement>(null);
+  const founderRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  const heroInView = useInView(heroRef, { once: true, margin: "-100px" });
+  const missionInView = useInView(missionRef, { once: true, margin: "-50px" });
+  const recognitionInView = useInView(recognitionRef, {
+    once: true,
+    margin: "-50px",
+  });
+  const founderInView = useInView(founderRef, { once: true, margin: "-50px" });
+  const videoInView = useInView(videoRef, { once: true, margin: "-50px" });
+  const ctaInView = useInView(ctaRef, { once: true, margin: "-50px" });
+
   return (
     <Layout>
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
         {/* Hero Section */}
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <Badge className="mb-6 bg-[#F4B448]/20 text-[#F4B448] border-[#F4B448]/30 hover:bg-[#F4B448]/30 transition-colors">
-                <Zap className="w-4 h-4 mr-2" />
-                From Vision to Reality
-              </Badge>
-              <h1 className="text-5xl font-bold text-white mb-6">
+            <motion.div
+              ref={heroRef}
+              className="text-center mb-16"
+              initial="initial"
+              animate={heroInView ? "animate" : "initial"}
+              variants={staggerContainer}
+            >
+              <motion.div variants={fadeInUp}>
+                <Badge className="mb-6 bg-[#F4B448]/20 text-[#F4B448] border-[#F4B448]/30 hover:bg-[#F4B448]/30 transition-colors">
+                  <Zap className="w-4 h-4 mr-2" />
+                  From Vision to Reality
+                </Badge>
+              </motion.div>
+              <motion.h1
+                className="text-5xl font-bold text-white mb-6"
+                variants={bounceUp}
+              >
                 About Areal
-              </h1>
-              <p className="text-gray-400 text-xl max-w-3xl mx-auto">
+              </motion.h1>
+              <motion.p
+                className="text-gray-400 text-xl max-w-3xl mx-auto"
+                variants={fadeInUp}
+              >
                 At the heart of Areal is a commitment to transform the real
                 estate industry. Discover how we're changing the landscape of
                 investing with our revolutionary approach.
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
 
             {/* Mission & Vision */}
-            <div className="grid lg:grid-cols-2 gap-16 mb-20">
-              <div className="group">
+            <motion.div
+              ref={missionRef}
+              className="grid lg:grid-cols-2 gap-16 mb-20"
+              initial="initial"
+              animate={missionInView ? "animate" : "initial"}
+              variants={staggerContainer}
+            >
+              <motion.div className="group" variants={bounceUp}>
                 <Card className="h-full bg-gray-900/50 border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
                   <CardContent className="p-8">
                     <div className="flex items-center mb-6">
@@ -147,91 +264,120 @@ export default function Company() {
                     </div>
                   </CardContent>
                 </Card>
-              </div>
+              </motion.div>
 
-              <div className="space-y-8">
+              <motion.div className="space-y-8" variants={fadeInUp}>
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-6">
+                <motion.div
+                  className="grid grid-cols-3 gap-6"
+                  variants={staggerContainer}
+                >
                   {stats.map((stat, index) => (
-                    <Card
-                      key={index}
-                      className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 group"
-                    >
-                      <CardContent className="p-6">
-                        <div className="flex justify-center mb-3">
-                          <stat.icon className="w-8 h-8 text-[#F4B448] group-hover:scale-110 transition-transform duration-300" />
-                        </div>
-                        <div className="text-3xl font-bold text-white mb-1">
-                          {stat.number}
-                        </div>
-                        <div className="text-sm text-gray-400 font-medium">
-                          {stat.label}
-                        </div>
-                      </CardContent>
-                    </Card>
+                    <motion.div key={index} variants={staggerItem}>
+                      <Card className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 group">
+                        <CardContent className="p-6">
+                          <div className="flex justify-center mb-3">
+                            <stat.icon className="w-8 h-8 text-[#F4B448] group-hover:scale-110 transition-transform duration-300" />
+                          </div>
+                          <div className="text-3xl font-bold text-white mb-1">
+                            {stat.number}
+                          </div>
+                          <div className="text-sm text-gray-400 font-medium">
+                            {stat.label}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
 
                 {/* Features */}
-                <div className="space-y-4">
+                <motion.div className="space-y-4" variants={staggerContainer}>
                   {features.map((feature, index) => (
-                    <Card
-                      key={index}
-                      className="bg-gray-900/30 border-gray-800 hover:bg-gray-900/50 transition-all duration-300 hover:-translate-y-1 group"
-                    >
-                      <CardContent className="p-6">
-                        <div className="flex items-start space-x-4">
-                          <div className="flex-shrink-0">
-                            <div className="w-10 h-10 bg-[#F4B448]/20 rounded-lg flex items-center justify-center group-hover:bg-[#F4B448]/30 group-hover:scale-110 transition-all duration-300">
-                              <feature.icon className="w-5 h-5 text-[#F4B448]" />
+                    <motion.div key={index} variants={staggerItem}>
+                      <Card className="bg-gray-900/30 border-gray-800 hover:bg-gray-900/50 transition-all duration-300 hover:-translate-y-1 group">
+                        <CardContent className="p-6">
+                          <div className="flex items-start space-x-4">
+                            <div className="flex-shrink-0">
+                              <div className="w-10 h-10 bg-[#F4B448]/20 rounded-lg flex items-center justify-center group-hover:bg-[#F4B448]/30 group-hover:scale-110 transition-all duration-300">
+                                <feature.icon className="w-5 h-5 text-[#F4B448]" />
+                              </div>
+                            </div>
+                            <div>
+                              <h4 className="text-lg font-semibold text-white mb-2">
+                                {feature.title}
+                              </h4>
+                              <p className="text-gray-400 text-sm">
+                                {feature.description}
+                              </p>
                             </div>
                           </div>
-                          <div>
-                            <h4 className="text-lg font-semibold text-white mb-2">
-                              {feature.title}
-                            </h4>
-                            <p className="text-gray-400 text-sm">
-                              {feature.description}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
                   ))}
-                </div>
-              </div>
-            </div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
 
             {/* Recognition */}
-            <div className="text-center mb-20">
-              <h2 className="text-3xl font-bold text-white mb-4">
+            <motion.div
+              ref={recognitionRef}
+              className="text-center mb-20"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
+            >
+              <motion.h2
+                className="text-3xl font-bold text-white mb-4"
+                variants={fadeInUp}
+              >
                 Areal in the Limelight
-              </h2>
-              <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
-              <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-12">
+              </motion.h2>
+              <motion.div
+                className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
+                variants={scaleUp}
+              ></motion.div>
+              <motion.p
+                className="text-gray-400 text-lg max-w-3xl mx-auto mb-12"
+                variants={fadeInUp}
+              >
                 We've been featured in leading global and regional publications
                 for our innovative approach to real estate tokenization.
-              </p>
-              <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-16 items-center">
-                {mediaLogos.map((media) => (
-                  <div
+              </motion.p>
+              <motion.div
+                className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-16 items-center"
+                variants={staggerContainer}
+              >
+                {mediaLogos.map((media, index) => (
+                  <motion.div
                     key={media.name}
                     className="flex justify-center items-center h-20 group"
+                    variants={staggerItem}
+                    whileHover={{ scale: 1.1 }}
                   >
                     <Image
                       src={media.src}
                       alt={media.name}
                       width={250}
-                      height={250} // Set width and height to the same value for uniformity
+                      height={250}
                       className="w-25 h-25 object-contain transition-all duration-300 group-hover:scale-[1.05]"
                     />
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="mb-20">
-              <div className="text-center mb-12">
+            {/* Meet the Founder */}
+            <motion.div
+              ref={founderRef}
+              className="mb-20"
+              initial="initial"
+              animate={founderInView ? "animate" : "initial"}
+              variants={staggerContainer}
+            >
+              <motion.div className="text-center mb-12" variants={fadeInUp}>
                 <h2 className="text-3xl font-bold text-white mb-4">
                   Meet the Founder
                 </h2>
@@ -242,22 +388,32 @@ export default function Company() {
                   future, they bring unparalleled expertise to the real estate
                   and tech industries.
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="flex items-center justify-center space-x-12">
+              <motion.div
+                className="flex items-center justify-center space-x-12"
+                variants={staggerContainer}
+              >
                 {/* Founder Image  */}
-                <div className="bg-transparent rounded-lg border border-[#F4B448] overflow-hidden group hover:scale-105 transition-all duration-300">
+                <motion.div
+                  className="bg-transparent rounded-lg border border-[#F4B448] overflow-hidden group hover:scale-105 transition-all duration-300"
+                  variants={scaleUp}
+                  whileHover={{ scale: 1.05 }}
+                >
                   <Image
-                    src="/team/founder.png" // Replace with actual image path
+                    src="/team/founder.png"
                     alt="Founder"
                     width={350}
                     height={350}
                     className="object-cover"
                   />
-                </div>
+                </motion.div>
 
                 {/* Founder Content */}
-                <div className="flex flex-col justify-center space-y-4 max-w-lg">
+                <motion.div
+                  className="flex flex-col justify-center space-y-4 max-w-lg"
+                  variants={bounceUp}
+                >
                   <h3 className="text-white text-2xl font-semibold">
                     Sripriya Kalyanasundaram
                   </h3>
@@ -279,88 +435,21 @@ export default function Company() {
                       to tokenized assets and driving innovation in the real
                       estate space globally.
                     </li>
-                    {/* <li>
-                      Dedicated to creating a sustainable, tech-driven future in
-                      real estate.
-                    </li> */}
                   </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Team Section */}
-            {/* <div className="mb-20"> */}
-              {/* <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-white mb-4">
-                  Meet the Innovators
-                </h2>
-                <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
-                <p className="text-gray-400 text-lg max-w-3xl mx-auto">
-                  Our team brings together expertise from real estate, finance,
-                  and technology sectors. Meet the people leading the Areal
-                  revolution.
-                </p>
-              </div> */}
-
-              {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
-                {teamMembers.map((member, index) => (
-                  <Card
-                    key={index}
-                    className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl group"
-                  >
-                    <CardHeader className="pb-4">
-                      <div className="w-20 h-20 bg-[#F4B448] rounded-full mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <span className="text-lg font-bold text-black">
-                          {member.name
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </span>
-                      </div>
-                      <CardTitle className="text-white group-hover:text-[#F4B448] transition-colors">
-                        {member.name}
-                      </CardTitle>
-                      <CardDescription className="text-gray-400 text-sm leading-relaxed">
-                        {member.role}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
-                ))}
-              </div> */}
-
-              {/* Advisory Board */}
-              {/* <div className="bg-gray-900/30 rounded-xl p-8 border border-gray-800">
-                <h3 className="text-2xl font-bold text-white text-center mb-8">
-                  Advisory Board
-                </h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-                  {advisors.map((advisor, index) => (
-                    <Card
-                      key={index}
-                      className="bg-gray-800/50 border-gray-700 text-center hover:bg-gray-800/70 transition-all duration-300 hover:-translate-y-1 group"
-                    >
-                      <CardContent className="p-4">
-                        <div className="w-12 h-12 bg-gray-600 rounded-full mx-auto mb-3 flex items-center justify-center group-hover:bg-[#F4B448] group-hover:scale-110 transition-all duration-300">
-                          <span className="text-white group-hover:text-black font-bold text-sm">
-                            {advisor.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </span>
-                        </div>
-                        <p className="text-sm font-medium text-gray-300 group-hover:text-[#F4B448] transition-colors">
-                          {advisor.name}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </div> */}
+                </motion.div>
+              </motion.div>
+            </motion.div>
 
             {/* Video Section */}
-            <div className="mb-20">
-              <div className="text-center mb-8">
+            <motion.div
+              ref={videoRef}
+              className="mb-20"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={bounceUp}
+            >
+              <motion.div className="text-center mb-8" variants={fadeInUp}>
                 <h2 className="text-3xl font-bold text-white mb-4">
                   Promotional Videos
                 </h2>
@@ -368,9 +457,9 @@ export default function Company() {
                 <p className="text-gray-400 text-lg">
                   Learn more about our platform with our informative videos
                 </p>
-              </div>
+              </motion.div>
 
-              <div className="max-w-4xl mx-auto">
+              <motion.div className="max-w-4xl mx-auto" variants={scaleUp}>
                 <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833]">
                   <iframe
                     className="w-full h-full"
@@ -381,11 +470,18 @@ export default function Company() {
                     allowFullScreen
                   ></iframe>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* CTA Section */}
-            <div className="bg-gray-900/50 rounded-xl p-12 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1">
+            <motion.div
+              ref={ctaRef}
+              className="bg-gray-900/50 rounded-xl p-12 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={bounceUp}
+            >
               <div className="text-center">
                 <h2 className="text-3xl font-bold text-white mb-6">
                   Join Our Journey
@@ -396,15 +492,23 @@ export default function Company() {
                   transparent future.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                  <motion.button
+                    className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     Join Our Team
-                  </button>
-                  <button className="border border-[#F4B448] text-[#F4B448] hover:bg-[#F4B448] hover:text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                  </motion.button>
+                  <motion.button
+                    className="border border-[#F4B448] text-[#F4B448] hover:bg-[#F4B448] hover:text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     Partner With Us
-                  </button>
+                  </motion.button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -2,8 +2,8 @@ import Layout from "@/src/components/layout";
 import Hero from "@/src/components/hero";
 import Image from "next/image";
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
 import { useRouter } from "next/router";
+import { motion, easeOut } from "framer-motion";
 import {
   Accordion,
   AccordionContent,
@@ -11,9 +11,10 @@ import {
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
 import { properties } from "@/src/data/properties";
+import type { Variants } from "framer-motion";
 
 export default function Home() {
-  const router = useRouter(); // Use the router for navigation
+  const router = useRouter();
 
   const partners = [
     { name: "Google", src: "/partners/google.png" },
@@ -78,177 +79,355 @@ export default function Home() {
     },
   ];
 
-  // Split partners for two rows
-  const partnersRow1 = partners.slice(0, 5);
-  const partnersRow2 = partners.slice(5);
+  // Animation variants
+  const fadeInUp = {
+    initial: { opacity: 0, y: 60 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
+  };
+
+  const fadeInLeft = {
+    initial: { opacity: 0, x: -60 },
+    animate: { opacity: 1, x: 0, transition: { duration: 0.6, ease: easeOut } },
+  };
+
+  const fadeInRight = {
+    initial: { opacity: 0, x: 60 },
+    animate: { opacity: 1, x: 0, transition: { duration: 0.6, ease: easeOut } },
+  };
+
+  const bounceIn: Variants = {
+    initial: { opacity: 0, scale: 0.3 },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring" as const,
+        duration: 0.8,
+        bounce: 0.5,
+      },
+    },
+  };
+
+  const staggerContainer = {
+    initial: {},
+    animate: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const cardHover: Variants = {
+    rest: { scale: 1 },
+    hover: {
+      scale: 1.05,
+      transition: {
+        type: "spring" as const,
+        stiffness: 300,
+        damping: 20,
+      },
+    },
+  };
+
+  const textReveal: Variants = {
+    initial: { opacity: 0, y: 20 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: easeOut,
+      },
+    },
+  };
 
   return (
     <Layout>
-      <section className="flex justify-center">
+      {/* Hero Section */}
+      <motion.section
+        className="flex justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <Hero />
-      </section>
+      </motion.section>
 
-      <section className="py-20 px-4 bg-gray-900/30">
+      {/* Special Stats Section */}
+      <motion.section
+        className="py-20 px-4 bg-gray-900/30"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+      >
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-16">
+          <motion.h2
+            className="text-3xl font-bold text-white mb-16"
+            variants={fadeInUp}
+          >
             What makes AREAL Special?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left">
+          </motion.h2>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left"
+            variants={staggerContainer}
+          >
             {specialStats.map((item, i) => (
-              <div key={i} className="bg-gray-800/60 p-6 rounded-xl">
-                <h3 className="text-4xl font-extrabold text-[#F4B448] mb-2">
+              <motion.div
+                key={i}
+                className="bg-gray-800/60 p-6 rounded-xl"
+                variants={bounceIn}
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 10px 30px rgba(244, 180, 72, 0.3)",
+                  transition: { type: "spring", stiffness: 300 },
+                }}
+              >
+                <motion.h3
+                  className="text-4xl font-extrabold text-[#F4B448] mb-2"
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    type: "spring",
+                    duration: 0.8,
+                    delay: i * 0.1,
+                    bounce: 0.6,
+                  }}
+                >
                   {item.prefix}
                   <span className="counter" data-value={item.value}>
                     {item.value}
                   </span>
                   {item.suffix}
-                </h3>
-                <p className="text-gray-300">{item.label}</p>
-              </div>
+                </motion.h3>
+                <motion.p className="text-gray-300" variants={textReveal}>
+                  {item.label}
+                </motion.p>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Real World Assets (RWA) Section */}
-      <section className="py-20 px-4 bg-gray-900/20">
-        <div className="max-w-7xl mx-auto text-center  justify-center">
-          <h2 className="text-3xl font-bold text-white mb-12">
+      {/* Featured Projects Section */}
+      <motion.section
+        className="py-20 px-4 bg-gray-900/20"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+      >
+        <div className="max-w-7xl mx-auto text-center justify-center">
+          <motion.h2
+            className="text-3xl font-bold text-white mb-12"
+            variants={fadeInUp}
+          >
             Featured Projects
-          </h2>
-          <div className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
-            {properties.map((property) => (
-              <Link
-                href={`/property/${property.id}`}
+          </motion.h2>
+          <motion.div
+            className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto"
+            variants={staggerContainer}
+          >
+            {properties.map((property, i) => (
+              <motion.div
                 key={property.id}
-                className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] hover:shadow-[0_0_20px_#F4B448] transition-all p-6 text-left w-full max-w-sm"
+                variants={fadeInUp}
+                whileHover="hover"
+                initial="rest"
+                animate="rest"
               >
-                <div className="aspect-[4/3] w-full overflow-hidden rounded-lg mb-4 relative">
-                  <Image
-                    src={property.image}
-                    alt={property.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-white">
-                  {property.title}
-                </h3>
-                <p className="text-gray-400 text-sm mb-2">
-                  {property.location}
-                </p>
-                <p className="text-yellow-400 text-sm">{property.price}</p>
-              </Link>
+                <Link
+                  href={`/property/${property.id}`}
+                  className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] hover:shadow-[0_0_20px_#F4B448] transition-all p-6 text-left w-full max-w-sm block"
+                >
+                  <motion.div
+                    className="aspect-[4/3] w-full overflow-hidden rounded-lg mb-4 relative"
+                    variants={cardHover}
+                  >
+                    <Image
+                      src={property.image}
+                      alt={property.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </motion.div>
+                  <motion.h3
+                    className="text-xl font-bold text-white"
+                    variants={textReveal}
+                  >
+                    {property.title}
+                  </motion.h3>
+                  <motion.p
+                    className="text-gray-400 text-sm mb-2"
+                    variants={textReveal}
+                  >
+                    {property.location}
+                  </motion.p>
+                  <motion.p
+                    className="text-yellow-400 text-sm"
+                    variants={textReveal}
+                  >
+                    {property.price}
+                  </motion.p>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Areal Suite Section */}
-      <section className="py-20 px-4">
+      <motion.section
+        className="py-20 px-4"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-6">
+            <motion.h2
+              className="text-4xl font-bold text-white mb-6"
+              variants={fadeInUp}
+            >
               The Areal Suite
-            </h2>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-8">
+            </motion.h2>
+            <motion.p
+              className="text-gray-400 text-lg max-w-3xl mx-auto mb-8"
+              variants={fadeInUp}
+            >
               At AREAL, we provide more than just a platform - we offer a
               comprehensive suite of products designed to tokenize and
               democratize Real World Assets.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
+            </motion.p>
+            <motion.div
+              className="flex flex-wrap justify-center gap-4 mb-8"
+              variants={staggerContainer}
+            >
               {[
                 "Areal TaaS",
                 "Areal Mortgage",
                 "Launchpad",
                 "ArealPay",
                 "Areal Marketplace",
-              ].map((product) => (
-                <button
+              ].map((product, i) => (
+                <motion.button
                   key={product}
                   onClick={() => handleProductClick(product)}
                   className="bg-gray-800 text-white px-4 py-2 rounded-full"
+                  variants={bounceIn}
+                  whileHover={{
+                    scale: 1.1,
+                    backgroundColor: "#F4B448",
+                    color: "#000",
+                    transition: { type: "spring", stiffness: 400 },
+                  }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {product}
-                </button>
+                </motion.button>
               ))}
-            </div>
-            <button className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-3 rounded-lg">
+            </motion.div>
+            <motion.button
+              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-3 rounded-lg"
+              variants={bounceIn}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: "0 10px 30px rgba(244, 180, 72, 0.4)",
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
               Explore our Ecosystem →
-            </button>
+            </motion.button>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 transition-all duration-500 ease-in-out hover:border-[#F4B448] hover:border-2 hover:scale-102 hover:shadow-[0_0_25px_#F4B448]">
-              <div className="w-12 h-12 bg-[#F4B448] rounded-lg mb-6 flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-black"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+          <motion.div
+            className="grid md:grid-cols-3 gap-8"
+            variants={staggerContainer}
+          >
+            {[
+              {
+                title: "Turn Real Estate into Crypto",
+                description:
+                  "Tokenize property investments and convert to various cryptocurrencies.",
+                icon: "M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z",
+              },
+              {
+                title: "Lightning Fast Transactions",
+                description:
+                  "Revolutionizing liquidity with ArealPay's blockchain technology.",
+                icon: "M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z",
+              },
+              {
+                title: "Spend Your Property Portfolio",
+                description:
+                  "Make your real estate assets liquid enough to spend on everyday goods and services through crypto.",
+                icon: "M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zM14 6a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h6zM4 14a2 2 0 002 2h8a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2z",
+              },
+            ].map((feature, i) => (
+              <motion.div
+                key={i}
+                className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 transition-all duration-500 ease-in-out hover:border-[#F4B448] hover:border-2 hover:scale-102 hover:shadow-[0_0_25px_#F4B448]"
+                variants={fadeInUp}
+                whileHover={{
+                  y: -10,
+                  transition: { type: "spring", stiffness: 300 },
+                }}
+              >
+                <motion.div
+                  className="w-12 h-12 bg-[#F4B448] rounded-lg mb-6 flex items-center justify-center"
+                  whileHover={{
+                    rotate: 360,
+                    transition: { duration: 0.8 },
+                  }}
                 >
-                  <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Turn Real Estate into Crypto
-              </h3>
-              <p className="text-gray-400">
-                Tokenize property investments and convert to various
-                cryptocurrencies.
-              </p>
-            </div>
-
-            <div className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 transition-all duration-500 ease-in-out hover:border-[#F4B448] hover:border-2 hover:scale-102 hover:shadow-[0_0_25px_#F4B448]">
-              <div className="w-12 h-12 bg-[#F4B448] rounded-lg mb-6 flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-black"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  <svg
+                    className="w-6 h-6 text-black"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d={feature.icon} />
+                  </svg>
+                </motion.div>
+                <motion.h3
+                  className="text-xl font-semibold text-white mb-4"
+                  variants={textReveal}
                 >
-                  <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Lightning Fast Transactions
-              </h3>
-              <p className="text-gray-400">
-                Revolutionizing liquidity with ArealPay's blockchain technology.
-              </p>
-            </div>
-
-            <div className="bg-gray-900/50 p-8 rounded-xl border border-gray-800 transition-all duration-500 ease-in-out hover:border-[#F4B448] hover:border-2 hover:scale-102 hover:shadow-[0_0_25px_#F4B448]">
-              <div className="w-12 h-12 bg-[#F4B448] rounded-lg mb-6 flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-black"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zM14 6a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2h6zM4 14a2 2 0 002 2h8a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-4">
-                Spend Your Property Portfolio
-              </h3>
-              <p className="text-gray-400">
-                Make your real estate assets liquid enough to spend on everyday
-                goods and services through crypto.
-              </p>
-            </div>
-          </div>
+                  {feature.title}
+                </motion.h3>
+                <motion.p className="text-gray-400" variants={textReveal}>
+                  {feature.description}
+                </motion.p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Partners Section */}
-      <section className="py-20 px-4 bg-gray-900/30">
+      <motion.section
+        className="py-20 px-4 bg-gray-900/30"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+      >
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">
+          <motion.h2
+            className="text-2xl font-bold text-white mb-4"
+            variants={fadeInUp}
+          >
             Partner and Collaborators
-          </h2>
-          <p className="text-gray-400 mb-12">
+          </motion.h2>
+          <motion.p className="text-gray-400 mb-12" variants={fadeInUp}>
             Building the Future of Crypto Real Estate with our Network of
             Trusted Blockchain Partners
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-center">
+          </motion.p>
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-center"
+            variants={staggerContainer}
+          >
             {[
               { name: "Google", src: "/partners/google.png" },
               { name: "Meta", src: "/partners/meta.png" },
@@ -261,90 +440,105 @@ export default function Home() {
               { name: "Solana", src: "/partners/solana.png" },
               { name: "Coinbase", src: "/partners/coinbase.png" },
             ].map((partner, i) => (
-              <div
+              <motion.div
                 key={i}
                 className="bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-20"
+                variants={bounceIn}
+                whileHover={{
+                  scale: 1.1,
+                  transition: {
+                    scale: { type: "spring", stiffness: 300 },
+                  },
+                }}
               >
                 <Image
                   src={partner.src}
                   alt={partner.name}
                   width={200}
                   height={200}
-                  className="max-h-10 object-contain  hover:scale-105 transition-all duration-300"
+                  className="max-h-10 object-contain hover:scale-105 transition-all duration-300"
                 />
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
-
-      {/* Testimonials Section - Hidden as requested */}
-      {/*
-      <section className="py-20 px-4 bg-gray-900/30">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Testimonials and Endorsements
-          </h2>
-          <p className="text-gray-400 mb-12">
-            Hear what our crypto real estate investor community is saying about
-            AREAL:
-          </p>
-          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {Array.from({ length: 5 }, (_, i) => (
-              <div key={i} className="bg-gray-800/50 p-6 rounded-lg">
-                <div className="text-gray-400">
-                  Investor testimonial placeholder
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      */}
+      </motion.section>
 
       {/* FAQ Section */}
-      <section className="py-20 px-4">
+      <motion.section
+        className="py-20 px-4"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+      >
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">FAQ</h2>
-            <p className="text-gray-400">Everything you need to know</p>
+            <motion.h2
+              className="text-3xl font-bold text-white mb-4"
+              variants={fadeInUp}
+            >
+              FAQ
+            </motion.h2>
+            <motion.p className="text-gray-400" variants={fadeInUp}>
+              Everything you need to know
+            </motion.p>
           </div>
-          <Accordion type="single" collapsible className="w-full space-y-4">
-            {faqItems.map((item, i) => (
-              <AccordionItem
-                key={i}
-                value={`item-${i}`}
-                className="bg-gray-800/50 rounded-lg border border-gray-700 data-[state=open]:border-[#F4B448]/50"
-              >
-                <AccordionTrigger className="p-6 text-left font-semibold text-white hover:no-underline">
-                  {item.question}
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6 text-gray-400">
-                  {item.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+          <motion.div variants={staggerContainer}>
+            <Accordion type="single" collapsible className="w-full space-y-4">
+              {faqItems.map((item, i) => (
+                <motion.div key={i} variants={fadeInLeft}>
+                  <AccordionItem
+                    value={`item-${i}`}
+                    className="bg-gray-800/50 rounded-lg border border-gray-700 data-[state=open]:border-[#F4B448]/50"
+                  >
+                    <AccordionTrigger className="p-6 text-left font-semibold text-white hover:no-underline">
+                      {item.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="px-6 pb-6 text-gray-400">
+                      {item.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                </motion.div>
+              ))}
+            </Accordion>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Final CTA Section bg-gradient-to-r from-[#F4B448]/10 to-yellow-500/10*/}
-      <section className="py-20 px-4 mb-10">
+      {/* Final CTA Section */}
+      <motion.section
+        className="py-20 px-4 mb-10"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={staggerContainer}
+      >
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-gray-400 mb-4">
+          <motion.p className="text-gray-400 mb-4" variants={fadeInUp}>
             Don't miss out on the future of crypto real estate investment.
-          </p>
-          <h2 className="text-4xl font-bold text-white mb-8">
+          </motion.p>
+          <motion.h2
+            className="text-4xl font-bold text-white mb-8"
+            variants={fadeInUp}
+          >
             Ready to Start Your Crypto Real Estate Journey?
-          </h2>
-          <button
+          </motion.h2>
+          <motion.button
             className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-4 rounded-lg text-lg"
             onClick={() => (window.location.href = "/contact")}
+            variants={bounceIn}
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 15px 40px rgba(244, 180, 72, 0.4)",
+              transition: { type: "spring", stiffness: 300 },
+            }}
+            whileTap={{ scale: 0.95 }}
           >
             Join the Revolution →
-          </button>
+          </motion.button>
         </div>
-      </section>
+      </motion.section>
     </Layout>
   );
 }

@@ -31,7 +31,7 @@ export default function VipMember() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
+      <div className="min-h-screen  text-white">
         <div className="container mx-auto px-4 py-24 md:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Side: Information */}
