@@ -84,7 +84,10 @@ export default function Home() {
 
   return (
     <Layout>
-      <Hero />
+      <section className="flex justify-center">
+        <Hero />
+      </section>
+
       <section className="py-20 px-4 bg-gray-900/30">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-16">
