@@ -372,7 +372,7 @@ export default function Company(): JSX.Element {
             {/* Meet the Founder */}
             <motion.div
               ref={founderRef}
-              className="mb-20"
+              className="mb-20 flex flex-col items-center"
               initial="initial"
               animate={founderInView ? "animate" : "initial"}
               variants={staggerContainer}
@@ -391,7 +391,7 @@ export default function Company(): JSX.Element {
               </motion.div>
 
               <motion.div
-                className="flex items-center justify-center space-x-12"
+                className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col"
                 variants={staggerContainer}
               >
                 {/* Founder Image  */}
@@ -401,7 +401,7 @@ export default function Company(): JSX.Element {
                   whileHover={{ scale: 1.05 }}
                 >
                   <Image
-                    src="/team/founder.png"
+                    src="/team/founder.jpg"
                     alt="Founder"
                     width={350}
                     height={350}
@@ -411,7 +411,7 @@ export default function Company(): JSX.Element {
 
                 {/* Founder Content */}
                 <motion.div
-                  className="flex flex-col justify-center space-y-4 max-w-lg"
+                  className="flex flex-col justify-center space-y-4 max-w-lg sm:mt-10"
                   variants={bounceUp}
                 >
                   <h3 className="text-white text-2xl font-semibold">

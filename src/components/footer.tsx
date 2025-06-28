@@ -211,6 +211,19 @@ export default function Footer() {
                 className="h-6 w-6"
               />
             </a>
+            <a
+              href="https://t.me/arealnow"
+              className="text-gray-400 hover:text-white"
+            >
+              <span className="sr-only">TELEGRAM</span>
+              <Image
+                src="/socialmedia/telegram.svg"
+                alt="X Logo"
+                width={24}
+                height={24}
+                className="h-6 w-6"
+              />
+            </a>
           </div>
         </div>
       </div>

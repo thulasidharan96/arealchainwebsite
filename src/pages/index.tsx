@@ -29,6 +29,7 @@ export default function Home() {
   const projectsRef = useRef(null);
   const suiteRef = useRef(null);
   const partnersRef = useRef(null);
+  const AccreditersRef = useRef(null);
   const faqRef = useRef(null);
   const ctaRef = useRef(null);
 
@@ -43,6 +44,11 @@ export default function Home() {
     { name: "Microsoft", src: "/partners/microsoft.png" },
     { name: "Solana", src: "/partners/solana.png" },
     { name: "Coinbase", src: "/partners/coinbase.png" },
+  ];
+
+  const Accredited = [
+    { name: "Costa Ricae", src: "/Accrediters/Costa_Rica.png" },
+    { name: "VARA", src: "/Accrediters/vara.png" },
   ];
 
   interface ProductClickEvent {
@@ -77,7 +83,12 @@ export default function Home() {
     { value: 0.25, prefix: "$", label: "Launching Price", suffix: "" },
     { value: 40, suffix: "%", label: "Investor Staking", prefix: "" },
     { value: 4.5, prefix: "$", suffix: " Million", label: "Fund Raised" },
-    { value: 10, suffix: "x", label: "Project Growth", prefix: "" },
+    {
+      value: 10,
+      suffix: "x",
+      label: "Expected Project Growth in 2 Years",
+      prefix: "",
+    },
   ];
 
   const faqItems = [
@@ -204,6 +215,30 @@ export default function Home() {
       start: "top 80%",
       onEnter: () => {
         gsap.to(partnersRef.current.querySelectorAll("h2, p"), {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: "power2.out",
+        });
+
+        gsap.to(".partner-logo", {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: "back.out(1.2)",
+          delay: 0.2,
+        });
+      },
+    });
+
+    ScrollTrigger.create({
+      trigger: AccreditersRef.current,
+      start: "top 80%",
+      onEnter: () => {
+        gsap.to(AccreditersRef.current.querySelectorAll("h2, p"), {
           opacity: 1,
           y: 0,
           duration: 0.6,
@@ -415,6 +450,38 @@ export default function Home() {
         <div className="h-px bg-[#F4B448]/30"></div>
       </div>
 
+      {/* Partners Section */}
+      <section ref={AccreditersRef} className="py-20 px-4 ">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
+            Accredited With
+          </h2>
+          <div className="flex flex-row gap-8 items-center justify-center">
+            {Accredited.map((Accrediter, i) => (
+              <div
+                key={i}
+                className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-[200px] w-[400px] cursor-pointer"
+                onMouseEnter={handleCardHover}
+                onMouseLeave={handleCardLeave}
+              >
+                <Image
+                  src={Accrediter.src}
+                  alt={Accrediter.name}
+                  width={150}
+                  height={150}
+                  // className="max-h-20 object-contain transition-transform duration-300"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Section Separator */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="h-px bg-[#F4B448]/30"></div>
+      </div>
+
       {/* Featured Projects Section */}
       <section ref={projectsRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center justify-center">
@@ -560,18 +627,7 @@ export default function Home() {
             Trusted Blockchain Partners
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-center">
-            {[
-              { name: "Google", src: "/partners/google.png" },
-              { name: "Meta", src: "/partners/meta.png" },
-              { name: "GitHub", src: "/partners/github.png" },
-              { name: "AWS", src: "/partners/aws.png" },
-              { name: "Microsoft", src: "/partners/microsoft.png" },
-              { name: "Binance", src: "/partners/binance.png" },
-              { name: "Chainlink", src: "/partners/chainlink.png" },
-              { name: "CoinGecko", src: "/partners/coingecko.png" },
-              { name: "USDT", src: "/partners/usdt.svg" },
-              { name: "Coinbase", src: "/partners/coinbase.png" },
-            ].map((partner, i) => (
+            {partners.map((partner, i) => (
               <div
                 key={i}
                 className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-20 cursor-pointer"

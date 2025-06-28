@@ -17,10 +17,9 @@ import type { Announcement } from "@/src/lib/announcementData";
 
 export default function Announcement() {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const allAnnouncements = getAllAnnouncements(); // Fetch all announcements
+  const allAnnouncements = getAllAnnouncements();
   const filteredAnnouncements = getAnnouncementsByCategory(selectedCategory); // Filter by category
 
-  const categories = ["All", "Event", "News", "Update", "Press Release"]; // Define categories for filtering
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -41,26 +40,10 @@ export default function Announcement() {
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-4 justify-center mb-12">
-              {categories.map((category, index) => (
-                <Badge
-                  key={index}
-                  className={`cursor-pointer px-4 py-2 transition-colors ${
-                    selectedCategory === category
-                      ? "bg-[#F4B448] text-black hover:bg-[#F4B448]/90"
-                      : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                  }`}
-                  onClick={() => handleCategoryClick(category)}
-                >
-                  {category}
-                </Badge>
-              ))}
-            </div>
-
             <div className="grid lg:grid-cols-2 gap-8">
               {filteredAnnouncements.map((announcement: Announcement) => (
                 <Link
-                  href={`/announcement/${announcement.id}`}
+                  href={`${announcement.link}`}
                   key={announcement.id}
                 >
                   <Card className="bg-gray-900/50 border-gray-800 hover:border-[#F4B448]/50 transition-all duration-300 cursor-pointer hover:transform hover:scale-[1.02]">

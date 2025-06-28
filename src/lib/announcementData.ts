@@ -1,4 +1,5 @@
 export interface Announcement {
+  link: string;
   id: string;
   title: string;
   excerpt: string;
@@ -13,6 +14,7 @@ export interface Announcement {
 
 export const announcements: Announcement[] = [
   {
+    link: "https",
     id: "brock-pierce-joins-Areal",
     title: "EOS & USDT Co-Founder, Brock Pierce, Joins Areal!",
     excerpt:
@@ -46,6 +48,7 @@ export const announcements: Announcement[] = [
     tags: ["Partnership", "Blockchain", "Investment"],
   },
   {
+    link: "https",
     id: "welcoming-charles-lamoulen",
     title: "Welcoming Charles Lamoulen!",
     excerpt:
@@ -85,6 +88,7 @@ export const announcements: Announcement[] = [
     tags: ["Team", "Advisory", "Real Estate"],
   },
   {
+    link: "https",
     id: "marketing-visual-update",
     title: "Ramping Up the Marketing Machine: A Visual Update",
     excerpt:
