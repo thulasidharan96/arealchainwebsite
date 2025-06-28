@@ -569,7 +569,7 @@ export default function Home() {
               { name: "Binance", src: "/partners/binance.png" },
               { name: "Chainlink", src: "/partners/chainlink.png" },
               { name: "CoinGecko", src: "/partners/coingecko.png" },
-              { name: "Solana", src: "/partners/solana.png" },
+              { name: "USDT", src: "/partners/usdt.svg" },
               { name: "Coinbase", src: "/partners/coinbase.png" },
             ].map((partner, i) => (
               <div
