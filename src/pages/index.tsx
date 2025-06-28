@@ -344,13 +344,13 @@ export default function Home() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section ref={heroRef} className="flex justify-center opacity-0">
+      <section ref={heroRef} className="flex justify-center">
         <Hero />
       </section>
 
       {/* Special Stats Section */}
       <motion.section
-        className="py-20 px-4 bg-gray-900/30"
+        className="py-20 px-4"
         initial="initial"
         whileInView="animate"
         viewport={{ once: true, amount: 0.3 }}
@@ -406,7 +406,7 @@ export default function Home() {
       </motion.section>
 
       {/* Featured Projects Section */}
-      <section ref={projectsRef} className="py-20 px-4 bg-gray-900/20">
+      <section ref={projectsRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center justify-center">
           <h2 className="text-3xl font-bold text-white mb-12 opacity-0">
             Featured Projects
@@ -530,7 +530,7 @@ export default function Home() {
       </section>
 
       {/* Partners Section */}
-      <section ref={partnersRef} className="py-20 px-4 bg-gray-900/30">
+      <section ref={partnersRef} className="py-20 px-4 ">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
             Partner and Collaborators

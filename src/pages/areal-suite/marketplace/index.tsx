@@ -30,7 +30,7 @@ const ProductPage = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      <div className="min-h-screen bg-transparent">
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">
             {/* Header with animation */}
@@ -96,8 +96,8 @@ const ProductPage = () => {
                   <Image
                     src="/ArealSuite/marketplace1.png"
                     alt="Areal Marketplace Product Image"
-                    width={400}
-                    height={400}
+                    width={500}
+                    height={500}
                   />
                 </motion.div>
 

@@ -2,6 +2,8 @@ import { Button } from "@/src/components/ui/button";
 import { Badge } from "@/src/components/ui/badge";
 import { BlobAnimation } from "@/src/components/ui/BlobAnimation";
 import SplineViewer from "./SplineViewer";
+import { Link } from "lucide-react";
+import { http } from "viem";
 
 export default function Hero() {
   return (
@@ -50,17 +52,28 @@ export default function Hero() {
         </div>
 
         {/* Right Spline Viewer */}
-        <div className="w-full lg:w-1/2">
+        <div className="w-full lg:w-1/2 flex justify-center items-center">
           <SplineViewer />
         </div>
       </div>
 
       {/* Video Section */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 my-12">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 my-4">
+        <div>
+          <a
+            href="https://www.youtube.com/@ArealChain"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 text-center cursor-pointer hover:underline">
+              Watch our Latest Promo
+            </h2>
+          </a>
+        </div>
         <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833]">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/wu5bA6-weUk?autoplay=1&mute=1&loop=1&playlist=wu5bA6-weUk&controls=0&modestbranding=1&showinfo=0&rel=0"
+            src="https://www.youtube.com/embed/Df8b_7NpvSQ?si=6rUGdRvm6_RzxkDd?autoplay=1&mute=1&loop=1&playlist=wu5bA6-weUk&controls=0&modestbranding=1&showinfo=0&rel=0"
             title="Introducing the identity behind the innovation."
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

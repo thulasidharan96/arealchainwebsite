@@ -253,7 +253,7 @@ export default function Roadmap() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-x-hidden">
+      <div className="min-h-screen bg-transparent overflow-x-hidden">
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
@@ -283,7 +283,7 @@ export default function Roadmap() {
         >
           <div className="relative inline-flex items-center h-[600px] py-10 px-20 min-w-full">
             {/* Horizontal line */}
-            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-900 -translate-y-1/2"></div>
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-600 -translate-y-1/2"></div>
 
             <div className="flex items-center">
               {timelineItems.map((item, index) => {

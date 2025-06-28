@@ -38,7 +38,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-black/30 border-t border-gray-800">
+    <footer className="relative z-50 bg-[#171717] backdrop-blur-md border-t border-gray-800">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           <div className="space-y-4">

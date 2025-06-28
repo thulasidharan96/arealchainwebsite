@@ -7,7 +7,9 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { Check } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const ProductPage = () => {
   const product = {
@@ -28,22 +30,32 @@ const ProductPage = () => {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+      <div className="min-h-screen bg-transparent">
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-16">
+            {/* Header with animation */}
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-16"
+            >
               <h1 className="text-5xl font-bold text-white mb-6">
                 {product.name}
               </h1>
               <p className="text-gray-400 text-xl max-w-3xl mx-auto">
                 {product.subtitle}
               </p>
-            </div>
+            </motion.div>
 
             <div className="grid lg:grid-cols-2 gap-16 items-center">
-              {/* Description & Features */}
-              <div className="space-y-8">
+              {/* Description & Features with animation */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+                className="space-y-8"
+              >
                 <p className="text-lg text-gray-300 leading-relaxed">
                   {product.description}
                 </p>
@@ -62,10 +74,33 @@ const ProductPage = () => {
                     ))}
                   </ul>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Waitlist CTA */}
-              <div>
+              {/* Waitlist CTA with bounce animation */}
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2 }}
+              >
+                <motion.div
+                  animate={{
+                    y: [0, -10, 0], // Bouncing effect
+                  }}
+                  transition={{
+                    repeat: Infinity, // Loop the animation
+                    repeatType: "loop",
+                    duration: 2.5, // Increased duration for slower bounce
+                  }}
+                  className="flex justify-center"
+                >
+                  <Image
+                    src="/ArealSuite/mortgage1.png"
+                    alt="Areal Mortgage Product Image"
+                    width={500}
+                    height={500}
+                  />
+                </motion.div>
+
                 <Card className="bg-gray-900/50 border-gray-800 hover:border-[#F4B448]/50 transition-colors">
                   <CardHeader>
                     <CardTitle className="text-white text-2xl text-center">
@@ -88,7 +123,7 @@ const ProductPage = () => {
                     </Link>
                   </CardContent>
                 </Card>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
