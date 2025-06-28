@@ -16,7 +16,7 @@ export const properties = [
     title: "Land Plot - Al Marjan Island",
     location: "Peninsula, Al Marjan Island",
     area: "50,885.42 sq. ft.",
-    image: "/properties/property1.jpg",
+    image: "/properties/property1.png",
     price: "1.01M AED /  3,132,000 ARL",
     description:
       "Exclusive villa with private garden and panoramic island views, ideal for families.",
