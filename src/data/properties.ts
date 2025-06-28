@@ -8,7 +8,7 @@ export const properties = [
     price: "3M AED / 3,000,000 ARL",
     description:
       "Modern apartment in the heart of Dubai with skyline views and excellent connectivity.",
-    ownership: "Leasehold (99 years)",
+    ownership: "Freehold (99 years)",
     yield: "6.5% annually",
   },
   {

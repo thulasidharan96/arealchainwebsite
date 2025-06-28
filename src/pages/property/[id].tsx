@@ -87,7 +87,7 @@ export default function PropertyDetailsPage() {
                 className="bg-[#F4B448] hover:bg-[#F4B448]/90 hover:text-black font-semibold text-black w-full"
                 onClick={() => router.push("/contact")}
               >
-                Join
+                Join The Privilege
               </Button>
             </div>
           </div>

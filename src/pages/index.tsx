@@ -474,9 +474,10 @@ export default function Home() {
               ))}
             </div>
             <button
-              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-3 rounded-lg opacity-0"
+              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-3 rounded-lg"
               onMouseEnter={handleButtonHover}
               onMouseLeave={handleButtonLeave}
+              onClick={() => router.push("/areal-suite")}
             >
               Explore our Ecosystem →
             </button>
