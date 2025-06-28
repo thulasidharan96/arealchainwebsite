@@ -47,7 +47,7 @@ export default function Home() {
   ];
 
   const Accredited = [
-    { name: "Costa Ricae", src: "/Accrediters/Costa_Rica.png" },
+    // { name: "Costa Ricae", src: "/Accrediters/Costa_Rica.png" },
     { name: "VARA", src: "/Accrediters/vara.png" },
   ];
 
@@ -450,7 +450,7 @@ export default function Home() {
         <div className="h-px bg-[#F4B448]/30"></div>
       </div>
 
-      {/* Partners Section */}
+      {/*  Accredited Section */}
       <section ref={AccreditersRef} className="py-20 px-4 ">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
@@ -460,15 +460,15 @@ export default function Home() {
             {Accredited.map((Accrediter, i) => (
               <div
                 key={i}
-                className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-[200px] w-[400px] cursor-pointer"
+                className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-[200px] w-[400px] cursor-pointer mt-4"
                 onMouseEnter={handleCardHover}
                 onMouseLeave={handleCardLeave}
               >
                 <Image
                   src={Accrediter.src}
                   alt={Accrediter.name}
-                  width={150}
-                  height={150}
+                  width={200}
+                  height={200}
                   // className="max-h-20 object-contain transition-transform duration-300"
                 />
               </div>
