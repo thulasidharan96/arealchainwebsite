@@ -269,7 +269,7 @@ export default function Home() {
   }, []);
 
   // Optimized hover handlers
-  const handleCardHover = (e) => {
+  const handleCardHover = (e: { currentTarget: gsap.TweenTarget }) => {
     gsap.to(e.currentTarget, {
       scale: 1.05,
       duration: 0.3,
@@ -277,7 +277,7 @@ export default function Home() {
     });
   };
 
-  const handleCardLeave = (e) => {
+  const handleCardLeave = (e: { currentTarget: gsap.TweenTarget }) => {
     gsap.to(e.currentTarget, {
       scale: 1,
       duration: 0.3,
@@ -285,7 +285,7 @@ export default function Home() {
     });
   };
 
-  const handleButtonHover = (e) => {
+  const handleButtonHover = (e: { currentTarget: gsap.TweenTarget }) => {
     gsap.to(e.currentTarget, {
       scale: 1.05,
       duration: 0.2,
@@ -293,7 +293,7 @@ export default function Home() {
     });
   };
 
-  const handleButtonLeave = (e) => {
+  const handleButtonLeave = (e: { currentTarget: gsap.TweenTarget }) => {
     gsap.to(e.currentTarget, {
       scale: 1,
       duration: 0.2,
@@ -347,6 +347,11 @@ export default function Home() {
       <section ref={heroRef} className="flex justify-center">
         <Hero />
       </section>
+
+      {/* Section Separator */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="h-px bg-[#F4B448]/30"></div>
+      </div>
 
       {/* Special Stats Section */}
       <motion.section
@@ -405,6 +410,11 @@ export default function Home() {
         </div>
       </motion.section>
 
+      {/* Section Separator */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="h-px bg-[#F4B448]/30"></div>
+      </div>
+
       {/* Featured Projects Section */}
       <section ref={projectsRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center justify-center">
@@ -441,6 +451,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Section Separator */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="h-px bg-[#F4B448]/30"></div>
+      </div>
 
       {/* Areal Suite Section */}
       <section ref={suiteRef} className="py-20 px-4">
@@ -529,6 +544,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section Separator */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="h-px bg-[#F4B448]/30"></div>
+      </div>
+
       {/* Partners Section */}
       <section ref={partnersRef} className="py-20 px-4 ">
         <div className="max-w-7xl mx-auto text-center">
@@ -571,6 +591,11 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Section Separator */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="h-px bg-[#F4B448]/30"></div>
+      </div>
+
       {/* FAQ Section */}
       <section ref={faqRef} className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
@@ -603,6 +628,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Section Separator */}
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="h-px bg-[#F4B448]/30"></div>
+      </div>
 
       {/* Final CTA Section */}
       <section ref={ctaRef} className="py-20 px-4 mb-10">
