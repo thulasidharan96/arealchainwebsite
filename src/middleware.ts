@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
     "/ecosystem",
     "/forgetpassword",
     "/property",
+    "/announcement",
   ];
 
   const isPublicPath = publicPaths.some(

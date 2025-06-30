@@ -1,3 +1,5 @@
+// pages/join.tsx
+import { useState } from "react";
 import Layout from "@/src/components/layout";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
@@ -29,12 +31,47 @@ export default function VipMember() {
     },
   ];
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    terms: false,
+  });
+  const [status, setStatus] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [id]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.terms) {
+      setStatus("You must agree to receive updates.");
+      return;
+    }
+
+    setStatus("Submitting...");
+
+    const res = await fetch("/api/elite", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    setStatus(data.message);
+  };
+
   return (
     <Layout>
-      <div className="min-h-screen  text-white">
+      <div className="min-h-screen flex justify-center items-center text-white">
         <div className="container mx-auto px-4 py-24 md:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Side: Information */}
             <div className="space-y-8">
               <h1 className="text-5xl md:text-6xl font-extrabold leading-tight text-transparent bg-clip-text animate-gradient bg-gradient-to-r from-yellow-300 via-[#F4B448] to-yellow-300 bg-[length:200%_200%]">
                 Areal ELITE Club
@@ -44,7 +81,6 @@ export default function VipMember() {
                 <br />
                 <span className="text-gray-400">Become an Areal ELITE.</span>
               </h2>
-
               <div className="space-y-4 pt-4 border-t-2 border-[#F4B448]/30">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start gap-4">
@@ -60,8 +96,7 @@ export default function VipMember() {
               </div>
             </div>
 
-            {/* Right Side: Form */}
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl shadow-2xl shadow-[#F4B448]/10 p-8 backdrop-blur-sm">
+            <div className="bg-transparent border border-gray-800 rounded-2xl shadow-2xl shadow-[#F4B448]/10 p-8 backdrop-blur-sm">
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-white">
                   Join the ELITE Club
@@ -74,13 +109,15 @@ export default function VipMember() {
                 </p>
               </div>
 
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <Label htmlFor="name" className="font-medium text-gray-300">
                     Name<span className="text-[#F4B448]">*</span>
                   </Label>
                   <Input
                     id="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     placeholder="Your Full Name"
                     className="mt-2 bg-gray-800 border-gray-700 text-white focus:border-[#F4B448] focus:ring-[#F4B448]"
                   />
@@ -92,6 +129,8 @@ export default function VipMember() {
                   <Input
                     id="email"
                     type="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     placeholder="you@example.com"
                     className="mt-2 bg-gray-800 border-gray-700 text-white focus:border-[#F4B448] focus:ring-[#F4B448]"
                   />
@@ -103,6 +142,8 @@ export default function VipMember() {
                   <Input
                     id="phone"
                     type="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
                     placeholder="+1 234 567 890"
                     className="mt-2 bg-gray-800 border-gray-700 text-white focus:border-[#F4B448] focus:ring-[#F4B448]"
                   />
@@ -110,6 +151,13 @@ export default function VipMember() {
                 <div className="flex items-center space-x-3 pt-2">
                   <Checkbox
                     id="terms"
+                    checked={formData.terms}
+                    onCheckedChange={(checked) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        terms: checked === true,
+                      }))
+                    }
                     className="border-gray-600 data-[state=checked]:bg-[#F4B448] data-[state=checked]:text-black"
                   />
                   <Label
@@ -122,6 +170,7 @@ export default function VipMember() {
                 </div>
 
                 <Button
+                  type="submit"
                   size="lg"
                   className="w-full bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-bold text-base py-6 transition-transform hover:scale-105"
                 >
@@ -129,6 +178,12 @@ export default function VipMember() {
                   Apply for ELITE Access
                   <Star className="w-5 h-5 ml-2" />
                 </Button>
+
+                {status && (
+                  <p className="text-sm text-center text-yellow-400 mt-4">
+                    {status}
+                  </p>
+                )}
               </form>
 
               <div className="flex items-center justify-center gap-3 mt-6 text-gray-500 text-xs">

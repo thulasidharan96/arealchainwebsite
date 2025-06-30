@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, ChangeEvent } from "react";
+import React, { useState, FormEvent, ChangeEvent } from "react";
 import Layout from "@/src/components/layout";
 import { Card } from "@/src/components/ui/card";
 import { Input } from "@/src/components/ui/input";
@@ -22,6 +22,9 @@ export default function Login() {
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const [showOtpStep, setShowOtpStep] = useState<boolean>(false);
+
+  // ✅ SECURE: Store pending token for OTP verification
+  const [pendingToken, setPendingToken] = useState<string>("");
 
   const validateCredentials = (): boolean => {
     if (!email.trim() || !password.trim()) {
@@ -69,27 +72,36 @@ export default function Login() {
         redirect: false,
       });
 
+      // ✅ SECURE: Handle the custom OTP_REQUIRED error
       if (result?.error) {
-        switch (result.error) {
-          case "CredentialsSignin":
-          case "InvalidCredentials":
-            setError("Invalid email or password");
-            break;
-          case "UserNotFound":
-            setError("No account found with this email");
-            break;
-          case "TooManyRequests":
-            setError("Too many login attempts. Please try again later");
-            break;
-          default:
-            setError("Invalid email or password");
+        if (result.error.startsWith("OTP_REQUIRED:")) {
+          const token = result.error.split("OTP_REQUIRED:")[1];
+          setPendingToken(token);
+          setShowOtpStep(true);
+          setSuccess("Please enter the OTP sent to your email");
+        } else {
+          // Handle other error types
+          switch (result.error) {
+            case "CredentialsSignin":
+            case "InvalidCredentials":
+              setError("Invalid email or password");
+              break;
+            case "UserNotFound":
+              setError("No account found with this email");
+              break;
+            case "TooManyRequests":
+              setError("Too many login attempts. Please try again later");
+              break;
+            default:
+              setError("Invalid email or password");
+          }
         }
       } else {
-        setShowOtpStep(true);
-        setSuccess("Please enter the OTP sent to your email");
+        // This shouldn't happen with our new secure flow
+        setError("Unexpected authentication flow. Please try again.");
       }
     } catch (error) {
-      setError("Invalid email or password");
+      setError("Authentication failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -100,43 +112,63 @@ export default function Login() {
 
     if (!validateOtp()) return;
 
+    // ✅ SECURE: Ensure we have a valid pending token
+    if (!pendingToken) {
+      setError("Session expired. Please start login process again.");
+      handleBackToCredentials();
+      return;
+    }
+
     setLoading(true);
     setError("");
     setSuccess("");
 
     try {
       const result = await signIn("credentials", {
-        email,
-        password,
         verifyCode: otp,
         step: "otp",
+        pendingToken: pendingToken, // ✅ SECURE: Pass the pending token
         redirect: false,
       });
 
       if (result?.error) {
-        switch (result.error) {
-          case "InvalidOTP":
-            setError("Invalid verification code");
-            break;
-          case "OTPExpired":
-            setError("Verification code has expired. Please request a new one");
-            break;
-          case "TooManyAttempts":
-            setError("Too many invalid attempts. Please request a new code");
-            break;
-          default:
-            setError("Invalid verification code");
+        // Handle OTP verification errors
+        if (result.error.includes("Invalid or expired session")) {
+          setError("Session expired. Please start login process again.");
+          handleBackToCredentials();
+        } else {
+          switch (result.error) {
+            case "InvalidOTP":
+              setError("Invalid verification code");
+              break;
+            case "OTPExpired":
+              setError(
+                "Verification code has expired. Please request a new one"
+              );
+              break;
+            case "TooManyAttempts":
+              setError("Too many invalid attempts. Please request a new code");
+              break;
+            default:
+              setError("Invalid verification code");
+          }
         }
       } else if (result?.ok) {
+        // ✅ SECURE: Only redirect after successful complete authentication
         setSuccess("Login successful! Redirecting...");
+        // Clear sensitive data
+        setPendingToken("");
+        setPassword("");
+        setOtp("");
+
         setTimeout(() => {
           window.location.href = callbackUrl;
         }, 1000);
       } else {
-        setError("Invalid verification code");
+        setError("Authentication failed. Please try again.");
       }
     } catch (error) {
-      setError("Invalid verification code");
+      setError("Authentication failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -150,13 +182,18 @@ export default function Login() {
     };
 
   const handleBackToCredentials = () => {
+    // ✅ SECURE: Clear all sensitive data when going back
     setShowOtpStep(false);
     setOtp("");
     setError("");
     setSuccess("");
+    setPendingToken(""); // Clear pending token
   };
 
   const resendOtp = async () => {
+    // ✅ SECURE: Clear current tokens and restart the process
+    setPendingToken("");
+    setOtp("");
     setLoading(true);
     setError("");
     setSuccess("");
@@ -169,10 +206,12 @@ export default function Login() {
         redirect: false,
       });
 
-      if (result?.error) {
-        setError("Failed to resend OTP. Please try again.");
-      } else {
+      if (result?.error && result.error.startsWith("OTP_REQUIRED:")) {
+        const token = result.error.split("OTP_REQUIRED:")[1];
+        setPendingToken(token);
         setSuccess("OTP resent to your email!");
+      } else {
+        setError("Failed to resend OTP. Please try again.");
       }
     } catch (error) {
       setError("Failed to resend OTP. Please try again.");
@@ -180,6 +219,15 @@ export default function Login() {
       setLoading(false);
     }
   };
+
+  // ✅ SECURE: Clear sensitive data on component unmount
+  React.useEffect(() => {
+    return () => {
+      setPendingToken("");
+      setPassword("");
+      setOtp("");
+    };
+  }, []);
 
   return (
     <Layout>
