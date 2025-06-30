@@ -660,7 +660,7 @@ export default function Home() {
               FAQ
             </h2>
             <p className="text-gray-400 opacity-0">
-              Everything you need to know
+              Before You Ask, We’ve Tokenized the Answer.
             </p>
           </div>
           <div>

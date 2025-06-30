@@ -1,4 +1,5 @@
 import Layout from "@/src/components/layout";
+import TwitterFeed from "@/src/components/TwitterFeed"; // Import the new component
 import {
   Card,
   CardContent,
@@ -18,7 +19,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface TeamMember {
   name: string;
@@ -471,6 +472,19 @@ export default function Company(): JSX.Element {
                   ></iframe>
                 </div>
               </motion.div>
+            </motion.div>
+
+            {/* Twitter Feed Widget - Now using the new component */}
+            <motion.div
+              className="mb-20"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={fadeInUp}
+            >
+              <div className="max-w-full mx-auto">
+                <TwitterFeed />
+              </div>
             </motion.div>
 
             {/* CTA Section */}
