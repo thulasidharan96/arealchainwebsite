@@ -60,15 +60,15 @@ export default function Hero() {
       {/* Video Section */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 my-4">
         <div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 text-center cursor-pointer">
-            Watch our Latest Promo
-          </h2>
-          {/* <a
+          <a
             href="https://www.youtube.com/@ArealChain"
             target="_blank"
             rel="noopener noreferrer"
-          > */}
-          {/* </a> */}
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 text-center cursor-pointer">
+              Watch our Latest Promo
+            </h2>
+          </a>
         </div>
         <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833]">
           <iframe

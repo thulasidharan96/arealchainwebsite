@@ -104,6 +104,16 @@ export default function Navbar() {
               Roadmap
             </Link>
             <Link
+              href="/announcement"
+              className={`text-sm font-medium transition-colors ${
+                isActive("/announcement")
+                  ? "text-[#F4B448]"
+                  : "text-gray-300 hover:text-[#F4B448]"
+              }`}
+            >
+              Announcements
+            </Link>
+            <Link
               href="/vip-member"
               className={`text-sm font-medium transition-colors ${
                 isActive("/vip-member")

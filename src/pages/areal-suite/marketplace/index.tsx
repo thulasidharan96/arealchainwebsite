@@ -10,6 +10,7 @@ import { Check } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion"; // Import Framer Motion
+import { useRouter } from "next/router";
 
 const ProductPage = () => {
   const product = {
@@ -26,6 +27,30 @@ const ProductPage = () => {
       "Transparent on-chain transaction history.",
       "Support for a wide range of asset classes.",
     ],
+  };
+
+  const router = useRouter();
+
+  const handleProductClick = (product: string): void => {
+    switch (product) {
+      case "Areal TaaS":
+        router.push("/areal-suite/taas");
+        break;
+      case "Areal Mortgage":
+        router.push("/areal-suite/mortgage");
+        break;
+      case "Launchpad":
+        router.push("/areal-suite/launchpad");
+        break;
+      case "ArealPay":
+        router.push("/areal-suite/pay");
+        break;
+      case "Areal Marketplace":
+        router.push("/areal-suite/marketplace");
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -125,6 +150,23 @@ const ProductPage = () => {
                 </Card>
               </motion.div>
             </div>
+          </div>
+          <div className="flex flex-wrap justify-center gap-4 m-8">
+            {[
+              "Areal TaaS",
+              "Areal Mortgage",
+              "Launchpad",
+              "ArealPay",
+              "Areal Marketplace",
+            ].map((product, i) => (
+              <button
+                key={product}
+                onClick={() => handleProductClick(product)}
+                className="bg-gray-800 text-white px-4 py-2 rounded-md transition-colors hover:bg-[#F4B448] hover:text-black"
+              >
+                {product}
+              </button>
+            ))}
           </div>
         </div>
       </div>

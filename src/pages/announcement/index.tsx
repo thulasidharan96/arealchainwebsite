@@ -20,7 +20,6 @@ export default function Announcement() {
   const allAnnouncements = getAllAnnouncements();
   const filteredAnnouncements = getAnnouncementsByCategory(selectedCategory); // Filter by category
 
-
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
   };
@@ -42,10 +41,7 @@ export default function Announcement() {
 
             <div className="grid lg:grid-cols-2 gap-8">
               {filteredAnnouncements.map((announcement: Announcement) => (
-                <Link
-                  href={`${announcement.link}`}
-                  key={announcement.id}
-                >
+                <Link href={`${announcement.link}`} key={announcement.id}>
                   <Card className="bg-gray-900/50 border-gray-800 hover:border-[#F4B448]/50 transition-all duration-300 cursor-pointer hover:transform hover:scale-[1.02]">
                     <CardHeader className="p-0">
                       <div className="aspect-video bg-gray-800 rounded-t-lg overflow-hidden">
@@ -85,12 +81,12 @@ export default function Announcement() {
               </div>
             )}
 
-            <div className="text-center mt-12">
+            {/* <div className="text-center mt-12">
               <button className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-3 rounded-lg transition-colors">
                 Load More Announcements
               </button>
-            </div>
-
+            </div> */}
+            {/* 
             <div className="mt-20 bg-gray-900/50 rounded-xl p-12 border border-gray-800 text-center">
               <h2 className="text-3xl font-bold text-white mb-6">
                 Stay Informed
@@ -108,7 +104,7 @@ export default function Announcement() {
                   Subscribe
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
