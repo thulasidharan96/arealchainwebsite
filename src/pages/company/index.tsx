@@ -217,15 +217,21 @@ export default function Company(): JSX.Element {
                 className="text-5xl font-bold text-white mb-6"
                 variants={bounceUp}
               >
-                About Areal
+                AREAL : The Future of Real Assets
               </motion.h1>
               <motion.p
                 className="text-gray-400 text-xl max-w-3xl mx-auto"
                 variants={fadeInUp}
               >
-                At the heart of Areal is a commitment to transform the real
-                estate industry. Discover how we're changing the landscape of
-                investing with our revolutionary approach.
+                From Vision to Reality: Powering the Future of Real-World
+                Investments
+              </motion.p>
+              <motion.p
+                className="text-gray-400 text-xl max-w-3xl mx-auto"
+                variants={fadeInUp}
+              >
+                At Areal, we’re not just building blockchain infrastructure —
+                we’re reshaping how the world invests in real-world assets.
               </motion.p>
             </motion.div>
 
@@ -392,7 +398,7 @@ export default function Company(): JSX.Element {
               </motion.div>
 
               <motion.div
-                className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col"
+                className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col flex-col"
                 variants={staggerContainer}
               >
                 {/* Founder Image  */}
@@ -412,7 +418,7 @@ export default function Company(): JSX.Element {
 
                 {/* Founder Content */}
                 <motion.div
-                  className="flex flex-col justify-center space-y-4 max-w-lg sm:mt-10"
+                  className="flex flex-col justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0"
                   variants={bounceUp}
                 >
                   <h3 className="text-white text-2xl font-semibold">

@@ -88,19 +88,18 @@ export default function ArealSuite() {
 
                 <div className="bg-gray-600/50 p-12 border border-gray-800 text-center backdrop-blur-sm rounded-3xl">
                   <h2 className="text-3xl font-bold text-white mb-6">
-                    Ready to Join the Revolution?
+                    Build the Future with Us.
                   </h2>
                   <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-                    Be the first to know when our new products go live. Join the
-                    waitlist for exclusive updates, early access, and special
-                    opportunities.
+                    AREAL is transforming how the world invests, buys, and sells
+                    real-world assets. Get in before the masses.
                   </p>
                   <Link href="/contact" passHref>
                     <Button
                       size="lg"
                       className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold"
                     >
-                      Join the Waitlist
+                      Join the Revolution
                     </Button>
                   </Link>
                 </div>

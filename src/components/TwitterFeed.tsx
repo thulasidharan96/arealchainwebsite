@@ -337,7 +337,7 @@ const TwitterFeed: React.FC<TwitterFeedProps> = ({ className = "" }) => {
               {isError ? "Error" : `${tweets.length} posts`}
             </Badge>
           </div>
-          <Button
+          {/* <Button
             onClick={() => refetch()}
             variant="outline"
             size="sm"
@@ -349,7 +349,7 @@ const TwitterFeed: React.FC<TwitterFeedProps> = ({ className = "" }) => {
             ) : (
               <RefreshCw className="w-4 h-4" />
             )}
-          </Button>
+          </Button> */}
         </DialogTitle>
       </DialogHeader>
 
@@ -442,8 +442,9 @@ const TwitterFeed: React.FC<TwitterFeedProps> = ({ className = "" }) => {
                       })}
                     </span>
                   </div>
+
                   <a
-                    href={`https://twitter.com/intent/tweet?in_reply_to=${tweet.id}`}
+                    href={`https://twitter.com/ArealNow/status/${tweet.id}`} // Corrected URL structure for tweets
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#F4B448] hover:text-[#F4B448]/80 transition-colors text-sm font-medium flex items-center space-x-1"
