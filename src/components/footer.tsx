@@ -1,5 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Mail } from "lucide-react";
+import { Input } from "@/src/components/ui/input";
+import { Label } from "@/src/components/ui/label";
+import { Button } from "@/src/components/ui/button";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -111,7 +115,7 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase">
-              Company
+              Products
             </h3>
             <ul className="mt-4 space-y-2">
               {TestnetTools.map((link) => (
@@ -127,8 +131,38 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+        {/* <div className="w-full">
+          <div className="w-ful mx-auto flex justify-end">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
+              <div className="w-full sm:w-2/3">
+                <Label
+                  htmlFor="newsletter-email"
+                  className="text-white font-medium mb-2 block"
+                >
+                  Subscribe to Our Newsletter{" "}
+                  <span className="text-[#F4B448]">*</span>
+                </Label>
+                <div className="relative max-w-md">
+                  <Mail className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
+                  <Input
+                    id="newsletter-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    required
+                    className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:border-[#F4B448] focus:ring-[#F4B448] rounded-md w-full"
+                  />
+                </div>
+              </div>
+              <div className="w-full sm:w-auto">
+                <Button className="bg-[#F4B448] hover:bg-[#e0a93a] text-black font-semibold px-6 py-2 mt-2 sm:mt-0 w-full sm:w-auto">
+                  Subscribe
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div> */}
 
-        <div className="mt-12 border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
+        <div className="mt-4 border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-gray-400">
             © {currentYear} Areal. All rights reserved.
           </p>

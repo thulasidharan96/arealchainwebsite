@@ -34,16 +34,16 @@ export default function Home() {
   const ctaRef = useRef(null);
 
   const partners = [
-    { name: "Google", src: "/partners/google.png" },
-    { name: "Meta", src: "/partners/meta.png" },
-    { name: "GitHub", src: "/partners/github.png" },
     { name: "Binance", src: "/partners/binance.png" },
     { name: "Chainlink", src: "/partners/chainlink.png" },
     { name: "Polygon", src: "/partners/polygon.png" },
+    { name: "coingecko", src: "/partners/coingecko.png" },
+    { name: "Coinbase", src: "/partners/coinbase.png" },
+    { name: "Google", src: "/partners/google.png" },
+    { name: "Meta", src: "/partners/meta.png" },
+    { name: "GitHub", src: "/partners/github.png" },
     { name: "AWS", src: "/partners/aws.png" },
     { name: "Microsoft", src: "/partners/microsoft.png" },
-    { name: "Solana", src: "/partners/solana.png" },
-    { name: "Coinbase", src: "/partners/coinbase.png" },
   ];
 
   const Accredited = [
@@ -537,10 +537,14 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-white mb-6 opacity-0">
               The Areal Suite
             </h2>
+            <h2 className="text-2xl font-bold text-white mb-6 opacity-0">
+              Unlock the Future of Real-World Assets — All in One Powerful
+              Suite.
+            </h2>
             <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-8 opacity-0">
-              At AREAL, we provide more than just a platform - we offer a
-              comprehensive suite of products designed to tokenize and
-              democratize Real World Assets.
+              The World’s First End-to-End Blockchain Ecosystem for Real Assets
+              is Now Live. In the words of our CEO: “Simple, Secure, Seamless —
+              That’s the Areal promise.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               {[
@@ -699,11 +703,14 @@ export default function Home() {
       {/* Final CTA Section */}
       <section ref={ctaRef} className="py-20 px-4 mb-10">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-gray-400 mb-4 opacity-0">
+          {/* <p className="text-gray-400 mb-4 opacity-0">
             Don't miss out on the future of crypto real estate investment.
-          </p>
-          <h2 className="text-4xl font-bold text-white mb-8 opacity-0">
-            Ready to Start Your Crypto Real Estate Journey?
+          </p> */}
+          <h2 className="text-3xl font-bold text-white mb-4 opacity-0">
+            The Opportunity to Invest in Real Assets on Blockchain is Here
+          </h2>
+          <h2 className="text-3xl font-bold text-white mb-8 opacity-0">
+            Don’t Miss the Opportunity
           </h2>
           <button
             className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-4 rounded-lg text-lg opacity-0"
@@ -711,7 +718,7 @@ export default function Home() {
             onMouseEnter={handleButtonHover}
             onMouseLeave={handleButtonLeave}
           >
-            Join the Revolution →
+            Join the Movement
           </button>
         </div>
       </section>

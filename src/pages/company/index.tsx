@@ -94,7 +94,7 @@ const mediaLogos = [
   { name: "Gulf Time", src: "/media/gulf-time.png" },
   { name: "Gulf News", src: "/media/gulf-news.png" },
   { name: "Gulf Today", src: "/media/gulf_today.png" },
-  { name: "CNBC", src: "/media/cnbc.png" },
+  { name: "GCCB", src: "/media/GCCB.png" },
   { name: "CoinTelegraph", src: "/media/cointelegraph.png" },
 ];
 
@@ -327,6 +327,54 @@ export default function Company(): JSX.Element {
               </motion.div>
             </motion.div>
 
+            {/* Vision Section */}
+            <motion.div
+              className="text-center mb-20"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={staggerContainer}
+            >
+              <motion.h2
+                className="text-3xl font-bold text-white mb-4"
+                variants={fadeInUp}
+              >
+                Our Vision
+              </motion.h2>
+              <motion.div
+                className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
+                variants={scaleUp}
+              ></motion.div>
+              <motion.p
+                className="text-gray-400 text-lg max-w-4xl mx-auto mb-8"
+                variants={fadeInUp}
+              >
+                To become the world's leading blockchain ecosystem for
+                real-world asset tokenization — where anyone, anywhere can
+                invest in tangible, secure, and accessible real estate assets
+                with the ease of digital finance.
+              </motion.p>
+              <motion.p
+                className="text-gray-400 text-lg max-w-3xl mx-auto mb-8"
+                variants={fadeInUp}
+              >
+                We envision a future where blockchain bridges the gap between
+                traditional investment barriers and modern financial freedom —
+                unlocking new wealth-building opportunities across the globe.
+              </motion.p>
+              <motion.div className="max-w-2xl mx-auto" variants={bounceUp}>
+                <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1">
+                  <p className="text-[#F4B448] text-2xl font-bold mb-2">
+                    Simple. Secure. Seamless.
+                  </p>
+                  <p className="text-gray-300 text-lg">
+                    That's the future of real estate investing — powered by
+                    AREAL.
+                  </p>
+                </div>
+              </motion.div>
+            </motion.div>
+
             {/* Recognition */}
             <motion.div
               ref={recognitionRef}
@@ -443,6 +491,21 @@ export default function Company(): JSX.Element {
                       estate space globally.
                     </li>
                   </ul>
+                  <div className="w-full sm:w-auto">
+                    <a
+                      href="https://www.linkedin.com/in/sripriya-kalyanasundaram-7964b28/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-transparent hover:bg-[#004182] text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-colors duration-200"
+                    >
+                      <img
+                        src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                        alt="LinkedIn"
+                        className="w-5 h-5"
+                      />
+                      Connect on LinkedIn
+                    </a>
+                  </div>
                 </motion.div>
               </motion.div>
             </motion.div>

@@ -64,10 +64,10 @@ export default function ArealSuite() {
                   </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+                <div className="flex flex-wrap justify-center gap-8 mb-20">
                   {products.map((product, index) => (
                     <Link href={product.href} key={index} passHref>
-                      <Card className="bg-gray-600/50 border-gray-800 hover:border-[#F4B448]/50 transition-all duration-300 cursor-pointer h-full flex flex-col group hover:transform hover:scale-[1.02] backdrop-blur-lg rounded-3xl">
+                      <Card className="bg-gray-600/50 border-gray-400 hover:border-[#F4B448]/50 transition-all duration-300 cursor-pointer w-[300px] group hover:transform hover:scale-[1.02] backdrop-blur-lg rounded-3xl flex flex-col h-full">
                         <CardHeader>
                           <CardTitle className="text-white text-xl group-hover:text-[#F4B448] transition-colors">
                             {product.name}
