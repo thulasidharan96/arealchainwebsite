@@ -12,7 +12,7 @@ const PrivacyPolicy: FC = () => {
       </section>
 
       {/* Main Content Section */}
-      <section className="min-h-screen bg-slate-900">
+      <section className="min-h-screen bg-transparent">
         <div className="flex max-w-7xl mx-auto">
           {/* Sidebar Navigation */}
           <aside className="w-80 min-h-screen bg-slate-800/50 border-r border-slate-700/50 p-8">

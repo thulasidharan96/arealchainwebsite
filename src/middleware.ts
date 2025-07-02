@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
     "/signup",
     "/about",
     "/contact",
-    "/blog",
     "/privacy-policy",
     "/terms-and-conditions",
     "/roadmap",
