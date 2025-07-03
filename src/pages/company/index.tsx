@@ -21,6 +21,7 @@ import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import SplineCompany from "@/src/components/SplineCompany";
+import { useRouter } from "next/router";
 
 interface TeamMember {
   name: string;
@@ -194,6 +195,8 @@ export default function Company(): JSX.Element {
   const founderInView = useInView(founderRef, { once: true, margin: "-50px" });
   const videoInView = useInView(videoRef, { once: true, margin: "-50px" });
   const ctaInView = useInView(ctaRef, { once: true, margin: "-50px" });
+
+  const router = useRouter();
 
   return (
     <Layout>
@@ -516,7 +519,7 @@ export default function Company(): JSX.Element {
               </motion.div>
 
               {/* Video Section */}
-              <motion.div
+              {/* <motion.div
                 ref={videoRef}
                 className="mb-20"
                 initial="initial"
@@ -546,7 +549,7 @@ export default function Company(): JSX.Element {
                     ></iframe>
                   </div>
                 </motion.div>
-              </motion.div>
+              </motion.div> */}
 
               {/* Twitter Feed Widget - Now using the new component */}
               <motion.div
@@ -584,6 +587,7 @@ export default function Company(): JSX.Element {
                       className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => router.push("/contact")}
                     >
                       Join Our Team
                     </motion.button>
@@ -591,6 +595,7 @@ export default function Company(): JSX.Element {
                       className="border border-[#F4B448] text-[#F4B448] hover:bg-[#F4B448] hover:text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                       whileHover={{ scale: 1.05, y: -2 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={() => router.push("/contact")}
                     >
                       Partner With Us
                     </motion.button>

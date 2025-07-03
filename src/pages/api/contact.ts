@@ -14,7 +14,7 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(405).end("Method Not Allowed");
 
-  const { fullName, email, message } = req.body;
+  const { fullName, email, contactType, message } = req.body;
 
   if (!fullName || !email) {
     return res.status(400).json({ message: "Name and email are required." });
@@ -25,6 +25,7 @@ export default async function handler(
     Item: {
       email,
       fullName,
+      contactType,
       message,
       createdAt: new Date().toISOString(),
     },

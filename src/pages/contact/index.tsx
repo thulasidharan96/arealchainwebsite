@@ -5,24 +5,40 @@ import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Textarea } from "@/src/components/ui/textarea";
-import { CheckCircle2, Lock } from "lucide-react";
+import { CheckCircle2, Lock, ChevronDown } from "lucide-react";
 import SplineConntact from "@/src/components/SplineContact";
+
+const contactTypes = [
+  { value: "retail-customer", label: "Retail Customer" },
+  { value: "investor", label: "Investor" },
+  { value: "ib", label: "IB" },
+  { value: "exchange", label: "Exchange" },
+  { value: "influencer", label: "Influencer" },
+  { value: "others", label: "Others" },
+];
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
+    contactType: "",
     message: "",
   });
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleDropdownSelect = (value: string) => {
+    setFormData((prev) => ({ ...prev, contactType: value }));
+    setDropdownOpen(false);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -42,10 +58,17 @@ export default function Contact() {
     if (res.ok) {
       setSubmitted(true);
       setStatusMessage("✅ Our team will reach out to you shortly.");
-      setFormData({ fullName: "", email: "", message: "" });
+      setFormData({ fullName: "", email: "", contactType: "", message: "" });
     } else {
       setStatusMessage("❌ Something went wrong. Please try again.");
     }
+  };
+
+  const getSelectedLabel = () => {
+    const selected = contactTypes.find(
+      (type) => type.value === formData.contactType
+    );
+    return selected ? selected.label : "Select contact type";
   };
 
   return (
@@ -103,6 +126,51 @@ export default function Contact() {
                       </div>
 
                       <div>
+                        <Label className="text-white font-medium mb-2 block">
+                          Contact Type<span className="text-[#F4B448]">*</span>
+                        </Label>
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                            className="w-full bg-transparent border-white border-2 rounded-3xl text-white px-4 py-2 text-left focus:border-[#F4B448] focus:ring-[#F4B448] focus:outline-none flex items-center justify-between"
+                          >
+                            <span
+                              className={
+                                formData.contactType
+                                  ? "text-white"
+                                  : "text-white/50"
+                              }
+                            >
+                              {getSelectedLabel()}
+                            </span>
+                            <ChevronDown
+                              className={`w-4 h-4 transition-transform ${
+                                dropdownOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+
+                          {dropdownOpen && (
+                            <div className="absolute top-full left-0 right-0 mt-1 bg-black/90 border border-white/20 rounded-2xl backdrop-blur-sm z-50 overflow-hidden">
+                              {contactTypes.map((type) => (
+                                <button
+                                  key={type.value}
+                                  type="button"
+                                  onClick={() =>
+                                    handleDropdownSelect(type.value)
+                                  }
+                                  className="w-full px-4 py-3 text-left text-white hover:bg-[#F4B448]/20 transition-colors border-b border-white/10 last:border-b-0"
+                                >
+                                  {type.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
                         <Label
                           htmlFor="message"
                           className="text-white font-medium mb-2 block"
@@ -132,7 +200,7 @@ export default function Contact() {
                       <Button
                         type="submit"
                         className="w-full bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-bold text-base py-3 transition-transform hover:scale-105"
-                        disabled={loading}
+                        disabled={loading || !formData.contactType}
                       >
                         {loading ? "Submitting..." : "Submit"}
                       </Button>

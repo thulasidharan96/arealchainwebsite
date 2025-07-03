@@ -169,6 +169,8 @@ export default function Footer() {
           <div className="flex space-x-6 mt-4 sm:mt-0">
             <a
               href="https://x.com/arealnow"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">X</span>
@@ -182,6 +184,8 @@ export default function Footer() {
             </a>
             <a
               href="https://www.youtube.com/@ArealChain"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">YOUTUBE</span>
@@ -195,6 +199,8 @@ export default function Footer() {
             </a>
             <a
               href="https://discord.gg/ZgVMbBYy7n"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">DISCORD</span>
@@ -208,6 +214,8 @@ export default function Footer() {
             </a>
             <a
               href="https://www.facebook.com/ArealChain"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">FACEBOOK</span>
@@ -221,6 +229,8 @@ export default function Footer() {
             </a>
             <a
               href="https://www.instagram.com/arealnow/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">INSTAGRAM</span>
@@ -234,6 +244,8 @@ export default function Footer() {
             </a>
             <a
               href="https://www.linkedin.com/company/arealchain"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">LINKEDIN</span>
@@ -247,6 +259,8 @@ export default function Footer() {
             </a>
             <a
               href="https://t.me/arealnow"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">TELEGRAM</span>
