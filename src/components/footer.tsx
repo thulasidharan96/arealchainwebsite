@@ -69,7 +69,7 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-base text-gray-400 hover:text-[#F4B448]"
+                    className="text-sm text-gray-400 hover:text-[#F4B448]"
                   >
                     {link.name}
                   </Link>
@@ -87,7 +87,7 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-base text-gray-400 hover:text-[#F4B448]"
+                    className="text-sm text-gray-400 hover:text-[#F4B448]"
                   >
                     {link.name}
                   </Link>
@@ -105,7 +105,7 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-base text-gray-400 hover:text-[#F4B448]"
+                    className="text-sm text-gray-400 hover:text-[#F4B448]"
                   >
                     {link.name}
                   </Link>
@@ -115,14 +115,14 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase">
-              Products
+              Testnet Viewer
             </h3>
             <ul className="mt-4 space-y-2">
               {TestnetTools.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-base text-gray-400 hover:text-[#F4B448]"
+                    className="text-sm text-gray-400 hover:text-[#F4B448]"
                   >
                     {link.name}
                   </Link>

@@ -73,8 +73,7 @@ export default function Hero() {
         <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833]">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/Df8b_7NpvSQ?autoplay=1&mute=1&loop=1&playlist=Df8b_7NpvSQ&controls=0&modestbranding=1&showinfo=0&rel=0"
-            title="We’re Launching Our Airdrop Soon!"
+            src="https://www.youtube.com/embed/uywf3RlK5aE?autoplay=1&mute=1&loop=1&playlist=uywf3RlK5aE&controls=0&modestbranding=1&showinfo=0&rel=0"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
