@@ -442,12 +442,12 @@ export default function Home() {
               </motion.div>
             ))}
           </motion.div>
-          <motion.h2
+          {/* <motion.h2
             className="text-3xl font-bold text-center text-white mt-8"
             variants={fadeInUp}
           >
             Simple Secure SeamLess
-          </motion.h2>
+          </motion.h2> */}
         </div>
       </motion.section>
 

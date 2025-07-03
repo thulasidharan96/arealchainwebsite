@@ -20,6 +20,7 @@ import {
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import SplineCompany from "@/src/components/SplineCompany";
 
 interface TeamMember {
   name: string;
@@ -196,402 +197,407 @@ export default function Company(): JSX.Element {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-transparent">
-        {/* Hero Section */}
-        <div className="pt-32 pb-20 px-4">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              ref={heroRef}
-              className="text-center mb-16"
-              initial="initial"
-              animate={heroInView ? "animate" : "initial"}
-              variants={staggerContainer}
-            >
-              <motion.div variants={fadeInUp}>
-                <Badge className="mb-6 bg-[#F4B448]/20 text-[#F4B448] border-[#F4B448]/30 hover:bg-[#F4B448]/30 transition-colors">
-                  <Zap className="w-4 h-4 mr-2" />
-                  From Vision to Reality
-                </Badge>
-              </motion.div>
-              <motion.h1
-                className="text-5xl font-bold text-white mb-6"
-                variants={bounceUp}
-              >
-                AREAL : The Future of Real Assets
-              </motion.h1>
-              <motion.p
-                className="text-gray-400 text-xl max-w-3xl mx-auto"
-                variants={fadeInUp}
-              >
-                From Vision to Reality: Powering the Future of Real-World
-                Investments
-              </motion.p>
-              <motion.p
-                className="text-gray-400 text-xl max-w-3xl mx-auto"
-                variants={fadeInUp}
-              >
-                At Areal, we’re not just building blockchain infrastructure —
-                we’re reshaping how the world invests in real-world assets.
-              </motion.p>
-            </motion.div>
-
-            {/* Mission & Vision */}
-            <motion.div
-              ref={missionRef}
-              className="grid lg:grid-cols-2 gap-16 mb-20"
-              initial="initial"
-              animate={missionInView ? "animate" : "initial"}
-              variants={staggerContainer}
-            >
-              <motion.div className="group" variants={bounceUp}>
-                <Card className="h-full bg-gray-900/50 border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
-                  <CardContent className="p-8">
-                    <div className="flex items-center mb-6">
-                      <div className="w-12 h-12 bg-[#F4B448] rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
-                        <Building2 className="w-6 h-6 text-black" />
-                      </div>
-                      <h2 className="text-3xl font-bold text-white">
-                        Our Mission
-                      </h2>
-                    </div>
-                    <div className="space-y-6">
-                      <h3 className="text-xl font-semibold text-[#F4B448]">
-                        Revolutionizing Real Estate Through Blockchain
-                      </h3>
-                      <p className="text-gray-400 text-lg leading-relaxed">
-                        We aim to bring the new era of real estate investing to
-                        life. Breaking down barriers and providing liquidity and
-                        flexibility for the new generation of property owners
-                        and investors.
-                      </p>
-                      <p className="text-gray-400 text-lg leading-relaxed">
-                        Our mission is to make real estate simple, affordable
-                        and accessible to everyone, everywhere.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <motion.div className="space-y-8" variants={fadeInUp}>
-                {/* Stats */}
-                <motion.div
-                  className="grid grid-cols-3 gap-6"
-                  variants={staggerContainer}
-                >
-                  {stats.map((stat, index) => (
-                    <motion.div key={index} variants={staggerItem}>
-                      <Card className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 group">
-                        <CardContent className="p-6">
-                          <div className="flex justify-center mb-3">
-                            <stat.icon className="w-8 h-8 text-[#F4B448] group-hover:scale-110 transition-transform duration-300" />
-                          </div>
-                          <div className="text-3xl font-bold text-white mb-1">
-                            {stat.number}
-                          </div>
-                          <div className="text-sm text-gray-400 font-medium">
-                            {stat.label}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))}
-                </motion.div>
-
-                {/* Features */}
-                <motion.div className="space-y-4" variants={staggerContainer}>
-                  {features.map((feature, index) => (
-                    <motion.div key={index} variants={staggerItem}>
-                      <Card className="bg-gray-900/30 border-gray-800 hover:bg-gray-900/50 transition-all duration-300 hover:-translate-y-1 group">
-                        <CardContent className="p-6">
-                          <div className="flex items-start space-x-4">
-                            <div className="flex-shrink-0">
-                              <div className="w-10 h-10 bg-[#F4B448]/20 rounded-lg flex items-center justify-center group-hover:bg-[#F4B448]/30 group-hover:scale-110 transition-all duration-300">
-                                <feature.icon className="w-5 h-5 text-[#F4B448]" />
-                              </div>
-                            </div>
-                            <div>
-                              <h4 className="text-lg font-semibold text-white mb-2">
-                                {feature.title}
-                              </h4>
-                              <p className="text-gray-400 text-sm">
-                                {feature.description}
-                              </p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </motion.div>
-            </motion.div>
-
-            {/* Vision Section */}
-            <motion.div
-              className="text-center mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={staggerContainer}
-            >
-              <motion.h2
-                className="text-3xl font-bold text-white mb-4"
-                variants={fadeInUp}
-              >
-                Our Vision
-              </motion.h2>
+      <div className="relative z-0">
+        {/* <SplineCompany /> */}
+        <div className="relative z-10">
+          {/* Hero Section */}
+          <div className="pt-32 pb-20 px-4">
+            <div className="max-w-7xl mx-auto">
               <motion.div
-                className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
-                variants={scaleUp}
-              ></motion.div>
-              <motion.p
-                className="text-gray-400 text-lg max-w-4xl mx-auto mb-8"
-                variants={fadeInUp}
-              >
-                To become the world's leading blockchain ecosystem for
-                real-world asset tokenization — where anyone, anywhere can
-                invest in tangible, secure, and accessible real estate assets
-                with the ease of digital finance.
-              </motion.p>
-              <motion.p
-                className="text-gray-400 text-lg max-w-3xl mx-auto mb-8"
-                variants={fadeInUp}
-              >
-                We envision a future where blockchain bridges the gap between
-                traditional investment barriers and modern financial freedom —
-                unlocking new wealth-building opportunities across the globe.
-              </motion.p>
-              <motion.div className="max-w-2xl mx-auto" variants={bounceUp}>
-                <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1">
-                  <p className="text-[#F4B448] text-2xl font-bold mb-2">
-                    Simple. Secure. Seamless.
-                  </p>
-                  <p className="text-gray-300 text-lg">
-                    That's the future of real estate investing — powered by
-                    AREAL.
-                  </p>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Recognition */}
-            <motion.div
-              ref={recognitionRef}
-              className="text-center mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={staggerContainer}
-            >
-              <motion.h2
-                className="text-3xl font-bold text-white mb-4"
-                variants={fadeInUp}
-              >
-                Areal in the Limelight
-              </motion.h2>
-              <motion.div
-                className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
-                variants={scaleUp}
-              ></motion.div>
-              <motion.p
-                className="text-gray-400 text-lg max-w-3xl mx-auto mb-12"
-                variants={fadeInUp}
-              >
-                We've been featured in leading global and regional publications
-                for our innovative approach to real estate tokenization.
-              </motion.p>
-              <motion.div
-                className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-16 items-center"
+                ref={heroRef}
+                className="text-center mb-16"
+                initial="initial"
+                animate={heroInView ? "animate" : "initial"}
                 variants={staggerContainer}
               >
-                {mediaLogos.map((media, index) => (
-                  <motion.div
-                    key={media.name}
-                    className="flex justify-center items-center h-20 group"
-                    variants={staggerItem}
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <Image
-                      src={media.src}
-                      alt={media.name}
-                      width={250}
-                      height={250}
-                      className="w-25 h-25 object-contain transition-all duration-300 group-hover:scale-[1.05]"
-                    />
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-
-            {/* Meet the Founder */}
-            <motion.div
-              ref={founderRef}
-              className="mb-20 flex flex-col items-center"
-              initial="initial"
-              animate={founderInView ? "animate" : "initial"}
-              variants={staggerContainer}
-            >
-              <motion.div className="text-center mb-12" variants={fadeInUp}>
-                <h2 className="text-3xl font-bold text-white mb-4">
-                  Meet the Founder
-                </h2>
-                <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
-                <p className="text-gray-400 text-lg max-w-3xl mx-auto">
-                  Our founder is the visionary behind Areal, with a deep passion
-                  for innovation and technology. Leading the company into the
-                  future, they bring unparalleled expertise to the real estate
-                  and tech industries.
-                </p>
-              </motion.div>
-
-              <motion.div
-                className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col flex-col"
-                variants={staggerContainer}
-              >
-                {/* Founder Image  */}
-                <motion.div
-                  className="bg-transparent rounded-lg border border-[#F4B448] overflow-hidden group hover:scale-105 transition-all duration-300"
-                  variants={scaleUp}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <Image
-                    src="/team/founder.jpg"
-                    alt="Founder"
-                    width={350}
-                    height={350}
-                    className="object-cover"
-                  />
+                <motion.div variants={fadeInUp}>
+                  <Badge className="mb-6 bg-[#F4B448]/20 text-[#F4B448] border-[#F4B448]/30 hover:bg-[#F4B448]/30 transition-colors">
+                    <Zap className="w-4 h-4 mr-2" />
+                    From Vision to Reality
+                  </Badge>
                 </motion.div>
-
-                {/* Founder Content */}
-                <motion.div
-                  className="flex flex-col justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0"
+                <motion.h1
+                  className="text-5xl font-bold text-white mb-6"
                   variants={bounceUp}
                 >
-                  <h3 className="text-white text-2xl font-semibold">
-                    Sripriya Kalyanasundaram
-                  </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    Founder & CEO | Areal Chain
-                  </p>
-                  <ul className="text-gray-400 text-sm space-y-2">
-                    <li>
-                      Sripriya Kalyanasundaram is the visionary Founder and CEO
-                      of Areal Chain, leading the charge in the tokenization of
-                      real-world assets (RWA) and creating a borderless,
-                      decentralized, permissionless economy. With over 20 years
-                      of experience in technology and business strategy, she is
-                      dedicated to driving digital transformation and empowering
-                      individuals through blockchain technology.
-                    </li>
-                    <li>
-                      Our Vision: To make RWA the next UPI, democratizing access
-                      to tokenized assets and driving innovation in the real
-                      estate space globally.
-                    </li>
-                  </ul>
-                  <div className="w-full sm:w-auto">
-                    <a
-                      href="https://www.linkedin.com/in/sripriya-kalyanasundaram-7964b28/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-transparent hover:bg-[#004182] text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-colors duration-200"
-                    >
-                      <img
-                        src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
-                        alt="LinkedIn"
-                        className="w-5 h-5"
-                      />
-                      Connect on LinkedIn
-                    </a>
+                  AREAL : The Future of Real Assets
+                </motion.h1>
+                <motion.p
+                  className="text-gray-400 text-xl max-w-3xl mx-auto"
+                  variants={fadeInUp}
+                >
+                  From Vision to Reality: Powering the Future of Real-World
+                  Investments
+                </motion.p>
+                <motion.p
+                  className="text-gray-400 text-xl max-w-3xl mx-auto"
+                  variants={fadeInUp}
+                >
+                  At Areal, we’re not just building blockchain infrastructure —
+                  we’re reshaping how the world invests in real-world assets.
+                </motion.p>
+              </motion.div>
+
+              {/* Mission & Vision */}
+              <motion.div
+                ref={missionRef}
+                className="grid lg:grid-cols-2 gap-16 mb-20"
+                initial="initial"
+                animate={missionInView ? "animate" : "initial"}
+                variants={staggerContainer}
+              >
+                <motion.div className="group" variants={bounceUp}>
+                  <Card className="h-full bg-gray-900/50 border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                    <CardContent className="p-8">
+                      <div className="flex items-center mb-6">
+                        <div className="w-12 h-12 bg-[#F4B448] rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
+                          <Building2 className="w-6 h-6 text-black" />
+                        </div>
+                        <h2 className="text-3xl font-bold text-white">
+                          Our Mission
+                        </h2>
+                      </div>
+                      <div className="space-y-6">
+                        <h3 className="text-xl font-semibold text-[#F4B448]">
+                          Revolutionizing Real Estate Through Blockchain
+                        </h3>
+                        <p className="text-gray-400 text-lg leading-relaxed">
+                          We aim to bring the new era of real estate investing
+                          to life. Breaking down barriers and providing
+                          liquidity and flexibility for the new generation of
+                          property owners and investors.
+                        </p>
+                        <p className="text-gray-400 text-lg leading-relaxed">
+                          Our mission is to make real estate simple, affordable
+                          and accessible to everyone, everywhere.
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+
+                <motion.div className="space-y-8" variants={fadeInUp}>
+                  {/* Stats */}
+                  <motion.div
+                    className="grid grid-cols-3 gap-6"
+                    variants={staggerContainer}
+                  >
+                    {stats.map((stat, index) => (
+                      <motion.div key={index} variants={staggerItem}>
+                        <Card className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 group">
+                          <CardContent className="p-6">
+                            <div className="flex justify-center mb-3">
+                              <stat.icon className="w-8 h-8 text-[#F4B448] group-hover:scale-110 transition-transform duration-300" />
+                            </div>
+                            <div className="text-3xl font-bold text-white mb-1">
+                              {stat.number}
+                            </div>
+                            <div className="text-sm text-gray-400 font-medium">
+                              {stat.label}
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+
+                  {/* Features */}
+                  <motion.div className="space-y-4" variants={staggerContainer}>
+                    {features.map((feature, index) => (
+                      <motion.div key={index} variants={staggerItem}>
+                        <Card className="bg-gray-900/30 border-gray-800 hover:bg-gray-900/50 transition-all duration-300 hover:-translate-y-1 group">
+                          <CardContent className="p-6">
+                            <div className="flex items-start space-x-4">
+                              <div className="flex-shrink-0">
+                                <div className="w-10 h-10 bg-[#F4B448]/20 rounded-lg flex items-center justify-center group-hover:bg-[#F4B448]/30 group-hover:scale-110 transition-all duration-300">
+                                  <feature.icon className="w-5 h-5 text-[#F4B448]" />
+                                </div>
+                              </div>
+                              <div>
+                                <h4 className="text-lg font-semibold text-white mb-2">
+                                  {feature.title}
+                                </h4>
+                                <p className="text-gray-400 text-sm">
+                                  {feature.description}
+                                </p>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+
+              {/* Vision Section */}
+              <motion.div
+                className="text-center mb-20"
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={staggerContainer}
+              >
+                <motion.h2
+                  className="text-3xl font-bold text-white mb-4"
+                  variants={fadeInUp}
+                >
+                  Our Vision
+                </motion.h2>
+                <motion.div
+                  className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
+                  variants={scaleUp}
+                ></motion.div>
+                <motion.p
+                  className="text-gray-400 text-lg max-w-4xl mx-auto mb-8"
+                  variants={fadeInUp}
+                >
+                  To become the world's leading blockchain ecosystem for
+                  real-world asset tokenization — where anyone, anywhere can
+                  invest in tangible, secure, and accessible real estate assets
+                  with the ease of digital finance.
+                </motion.p>
+                <motion.p
+                  className="text-gray-400 text-lg max-w-3xl mx-auto mb-8"
+                  variants={fadeInUp}
+                >
+                  We envision a future where blockchain bridges the gap between
+                  traditional investment barriers and modern financial freedom —
+                  unlocking new wealth-building opportunities across the globe.
+                </motion.p>
+                <motion.div className="max-w-2xl mx-auto" variants={bounceUp}>
+                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1">
+                    <p className="text-[#F4B448] text-2xl font-bold mb-2">
+                      Simple. Secure. Seamless.
+                    </p>
+                    <p className="text-gray-300 text-lg">
+                      That's the future of real estate investing — powered by
+                      AREAL.
+                    </p>
                   </div>
                 </motion.div>
               </motion.div>
-            </motion.div>
 
-            {/* Video Section */}
-            <motion.div
-              ref={videoRef}
-              className="mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={bounceUp}
-            >
-              <motion.div className="text-center mb-8" variants={fadeInUp}>
-                <h2 className="text-3xl font-bold text-white mb-4">
-                  Promotional Videos
-                </h2>
-                <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
-                <p className="text-gray-400 text-lg">
-                  Learn more about our platform with our informative videos
-                </p>
+              {/* Recognition */}
+              <motion.div
+                ref={recognitionRef}
+                className="text-center mb-20"
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={staggerContainer}
+              >
+                <motion.h2
+                  className="text-3xl font-bold text-white mb-4"
+                  variants={fadeInUp}
+                >
+                  Areal in the Limelight
+                </motion.h2>
+                <motion.div
+                  className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
+                  variants={scaleUp}
+                ></motion.div>
+                <motion.p
+                  className="text-gray-400 text-lg max-w-3xl mx-auto mb-12"
+                  variants={fadeInUp}
+                >
+                  We've been featured in leading global and regional
+                  publications for our innovative approach to real estate
+                  tokenization.
+                </motion.p>
+                <motion.div
+                  className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-16 items-center"
+                  variants={staggerContainer}
+                >
+                  {mediaLogos.map((media, index) => (
+                    <motion.div
+                      key={media.name}
+                      className="flex justify-center items-center h-20 group"
+                      variants={staggerItem}
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <Image
+                        src={media.src}
+                        alt={media.name}
+                        width={250}
+                        height={250}
+                        className="w-25 h-25 object-contain transition-all duration-300 group-hover:scale-[1.05]"
+                      />
+                    </motion.div>
+                  ))}
+                </motion.div>
               </motion.div>
 
-              <motion.div className="max-w-4xl mx-auto" variants={scaleUp}>
-                <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833]">
-                  <iframe
-                    className="w-full h-full"
-                    src="https://www.youtube.com/embed/wu5bA6-weUk?autoplay=1&mute=1&loop=1&playlist=wu5bA6-weUk&controls=0&modestbranding=1&showinfo=0&rel=0"
-                    title="Introducing the identity behind the innovation."
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
+              {/* Meet the Founder */}
+              <motion.div
+                ref={founderRef}
+                className="mb-20 flex flex-col items-center"
+                initial="initial"
+                animate={founderInView ? "animate" : "initial"}
+                variants={staggerContainer}
+              >
+                <motion.div className="text-center mb-12" variants={fadeInUp}>
+                  <h2 className="text-3xl font-bold text-white mb-4">
+                    Meet the Founder
+                  </h2>
+                  <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
+                  <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+                    Our founder is the visionary behind Areal, with a deep
+                    passion for innovation and technology. Leading the company
+                    into the future, they bring unparalleled expertise to the
+                    real estate and tech industries.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col flex-col"
+                  variants={staggerContainer}
+                >
+                  {/* Founder Image  */}
+                  <motion.div
+                    className="bg-transparent rounded-lg border border-[#F4B448] overflow-hidden group hover:scale-105 transition-all duration-300"
+                    variants={scaleUp}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <Image
+                      src="/team/founder.jpg"
+                      alt="Founder"
+                      width={350}
+                      height={350}
+                      className="object-cover"
+                    />
+                  </motion.div>
+
+                  {/* Founder Content */}
+                  <motion.div
+                    className="flex flex-col justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0"
+                    variants={bounceUp}
+                  >
+                    <h3 className="text-white text-2xl font-semibold">
+                      Sripriya Kalyanasundaram
+                    </h3>
+                    <p className="text-gray-400 text-sm leading-relaxed">
+                      Founder & CEO | Areal Chain
+                    </p>
+                    <ul className="text-gray-400 text-sm space-y-2">
+                      <li>
+                        Sripriya Kalyanasundaram is the visionary Founder and
+                        CEO of Areal Chain, leading the charge in the
+                        tokenization of real-world assets (RWA) and creating a
+                        borderless, decentralized, permissionless economy. With
+                        over 20 years of experience in technology and business
+                        strategy, she is dedicated to driving digital
+                        transformation and empowering individuals through
+                        blockchain technology.
+                      </li>
+                      <li>
+                        Our Vision: To make RWA the next UPI, democratizing
+                        access to tokenized assets and driving innovation in the
+                        real estate space globally.
+                      </li>
+                    </ul>
+                    <div className="w-full sm:w-auto">
+                      <a
+                        href="https://www.linkedin.com/in/sripriya-kalyanasundaram-7964b28/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-transparent hover:bg-[#004182] text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-colors duration-200"
+                      >
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+                          alt="LinkedIn"
+                          className="w-5 h-5"
+                        />
+                        Connect on LinkedIn
+                      </a>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+
+              {/* Video Section */}
+              <motion.div
+                ref={videoRef}
+                className="mb-20"
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={bounceUp}
+              >
+                <motion.div className="text-center mb-8" variants={fadeInUp}>
+                  <h2 className="text-3xl font-bold text-white mb-4">
+                    Promotional Videos
+                  </h2>
+                  <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
+                  <p className="text-gray-400 text-lg">
+                    Learn more about our platform with our informative videos
+                  </p>
+                </motion.div>
+
+                <motion.div className="max-w-4xl mx-auto" variants={scaleUp}>
+                  <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833]">
+                    <iframe
+                      className="w-full h-full"
+                      src="https://www.youtube.com/embed/wu5bA6-weUk?autoplay=1&mute=1&loop=1&playlist=wu5bA6-weUk&controls=0&modestbranding=1&showinfo=0&rel=0"
+                      title="Introducing the identity behind the innovation."
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </motion.div>
+              </motion.div>
+
+              {/* Twitter Feed Widget - Now using the new component */}
+              <motion.div
+                className="mb-20"
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={fadeInUp}
+              >
+                <div className="max-w-full mx-auto">
+                  <TwitterFeed />
                 </div>
               </motion.div>
-            </motion.div>
 
-            {/* Twitter Feed Widget - Now using the new component */}
-            <motion.div
-              className="mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={fadeInUp}
-            >
-              <div className="max-w-full mx-auto">
-                <TwitterFeed />
-              </div>
-            </motion.div>
-
-            {/* CTA Section */}
-            <motion.div
-              ref={ctaRef}
-              className="bg-gray-900/50 rounded-xl p-12 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={bounceUp}
-            >
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-white mb-6">
-                  Join Our Journey
-                </h2>
-                <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-                  Be part of the revolution that's transforming real estate
-                  investment. Together, we're building a more accessible and
-                  transparent future.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <motion.button
-                    className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Join Our Team
-                  </motion.button>
-                  <motion.button
-                    className="border border-[#F4B448] text-[#F4B448] hover:bg-[#F4B448] hover:text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Partner With Us
-                  </motion.button>
+              {/* CTA Section */}
+              <motion.div
+                ref={ctaRef}
+                className="bg-gray-900/50 rounded-xl p-12 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1"
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={bounceUp}
+              >
+                <div className="text-center">
+                  <h2 className="text-3xl font-bold text-white mb-6">
+                    Join Our Journey
+                  </h2>
+                  <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+                    Be part of the revolution that's transforming real estate
+                    investment. Together, we're building a more accessible and
+                    transparent future.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <motion.button
+                      className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Join Our Team
+                    </motion.button>
+                    <motion.button
+                      className="border border-[#F4B448] text-[#F4B448] hover:bg-[#F4B448] hover:text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Partner With Us
+                    </motion.button>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>

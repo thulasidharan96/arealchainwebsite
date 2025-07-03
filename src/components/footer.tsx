@@ -168,7 +168,7 @@ export default function Footer() {
           </p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
             <a
-              href="https://x.com/arealchain"
+              href="https://x.com/arealnow"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">X</span>
@@ -194,7 +194,7 @@ export default function Footer() {
               />
             </a>
             <a
-              href="https://discord.com/invite/dcYs5dGM"
+              href="https://discord.gg/ZgVMbBYy7n"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">DISCORD</span>
@@ -220,7 +220,7 @@ export default function Footer() {
               />
             </a>
             <a
-              href="https://www.instagram.com/arealchain/"
+              href="https://www.instagram.com/arealnow/"
               className="text-gray-400 hover:text-white"
             >
               <span className="sr-only">INSTAGRAM</span>
