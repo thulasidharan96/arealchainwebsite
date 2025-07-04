@@ -1,12 +1,6 @@
 // pages/api/contact.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import { DynamoDB } from "aws-sdk";
-
-const dynamoDb = new DynamoDB.DocumentClient({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
+import axios from "axios";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,28 +8,20 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(405).end("Method Not Allowed");
 
-  const { fullName, email, contactType, message } = req.body;
-
-  if (!fullName || !email) {
-    return res.status(400).json({ message: "Name and email are required." });
-  }
-
-  const params = {
-    TableName: "Contact_Form",
-    Item: {
-      email,
-      fullName,
-      contactType,
-      message,
-      createdAt: new Date().toISOString(),
-    },
-  };
+  const baseUrl = process.env.NEXT_PUBLIC_FORM_API_BASE_URL;
 
   try {
-    await dynamoDb.put(params).promise();
-    return res.status(200).json({ message: "Success" });
-  } catch (error) {
-    console.error("DynamoDB Error:", error);
-    return res.status(500).json({ message: "Server error." });
+    const response = await axios.post(`${baseUrl}/contact`, req.body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return res.status(response.status).json(response.data);
+  } catch (error: any) {
+    console.error("Proxy Error:", error.response?.data || error.message);
+    return res
+      .status(error.response?.status || 500)
+      .json({ message: "Server error." });
   }
 }

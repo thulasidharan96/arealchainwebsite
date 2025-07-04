@@ -35,7 +35,7 @@ export default function VipMember() {
     name: "",
     email: "",
     phone: "",
-    terms: false,
+    marketingConsent: false,
   });
   const [status, setStatus] = useState("");
 
@@ -50,7 +50,7 @@ export default function VipMember() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.terms) {
+    if (!formData.marketingConsent) {
       setStatus("You must agree to receive updates.");
       return;
     }
@@ -150,18 +150,18 @@ export default function VipMember() {
                 </div>
                 <div className="flex items-center space-x-3 pt-2">
                   <Checkbox
-                    id="terms"
-                    checked={formData.terms}
+                    id="marketingConsent"
+                    checked={formData.marketingConsent}
                     onCheckedChange={(checked) =>
                       setFormData((prev) => ({
                         ...prev,
-                        terms: checked === true,
+                        marketingConsent: checked === true,
                       }))
                     }
                     className="border-gray-600 data-[state=checked]:bg-[#F4B448] data-[state=checked]:text-black"
                   />
                   <Label
-                    htmlFor="terms"
+                    htmlFor="marketingConsent"
                     className="text-sm text-gray-400 font-medium leading-none cursor-pointer"
                   >
                     Yes, please keep me updated on news, events and offers.

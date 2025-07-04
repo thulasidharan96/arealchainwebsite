@@ -1,12 +1,6 @@
 // pages/api/elite.ts
 import type { NextApiRequest, NextApiResponse } from "next";
-import { DynamoDB } from "aws-sdk";
-
-const dynamoDb = new DynamoDB.DocumentClient({
-  region: process.env.AWS_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
+import axios from "axios";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,30 +8,30 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return res.status(405).end("Method Not Allowed");
 
-  const { name, email, phone, terms } = req.body;
+  const baseUrl = process.env.NEXT_PUBLIC_FORM_API_BASE_URL;
 
-  if (!name || !email || !phone || !terms) {
+  const { name, email, phone, marketingConsent } = req.body;
+
+  if (!name || !email || !phone || !marketingConsent) {
     return res.status(400).json({ message: "All fields are required." });
   }
 
-  const params = {
-    TableName: "EliteClubMembers",
-    Item: {
-      email,
-      name,
-      phone,
-      terms,
-      createdAt: new Date().toISOString(),
-    },
-  };
-
   try {
-    await dynamoDb.put(params).promise();
+    const response = await axios.post(
+      `${baseUrl}/elite`,
+      { name, email, phone, marketingConsent },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return res.status(response.status).json(response.data);
+  } catch (error: any) {
+    console.error("Proxy Error:", error.response?.data || error.message);
     return res
-      .status(200)
-      .json({ message: "Successfully applied to the ELITE Club!" });
-  } catch (error) {
-    console.error("DynamoDB Error:", error);
-    return res.status(500).json({ message: "Server error. Please try again." });
+      .status(error.response?.status || 500)
+      .json({ message: "Server error. Please try again." });
   }
 }
