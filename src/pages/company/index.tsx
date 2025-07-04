@@ -563,45 +563,6 @@ export default function Company(): JSX.Element {
                   <TwitterFeed />
                 </div>
               </motion.div>
-
-              {/* CTA Section */}
-              <motion.div
-                ref={ctaRef}
-                className="bg-gray-900/50 rounded-xl p-12 border border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={bounceUp}
-              >
-                <div className="text-center">
-                  <h2 className="text-3xl font-bold text-white mb-6">
-                    Join Our Journey
-                  </h2>
-                  <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
-                    Be part of the revolution that's transforming real estate
-                    investment. Together, we're building a more accessible and
-                    transparent future.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <motion.button
-                      className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => router.push("/contact")}
-                    >
-                      Join Our Team
-                    </motion.button>
-                    <motion.button
-                      className="border border-[#F4B448] text-[#F4B448] hover:bg-[#F4B448] hover:text-black font-semibold px-8 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => router.push("/contact")}
-                    >
-                      Partner With Us
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
             </div>
           </div>
         </div>
