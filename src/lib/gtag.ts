@@ -1,5 +1,5 @@
 // lib/gtag.ts
-export const GA_TRACKING_ID = "G-1FBGKFFY90"; // Replace with your ID
+export const GA_TRACKING_ID = "G-2SCDMRR2Q9";
 
 // Pageview tracking
 export const pageview = (url: string) => {
