@@ -9,8 +9,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/wagmi.config";
 import { AuthProvider } from "../providers/auth-provider";
 import { WalletProvider } from "@/src/contexts/WalletContext";
-import Script from "next/script";
-import * as gtag from "../lib/gtag";
 
 const queryClient = new QueryClient();
 
@@ -106,20 +104,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${gtag.GA_TRACKING_ID}', {
-        page_path: window.location.pathname,
-      });
-    `}
-      </Script>
       <AuthProvider>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
