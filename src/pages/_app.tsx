@@ -106,6 +106,20 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+        strategy="afterInteractive"
+      />
+      <Script id="gtag-init" strategy="afterInteractive">
+        {`
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${gtag.GA_TRACKING_ID}', {
+        page_path: window.location.pathname,
+      });
+    `}
+      </Script>
       <AuthProvider>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
@@ -123,20 +137,6 @@ export default function App({ Component, pageProps }: AppProps) {
                   />
                   <link rel="icon" href="/favicon.png" />
                   <title>Layer 1 Blockchain for RWA</title>
-                  <Script
-                    src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-                    strategy="afterInteractive"
-                  />
-                  <Script id="gtag-init" strategy="afterInteractive">
-                    {`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${gtag.GA_TRACKING_ID}', {
-        page_path: window.location.pathname,
-      });
-    `}
-                  </Script>
                 </Head>
 
                 {showSplash && <SplashScreen isFinishing={isFinishing} />}
