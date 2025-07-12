@@ -236,12 +236,12 @@ export default function Login() {
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-                {showOtpStep ? "Verify OTP 🔐" : "Welcome Back 👋"}
+                {showOtpStep ? "Verify OTP" : "You’re Back – Let’s Go"}
               </h1>
               <p className="text-gray-400 text-lg">
                 {showOtpStep
                   ? `We've sent a verification code to ${email}. Please enter it below to complete your login.`
-                  : "Log in to access your Areal account and manage your activities securely."}
+                  : "Your gateway to next-gen ownership awaits.Secure. Simple. Seamless."}
               </p>
             </div>
 
@@ -381,7 +381,7 @@ export default function Login() {
                     {loading ? "Verifying..." : "Verify & Login"}
                   </Button>
 
-                  <div className="text-center">
+                  {/* <div className="text-center">
                     <button
                       type="button"
                       onClick={resendOtp}
@@ -390,7 +390,7 @@ export default function Login() {
                     >
                       Didn't receive the code? Resend OTP
                     </button>
-                  </div>
+                  </div> */}
                 </form>
               )}
 

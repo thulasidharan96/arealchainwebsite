@@ -55,7 +55,7 @@ const Dashboard = () => {
           <div className="flex justify-center items-center w-full">
             <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-8 mt-6 text-white shadow-2xl w-full max-w-xl space-y-6">
               <h2 className="text-2xl font-bold text-green-400 text-center">
-                🎉 Welcome to the AREAL Family!
+                Cheers to Being Part of the Evolution!
               </h2>
 
               <p className="text-gray-300 text-center">
