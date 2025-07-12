@@ -25,6 +25,8 @@ export async function middleware(request: NextRequest) {
     "/property",
     "/announcement",
     "/faqs",
+    "/robots.txt",
+    "/sitemap-0.xml",
   ];
 
   const isPublicPath = publicPaths.some(

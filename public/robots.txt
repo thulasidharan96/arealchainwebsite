@@ -5,6 +5,7 @@ Allow: /
 # *
 User-agent: *
 Disallow: /dashboard
+Disallow: /buy
 
 # Host
 Host: https://arealchain.com

@@ -1,12 +1,13 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://arealchain.com", // Replace with your domain
+  siteUrl: "https://arealchain.com",
   generateRobotsTxt: true,
-  exclude: ["/dashboard"], // authenticated/private routes
+  exclude: ["/dashboard", "/buy", "/api/*", "/onboard"],
   robotsTxtOptions: {
     policies: [
       { userAgent: "*", allow: "/" },
-      { userAgent: "*", disallow: ["/dashboard"] },
+      { userAgent: "*", disallow: ["/dashboard", "/buy"] },
     ],
   },
+  sitemapSize: 5000,
 };
