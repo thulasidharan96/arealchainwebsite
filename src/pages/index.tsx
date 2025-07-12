@@ -14,6 +14,7 @@ import {
 } from "@/src/components/ui/accordion";
 import { properties } from "@/src/data/properties";
 import { motion, easeOut, Variants } from "framer-motion";
+import { Button } from "../components/ui/button";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -693,6 +694,9 @@ export default function Home() {
             </Accordion>
           </div>
         </div>
+        <div className="flex justify-center mt-4">
+          <Button onClick={() => router.push("/faqs")}>More FAQ</Button>
+        </div>
       </section>
 
       {/* Section Separator */}
@@ -714,7 +718,7 @@ export default function Home() {
           </h2>
           <button
             className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-4 rounded-lg text-lg opacity-0"
-            onClick={() => (window.location.href = "/contact")}
+            onClick={() => router.push("/contact")}
             onMouseEnter={handleButtonHover}
             onMouseLeave={handleButtonLeave}
           >

@@ -19,9 +19,10 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useRef, useState } from "react";
 import SplineCompany from "@/src/components/SplineCompany";
 import { useRouter } from "next/router";
+import SplineCube from "@/src/components/SplineCube";
 
 interface TeamMember {
   name: string;
@@ -201,7 +202,7 @@ export default function Company(): JSX.Element {
   return (
     <Layout>
       <div className="relative z-0">
-        {/* <SplineCompany /> */}
+        <SplineCube />
         <div className="relative z-10">
           {/* Hero Section */}
           <div className="pt-32 pb-20 px-4">

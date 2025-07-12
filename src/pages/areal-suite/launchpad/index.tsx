@@ -18,7 +18,7 @@ const ProductPage = () => {
     subtitle:
       "An Innovative Property Launchpad for Initial Real Estate Offerings (IREO), Making Real Estate Investing Accessible for Everyone.",
     description:
-      "Areal Launchpad provides a secure and compliant platform for real estate developers and asset owners to raise capital by tokenizing their projects. We connect innovative projects with a global network of investors looking for the next big opportunity in real estate.",
+      "A next-gen platform for Initial Real Estate Offerings (IREO).We help real estate developers raise capital by tokenizing their projects — simple, secure, and investor-ready.Backed by the Areal Network — trusted by builders & investors across the globe.",
     features: [
       "Full-service project incubation and advisory.",
       "Secure and audited smart contracts for token launches.",
@@ -82,7 +82,10 @@ const ProductPage = () => {
                 className="space-y-8"
               >
                 <p className="text-lg text-gray-300 leading-relaxed">
-                  {product.description}
+                  {/* {product.description} */}A next-gen platform for Initial
+                  Real Estate Offerings (IREO). We help real estate developers
+                  raise capital by tokenizing their projects simple, secure, and
+                  investor-ready.
                 </p>
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-6">

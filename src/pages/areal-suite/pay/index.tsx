@@ -15,9 +15,9 @@ import { useRouter } from "next/router";
 const ProductPage = () => {
   const product = {
     name: "ArealPay",
-    subtitle: "Seamlessly Transact and Pay with Your Real World Assets.",
+    subtitle: "The smarter way to spend your tokenized assets.",
     description:
-      "ArealPay is a revolutionary payment gateway that bridges the gap between your digital asset portfolio and real-world commerce. Spend the value of your tokenized assets instantly and securely, anywhere in the world.",
+      "Use your RWA-backed tokens for real-world purchases, cross-border transfers, and secure high-value payments — instantly, anywhere in the world.",
     features: [
       "Spend your RWA-backed tokens directly at participating merchants.",
       "Instantaneous, low-cost cross-border payments.",

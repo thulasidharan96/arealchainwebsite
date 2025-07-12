@@ -15,10 +15,9 @@ import { useRouter } from "next/router";
 const ProductPage = () => {
   const product = {
     name: "Areal TaaS",
-    subtitle:
-      "Tokenization as a Service: Your All-in-One Solution for Asset Digitization.",
+    subtitle: " Tokenize Smarter",
     description:
-      "Areal's Tokenization as a Service (TaaS) empowers asset owners, developers, and funds to convert real-world assets into tradable digital tokens on the blockchain. Our end-to-end service handles the complex legal, technical, and compliance aspects of tokenization, so you can focus on your assets.",
+      "Own an asset? We’ll turn it into a digital token — legally, securely, and effortlessly.",
     features: [
       "End-to-end tokenization workflow from structuring to issuance.",
       "Comprehensive legal and compliance support.",
@@ -81,9 +80,20 @@ const ProductPage = () => {
                 transition={{ duration: 1 }}
                 className="space-y-8"
               >
-                <p className="text-lg text-gray-300 leading-relaxed">
-                  {product.description}
-                </p>
+                <div>
+                  <p className="text-lg text-gray-300 leading-relaxed">
+                    {product.description}
+                  </p>
+                  <p className="text-lg text-gray-300 leading-relaxed">
+                    With Areal TaaS, you can easily convert them into tradable
+                    digital tokens on the blockchain.
+                  </p>
+                  <p className="text-lg text-gray-300 leading-relaxed">
+                    Areal’s Tokenization-as-a-Service (TaaS) is built for asset
+                    owners, developers, and funds ready to step into the future.
+                  </p>
+                </div>
+
                 <div>
                   <h3 className="text-2xl font-bold text-white mb-6">
                     Key Features

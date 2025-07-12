@@ -18,7 +18,7 @@ const ProductPage = () => {
     subtitle:
       "Unlock the Liquidity of Your Digital Assets with RWA-Backed Loans.",
     description:
-      "Areal Mortgage introduces a new paradigm in lending. Secure loans by using your tokenized real-world assets as collateral. Access liquidity when you need it without having to sell your valuable, appreciating investments.",
+      "Areal Mortgage lets you access instant liquidity by using your tokenized real-world assets as collateral .Access liquidity when you need it — while your investments continue to grow in value.",
     features: [
       "Obtain loans backed by your tokenized real estate portfolio.",
       "Competitive, transparent interest rates powered by DeFi protocols.",

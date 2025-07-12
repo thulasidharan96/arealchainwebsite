@@ -16,9 +16,9 @@ const ProductPage = () => {
   const product = {
     name: "Areal Marketplace",
     subtitle:
-      "The Premier Secondary Market for Buying and Selling RWAs and Tokens.",
+      "A Real-World Asset Trading Platform Built for Simplicity, Security, and Speed.",
     description:
-      "The Areal Marketplace is a liquid, secure, and transparent exchange for trading tokenized Real World Assets (RWAs). Seamlessly trade fractional ownership of properties and other assets from around the globe, 24/7.",
+      "Trade fractional ownership of real estate and other real-world assets anytime — with deep liquidity, transparent transactions, and secure wallet integration.",
     features: [
       "Peer-to-peer RWA and token trading.",
       "Deep liquidity pools for instant settlement.",

@@ -65,8 +65,8 @@ export default function Hero() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 text-center cursor-pointer">
-              Watch our Latest Promo
+            <h2 className="text-3xl sm:text-4xl md:text-4xl font-bold text-white mb-6 text-center cursor-pointer">
+              See What’s Happening at AREAL
             </h2>
           </a>
         </div>

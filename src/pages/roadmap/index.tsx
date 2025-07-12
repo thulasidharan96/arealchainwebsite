@@ -1,23 +1,21 @@
-import {
-  CheckCircle2,
-  Loader2,
-  Circle,
-  Zap,
-  Calendar,
-  Target,
-  TrendingUp,
-} from "lucide-react";
+"use client";
+
+import type React from "react";
+
+import { useState, useRef, useEffect } from "react";
+import type { MouseEvent } from "react";
+import { CheckCircle2, Loader2, Circle, Zap, Star } from "lucide-react";
+import Layout from "@/src/components/layout";
 import { cn } from "@/src/lib/utils";
 import { Badge } from "@/src/components/ui/badge";
-import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Layout from "@/src/components/layout";
+import { FloatingParticles } from "@/src/components/FloatingParticles";
 
-// Register ScrollTrigger plugin
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+// GSAP imports (these would normally be from CDN)
+declare global {
+  interface Window {
+    gsap: any;
+    ScrollTrigger: any;
+  }
 }
 
 interface Milestone {
@@ -25,498 +23,552 @@ interface Milestone {
   status: "completed" | "in-progress" | "upcoming";
   title: string;
   description: string;
-  features?: string[];
+  features?: string[]; // Added back features as per original roadmapData structure
 }
 
-// Roadmap Data based on the new technical roadmap
 const roadmapData: Milestone[] = [
   {
     quarter: "Q3 2023",
     status: "completed",
-    title: "Blockchain Architecture & Consensus Mechanism Development",
+    title: "Research & Development",
     description:
-      "Development of a robust Proof of Stake (PoS) consensus mechanism optimized for scalability, security, and low energy consumption.",
-    features: [
-      "PoS Consensus",
-      "Scalability Optimization",
-      "Energy Efficiency",
-    ],
+      "One year intensive R&D phase initiated to build the foundational technology for tokenizing real-world assets.",
+    features: ["Foundational Tech", "Asset Tokenization", "Intensive R&D"],
   },
   {
     quarter: "Q4 2023",
     status: "completed",
-    title: "Smart Contract & Tokenization Protocol Development",
+    title: "Conceptualization & Prototyping",
     description:
-      "Design of advanced smart contracts for tokenized asset management, with support for ERC-721, ERC-1155, and ERC-20 token standards.",
-    features: ["ERC-721 Support", "ERC-1155 Integration", "Asset Management"],
+      "Core concepts refined and a functional prototype developed to validate our innovative approach.",
+    features: [
+      "Core Concepts",
+      "Functional Prototype",
+      "Innovation Validation",
+    ],
   },
   {
     quarter: "Q1 2024",
     status: "completed",
     title: "Private Investor Funding Secured",
     description:
-      "Completion of a successful Series A funding round to enhance development capacity, focusing on technical infrastructure and developer ecosystem expansion.",
-    features: [
-      "Series A Complete",
-      "Infrastructure Focus",
-      "Developer Ecosystem",
-    ],
+      "Successfully closed a significant funding round from key private investors, securing our development runway.",
+    features: ["Private Funding", "Development Runway", "Key Investors"],
   },
   {
     quarter: "Q2 2024",
     status: "completed",
-    title: "Governance Framework & DAO Design",
+    title: "Board of Directors Established",
     description:
-      "Decentralized governance (DAO) system integrated into Areal Chain, allowing token holders to vote on critical network upgrades, asset onboarding, and revenue-sharing decisions.",
-    features: ["DAO Integration", "Token Voting", "Revenue Sharing"],
+      "Assembled a comprehensive board of directors with deep expertise in real estate, finance, and blockchain.",
+    features: [
+      "Board Formation",
+      "Real Estate Expertise",
+      "Blockchain Leadership",
+    ],
   },
   {
     quarter: "Q3 2024",
-    status: "in-progress",
-    title: "Testnet Launch (V1.0)",
+    status: "completed",
+    title: "Featured in Major News Channels",
     description:
-      "Deployment of Areal Chain's Testnet (v1.0) with active participation from validators and early adopters to test the blockchain protocol and tokenization features.",
-    features: ["Testnet Deployment", "Validator Network", "Protocol Testing"],
+      "Gained significant media traction, with features in several prominent financial and tech news outlets.",
+    features: ["Media Coverage", "Financial News", "Tech Features"],
+  },
+  {
+    quarter: "Q3 2024",
+    status: "completed",
+    title: "Showcased at Crypto Expo Dubai",
+    description:
+      "Successfully presented Areal's vision and technology at one of the world's leading crypto events, generating high interest.",
+    features: ["Crypto Expo", "Vision Presentation", "High Interest"],
   },
   {
     quarter: "Q4 2024",
     status: "in-progress",
-    title: "Enhanced Asset Class Expansion",
+    title: "Platform Alpha Launch",
     description:
-      "Integrating advanced asset classes into the Areal platform, including luxury assets, intellectual property, precious metals, and carbon credits.",
-    features: ["Luxury Assets", "IP Tokenization", "Carbon Credits"],
+      "Rolling out an exclusive alpha version of the platform to our early investors and partners for feedback.",
+    features: ["Alpha Release", "Early Access", "Partner Feedback"],
+  },
+  {
+    quarter: "Q4 2024",
+    status: "in-progress",
+    title: "Global Marketing Campaign Kick-off",
+    description:
+      "Initiating a multi-channel marketing campaign to build global awareness ahead of our public launch.",
+    features: ["Global Campaign", "Multi-channel", "Awareness Building"],
   },
   {
     quarter: "Q1 2025",
     status: "upcoming",
     title: "Public Platform Launch (V1.0)",
     description:
-      "Full-scale Areal Chain Mainnet launch, enabling global asset tokenization with enhanced scalability and cross-chain asset interoperability.",
-    features: ["Mainnet Launch", "Global Tokenization", "Cross-chain Support"],
+      "The official public launch of the Areal platform, opening up real-world asset tokenization to everyone.",
+    features: ["Public Launch", "Global Access", "Tokenization for All"],
+  },
+  {
+    quarter: "Q1 2025",
+    status: "upcoming",
+    title: "First RWA Listing",
+    description:
+      "Onboarding and listing the very first tokenized real-world asset on the Areal platform.",
+    features: ["First Listing", "Asset Onboarding", "RWA Token"],
   },
   {
     quarter: "Q2 2025",
     status: "upcoming",
-    title: "ArealPay Integration for Tokenized Transactions",
+    title: "Areal Marketplace Launch",
     description:
-      "Full deployment of ArealPay to process transactions for real estate and commodity-backed tokens.",
-    features: ["Payment Processing", "Real Estate Tokens", "Commodity Backing"],
+      "Introducing a secondary marketplace for the peer-to-peer trading of tokenized assets, boosting liquidity.",
+    features: ["Secondary Market", "P2P Trading", "Liquidity Boost"],
+  },
+  {
+    quarter: "Q2 2025",
+    status: "upcoming",
+    title: "ArealPay Integration",
+    description:
+      "Launch of our native payment solution to streamline transactions within the ecosystem.",
+    features: [
+      "Native Payments",
+      "Streamlined Transactions",
+      "Ecosystem Integration",
+    ],
   },
   {
     quarter: "Q3 2025",
     status: "upcoming",
-    title: "Decentralized Identity (DID) Integration",
+    title: "Mobile App Release (iOS & Android)",
     description:
-      "Implementation of a Decentralized Identity (DID) protocol for KYC/AML compliance without compromising user privacy.",
-    features: ["DID Protocol", "KYC/AML Compliance", "Privacy Protection"],
+      "Bringing the full power of the Areal platform to your fingertips with dedicated mobile applications.",
+    features: ["Mobile App", "iOS & Android", "Full Platform Access"],
   },
   {
     quarter: "Q4 2025",
     status: "upcoming",
-    title: "Web3 Asset Management & User Interface Revamp",
+    title: "Expansion into New Asset Classes",
     description:
-      "Web3-based platform for decentralized management of tokenized assets, including real-time performance analytics and asset tracking tools.",
-    features: ["Web3 Platform", "Performance Analytics", "Asset Tracking"],
-  },
-  {
-    quarter: "Q1 2026",
-    status: "upcoming",
-    title: "AI & Machine Learning Integration for Asset Valuation",
-    description:
-      "AI-driven asset valuation models integrated to provide real-time predictions and dynamic pricing for tokenized real-world assets based on machine learning algorithms.",
-    features: ["AI Valuation", "Real-time Predictions", "Dynamic Pricing"],
-  },
-  {
-    quarter: "Q3 2026",
-    status: "upcoming",
-    title: "Tokenization of Carbon Credits & Water Rights",
-    description:
-      "Launch of a tokenized marketplace for carbon credits and water rights, providing access to sustainable financial products and ESG investment opportunities.",
-    features: ["Carbon Marketplace", "Water Rights", "ESG Investment"],
+      "Expanding beyond real estate to include tokenization of other valuable real-world assets like art and commodities.",
+    features: ["New Asset Classes", "Art Tokenization", "Commodity Expansion"],
   },
 ];
 
 const statusConfig = {
   completed: {
     icon: CheckCircle2,
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500",
-    cardBorder: "border-emerald-500/30",
-    cardBg: "bg-emerald-500/10",
-    shadow: "shadow-emerald-500/20",
-    glowColor: "shadow-emerald-500/30",
-    dotColor: "bg-emerald-500",
-    lineColor: "bg-emerald-500/30",
+    color: "text-green-400",
+    bgColor: "bg-green-500",
+    cardBorder: "border-green-500/30",
+    cardBg: "bg-green-500/10",
+    shadow: "shadow-green-500/20",
   },
   "in-progress": {
     icon: Loader2,
-    color: "text-amber-400",
-    bgColor: "bg-amber-500",
-    cardBorder: "border-amber-500/30",
-    cardBg: "bg-amber-500/10",
-    shadow: "shadow-amber-500/20",
-    glowColor: "shadow-amber-500/30",
-    dotColor: "bg-amber-500",
-    lineColor: "bg-amber-500/30",
+    color: "text-[#F4B448]",
+    bgColor: "bg-[#F4B448]",
+    cardBorder: "border-[#F4B448]/30",
+    cardBg: "bg-[#F4B448]/10",
+    shadow: "shadow-[#F4B448]/20",
   },
   upcoming: {
     icon: Circle,
-    color: "text-slate-400",
-    bgColor: "bg-slate-500",
-    cardBorder: "border-slate-500/30",
-    cardBg: "bg-slate-500/5",
-    shadow: "shadow-slate-500/10",
-    glowColor: "shadow-slate-500/20",
-    dotColor: "bg-slate-500",
-    lineColor: "bg-slate-500/20",
+    color: "text-gray-500",
+    bgColor: "bg-gray-500",
+    cardBorder: "border-gray-500/30",
+    cardBg: "bg-gray-500/10",
+    shadow: "shadow-gray-500/20",
   },
 };
 
-const MilestoneCard = ({
-  milestone,
-  index,
-  isLeft,
-}: {
-  milestone: Milestone;
-  index: number;
-  isLeft: boolean;
-}) => {
+interface GSAPAnimatedComponentProps {
+  gsapLoaded: boolean;
+}
+
+const MilestoneCard = ({ milestone }: { milestone: Milestone }) => {
   const config = statusConfig[milestone.status];
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!cardRef.current) return;
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: cardRef.current,
-        start: "top 80%",
-        end: "bottom 20%",
-        toggleActions: "play none none reverse",
-      },
-    });
-
-    tl.fromTo(
-      cardRef.current,
-      {
-        opacity: 0,
-        x: isLeft ? -100 : 100,
-        scale: 0.8,
-      },
-      {
-        opacity: 1,
-        x: 0,
-        scale: 1,
-        duration: 0.8,
-        ease: "power2.out",
-      }
-    );
-
-    return () => {
-      tl.kill();
-    };
-  }, [isLeft]);
-
   return (
     <div
-      ref={cardRef}
       className={cn(
-        "relative group",
-        isLeft ? "mr-8 text-right" : "ml-8 text-left"
+        "p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-2 w-72 h-fit",
+        config.cardBorder,
+        config.cardBg,
+        `hover:shadow-lg ${config.shadow}`
       )}
     >
-      <motion.div
-        className={cn(
-          "p-8 rounded-2xl border-2 backdrop-blur-sm transition-all duration-500 hover:scale-105 max-w-lg",
-          config.cardBorder,
-          config.cardBg,
-          `hover:shadow-2xl ${config.glowColor}`
-        )}
-        whileHover={{ y: -5 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      >
-        <div className="flex items-center gap-3 mb-4">
-          <Badge
-            className={cn(
-              "px-3 py-1 text-xs font-semibold",
-              config.cardBorder,
-              config.cardBg,
-              config.color
-            )}
-          >
-            <Calendar className="w-3 h-3 mr-1" />
-            {milestone.quarter}
-          </Badge>
-          <div
-            className={cn(
-              "w-2 h-2 rounded-full",
-              config.dotColor,
-              milestone.status === "in-progress" && "animate-pulse"
-            )}
-          ></div>
-        </div>
-
-        <h3
-          className={cn("font-bold text-xl mb-4 leading-tight", config.color)}
-        >
-          {milestone.title}
-        </h3>
-
-        <p className="text-slate-300 text-sm leading-relaxed mb-6">
-          {milestone.description}
-        </p>
-
-        {milestone.features && (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
-              <Target className="w-3 h-3" />
-              Key Features
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {milestone.features.map((feature, featureIndex) => (
-                <span
-                  key={featureIndex}
-                  className="px-2 py-1 bg-slate-800/50 border border-slate-700 rounded-md text-xs text-slate-300"
-                >
-                  {feature}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-      </motion.div>
+      <p className="text-sm font-semibold text-gray-400 mb-2">
+        {milestone.quarter}
+      </p>
+      <h3 className={cn("font-bold text-white mb-2 text-lg", config.color)}>
+        {milestone.title}
+      </h3>
+      <p className="text-sm text-gray-300 leading-relaxed">
+        {milestone.description}
+      </p>
     </div>
   );
 };
 
-const TimelineDot = ({
-  milestone,
-  index,
-}: {
-  milestone: Milestone;
-  index: number;
-}) => {
-  const config = statusConfig[milestone.status];
-  const dotRef = useRef<HTMLDivElement>(null);
+interface AsteriskAnimationProps extends GSAPAnimatedComponentProps {
+  scrollContainerRef: React.RefObject<HTMLDivElement>;
+}
+
+const AsteriskAnimation = ({
+  gsapLoaded,
+  scrollContainerRef,
+}: AsteriskAnimationProps) => {
+  const asteriskRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!dotRef.current) return;
+    if (!gsapLoaded || !asteriskRef.current || !scrollContainerRef.current)
+      return;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: dotRef.current,
-        start: "top 80%",
-        end: "bottom 20%",
-        toggleActions: "play none none reverse",
-      },
-    });
-
-    tl.fromTo(
-      dotRef.current,
-      {
-        scale: 0,
-        opacity: 0,
-      },
-      {
-        scale: 1,
-        opacity: 1,
-        duration: 0.6,
-        ease: "back.out(1.7)",
-      }
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+    const asterisks = gsap.utils.toArray(
+      asteriskRef.current.querySelectorAll(".asterisk")
     );
 
-    return () => {
-      tl.kill();
-    };
-  }, []);
+    // Kill any existing ScrollTriggers for asterisks to prevent duplicates
+    ScrollTrigger.getAll().forEach((st: any) => {
+      if (
+        st.trigger === scrollContainerRef.current &&
+        st.vars.id === "asterisk-animation"
+      ) {
+        st.kill();
+      }
+    });
 
-  return (
-    <div
-      ref={dotRef}
-      className={cn(
-        "relative w-12 h-12 rounded-full flex items-center justify-center z-10 ring-4 ring-slate-900/50",
-        config.bgColor,
-        `shadow-lg ${config.glowColor}`
-      )}
-    >
-      <config.icon
-        className={cn(
-          "w-6 h-6 text-slate-900",
-          milestone.status === "in-progress" && "animate-spin"
-        )}
-      />
-    </div>
-  );
-};
+    gsap.set(asterisks, { opacity: 0, scale: 0 }); // Ensure initial state is hidden
 
-export default function VerticalRoadmap() {
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!timelineRef.current || !progressRef.current) return;
-
-    // Timeline progress animation
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: timelineRef.current,
-        start: "top 20%",
-        end: "bottom 80%",
-        scrub: 1,
-        onUpdate: (self) => {
-          if (progressRef.current) {
-            gsap.set(progressRef.current, {
-              scaleY: self.progress,
-              transformOrigin: "top",
-            });
-          }
+    const tl = gsap.timeline({ paused: true }); // Create a paused timeline
+    asterisks.forEach((asterisk: Element, index: number) => {
+      tl.to(
+        asterisk,
+        {
+          opacity: 1,
+          scale: 1,
+          rotation: 360,
+          duration: 0.5,
+          ease: "back.out(1.7)",
         },
-      },
+        index * 0.05 // Stagger the appearance
+      );
+    });
+
+    // Create ScrollTrigger to link timeline to horizontal scroll
+    const asteriskST = ScrollTrigger.create({
+      id: "asterisk-animation", // Give it an ID for easier killing
+      trigger: scrollContainerRef.current,
+      horizontal: true, // Listen to horizontal scroll
+      scrub: true, // Link timeline progress to scroll progress
+      start: "left left", // Start when the left edge of the scrollable content hits the left edge of its container
+      end: "right right", // End when the right edge of the scrollable content hits the right edge of its container
+      animation: tl, // Link this timeline to the ScrollTrigger
+      // markers: true, // Uncomment for debugging
     });
 
     return () => {
-      tl.kill();
+      asteriskST.kill(); // Clean up ScrollTrigger on unmount
+    };
+  }, [gsapLoaded, scrollContainerRef]); // Depend on gsapLoaded and scrollContainerRef
+
+  return (
+    <div ref={asteriskRef} className="absolute inset-0 pointer-events-none">
+      {Array.from({ length: 20 }).map((_, index) => (
+        <Star
+          key={index}
+          className={`asterisk absolute w-4 h-4 text-amber-400`}
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default function HorizontalRoadmap() {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const timelineInnerRef = useRef<HTMLDivElement>(null);
+  const progressLineRef = useRef<HTMLDivElement>(null);
+
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const [gsapLoaded, setGsapLoaded] = useState(false);
+
+  // Load GSAP and ScrollTrigger
+  useEffect(() => {
+    const loadGSAP = async () => {
+      if (typeof window === "undefined") return;
+
+      if (!window.gsap) {
+        const script = document.createElement("script");
+        script.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
+        script.onload = () => {
+          const scrollTriggerScript = document.createElement("script");
+          scrollTriggerScript.src =
+            "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
+          scrollTriggerScript.onload = () => {
+            if (window.gsap && window.ScrollTrigger) {
+              window.gsap.registerPlugin(window.ScrollTrigger);
+              setGsapLoaded(true);
+            }
+          };
+          document.head.appendChild(scrollTriggerScript);
+        };
+        document.head.appendChild(script);
+      } else {
+        setGsapLoaded(true);
+      }
+    };
+    loadGSAP();
+  }, []);
+
+  // Manual horizontal scrolling using mouse wheel
+  useEffect(() => {
+    const element = scrollContainerRef.current;
+    if (!element) return;
+
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0) return;
+      e.preventDefault(); // Prevent vertical page scroll
+      element.scrollTo({
+        left: element.scrollLeft + e.deltaY,
+        behavior: "auto", // or 'smooth' for smoother scroll
+      });
+    };
+
+    element.addEventListener("wheel", onWheel, { passive: false });
+    return () => {
+      element.removeEventListener("wheel", onWheel);
     };
   }, []);
+
+  // Manual horizontal scrolling using drag
+  const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+    const ele = scrollContainerRef.current;
+    if (!ele) return;
+    setIsDragging(true);
+    setStartX(e.pageX - ele.offsetLeft);
+    setScrollLeft(ele.scrollLeft);
+    ele.style.cursor = "grabbing";
+    ele.style.userSelect = "none";
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.cursor = "grab";
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.style.cursor = "grab";
+      scrollContainerRef.current.style.removeProperty("user-select");
+    }
+  };
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = (x - startX) * 2.5; // multiplier for faster scrolling
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+
+    // Update progress line on drag
+    updateProgressLine();
+  };
+
+  // Update progress line based on scroll position
+  const updateProgressLine = () => {
+    const scrollContainer = scrollContainerRef.current;
+    const progressLine = progressLineRef.current;
+    const timelineInner = timelineInnerRef.current;
+
+    if (scrollContainer && progressLine && timelineInner) {
+      const scrollWidth =
+        timelineInner.scrollWidth - scrollContainer.offsetWidth;
+      if (scrollWidth > 0) {
+        const scrollProgress = scrollContainer.scrollLeft / scrollWidth;
+        progressLine.style.transform = `scaleX(${scrollProgress})`;
+      } else {
+        progressLine.style.transform = "scaleX(0)"; // No scroll needed, hide progress
+      }
+    }
+  };
+
+  // Effect to update progress line on scroll (for wheel/programmatic scroll)
+  useEffect(() => {
+    const element = scrollContainerRef.current;
+    if (!element) return;
+
+    const handleScroll = () => {
+      updateProgressLine();
+    };
+
+    element.addEventListener("scroll", handleScroll);
+    // Initial update
+    updateProgressLine();
+
+    return () => {
+      element.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  type TimelineItem =
+    | { type: "year"; year: string }
+    | { type: "milestone"; data: Milestone };
+
+  const timelineItems: TimelineItem[] = [];
+  let currentYear: string | null = null;
+
+  roadmapData.forEach((milestone) => {
+    const year = milestone.quarter.split(" ")[1];
+    if (year !== currentYear) {
+      currentYear = year;
+      timelineItems.push({ type: "year", year });
+    }
+    timelineItems.push({ type: "milestone", data: milestone });
+  });
+
+  // Calculate dynamic width for the timelineInner to ensure all content fits
+  const calculateTimelineInnerWidth = () => {
+    let totalWidth = 0;
+    timelineItems.forEach((item) => {
+      if (item.type === "year") {
+        totalWidth += 112 + 32; // w-28 + mx-4 * 2
+      } else {
+        totalWidth += 320; // w-80
+      }
+    });
+    // Add horizontal padding from the scrollContainerInner
+    totalWidth += 2 * 80; // px-20 = 80px on each side
+
+    return `${totalWidth}px`;
+  };
+
+  let milestoneCounter = 0;
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-        {/* Header Section */}
-        <div className="pt-20 pb-12 px-4 relative overflow-hidden">
-          {/* Background Effects */}
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 via-transparent to-amber-500/5"></div>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
-
-          <div className="max-w-7xl mx-auto relative z-10">
-            <div className="text-center">
-              <Badge className="mb-6 bg-amber-500/20 text-amber-400 border-amber-500/30 hover:bg-amber-500/30 transition-colors">
+      <div className="min-h-screen bg-transparent overflow-x-hidden">
+        <FloatingParticles />
+        <div className="pt-32 pb-20 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="mb-6 bg-[#F4B448]/20 text-[#F4B448] border-[#F4B448]/30 hover:bg-[#F4B448]/30 transition-colors">
                 <Zap className="w-4 h-4 mr-2" />
-                Our Journey Forward
+                Our Path Forward
               </Badge>
-
-              <motion.h1
-                className="text-6xl font-bold text-white mb-6 bg-gradient-to-r from-white via-slate-200 to-white bg-clip-text text-transparent"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
+              <h1 className="text-5xl font-bold text-white mb-6">
                 Development Roadmap
-              </motion.h1>
-
-              <motion.p
-                className="text-slate-400 text-xl max-w-4xl mx-auto leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                Revolutionizing real-world asset tokenization through
-                cutting-edge blockchain technologies. Our comprehensive roadmap
-                showcases the milestones that will shape the future of
-                decentralized finance.
-              </motion.p>
+              </h1>
+              <p className="text-gray-400 text-xl max-w-3xl mx-auto">
+                Our journey to revolutionize real estate through blockchain
+                technology. Use your scroll wheel or drag to explore our
+                progress.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Timeline Section */}
-        <div className="relative px-4 pb-20 mt-8">
-          <div className="max-w-6xl mx-auto">
-            <div ref={timelineRef} className="relative">
-              {/* Timeline Line */}
-              <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-slate-700/50 -translate-x-1/2"></div>
+        {/* Outer container for horizontal scroll (h-screen for visible area) */}
+        <div
+          ref={scrollContainerRef}
+          className="no-scrollbar w-full overflow-x-auto cursor-grab relative p-8"
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+        >
+          {/* Asterisk Animation - now receives scrollContainerRef */}
+          {scrollContainerRef.current && (
+            <AsteriskAnimation
+              gsapLoaded={gsapLoaded}
+              scrollContainerRef={
+                scrollContainerRef as React.RefObject<HTMLDivElement>
+              }
+            />
+          )}
 
-              {/* Progress Line */}
+          {/* Main horizontal timeline content - increased height for visibility */}
+          <div
+            ref={timelineInnerRef}
+            className="relative inline-flex items-center h-[650px] py-10 px-20" // Adjusted height and padding
+            style={{ width: calculateTimelineInnerWidth() }} // Dynamic width for content
+          >
+            {/* Horizontal timeline line (static background) */}
+            <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-600 -translate-y-1/2">
+              {/* Animated progress fill for the global line */}
               <div
-                ref={progressRef}
-                className="absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-emerald-500 via-amber-500 to-slate-500 -translate-x-1/2 origin-top scale-y-0"
-              ></div>
-
-              {/* Timeline Items */}
-              <div className="space-y-16">
-                {roadmapData.map((milestone, index) => {
-                  const isLeft = index % 2 === 0;
-
-                  return (
-                    <div
-                      key={index}
-                      className="relative flex items-center justify-center"
-                    >
-                      {/* Timeline Dot */}
-                      <div className="absolute left-1/2 -translate-x-1/2 z-20">
-                        <TimelineDot milestone={milestone} index={index} />
-                      </div>
-
-                      {/* Content */}
-                      <div
-                        className={cn(
-                          "flex items-center w-full",
-                          isLeft ? "justify-end" : "justify-start"
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            "w-1/2 flex",
-                            isLeft ? "justify-end" : "justify-start"
-                          )}
-                        >
-                          <MilestoneCard
-                            milestone={milestone}
-                            index={index}
-                            isLeft={isLeft}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                ref={progressLineRef}
+                className="h-full bg-gradient-to-r from-green-500 via-[#F4B448] to-gray-500 origin-left scale-x-0 transition-transform duration-75 ease-out"
+              />
             </div>
+
+            {/* Individual timeline items (year markers and milestones) */}
+            {timelineItems.map((item, index) => {
+              if (item.type === "year") {
+                return (
+                  <div
+                    key={`year-${item.year}-${index}`}
+                    className="relative flex-shrink-0 w-28 h-full flex flex-col items-center justify-center z-10 mx-4"
+                  >
+                    {/* Dot on the timeline for the year */}
+                    <div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gray-700 ring-8 ring-gray-900"></div>
+                    {/* Year text */}
+                    <div className="absolute bottom-[calc(50%+6rem)] bg-[#F4B448] text-black font-bold text-xl px-4 py-1 rounded-lg shadow-lg shadow-[#F4B448]/20">
+                      {item.year}
+                    </div>
+                  </div>
+                );
+              }
+
+              milestoneCounter++;
+              const milestone = item.data;
+              const config = statusConfig[milestone.status];
+              const isAbove = milestoneCounter % 2 !== 0; // Alternate card position
+
+              return (
+                <div
+                  key={`milestone-${index}`}
+                  className="relative flex-shrink-0 w-80 h-full flex flex-col items-center justify-center"
+                >
+                  {/* Milestone dot */}
+                  <div
+                    className={cn(
+                      "absolute top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center z-20 ring-8 ring-gray-900",
+                      config.bgColor
+                    )}
+                  >
+                    <config.icon
+                      className={cn(
+                        "w-5 h-5 text-gray-900",
+                        milestone.status === "in-progress" && "animate-spin"
+                      )}
+                    />
+                  </div>
+                  {/* Milestone card */}
+                  <div
+                    className={cn(
+                      "absolute",
+                      isAbove
+                        ? "bottom-[calc(50%+2.5rem)]"
+                        : "top-[calc(50%+2.5rem)]" // Adjusted spacing
+                    )}
+                  >
+                    <MilestoneCard milestone={milestone} />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-
-        {/* Footer Stats */}
-        {/* <div className="py-16 px-4 bg-slate-900/50 border-t border-slate-800">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="text-3xl font-bold text-emerald-400">
-                  {roadmapData.filter((m) => m.status === "completed").length}
-                </div>
-                <div className="text-slate-400">Completed Milestones</div>
-              </motion.div>
-
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <div className="text-3xl font-bold text-amber-400">
-                  {roadmapData.filter((m) => m.status === "in-progress").length}
-                </div>
-                <div className="text-slate-400">In Progress</div>
-              </motion.div>
-
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <div className="text-3xl font-bold text-slate-400">
-                  {roadmapData.filter((m) => m.status === "upcoming").length}
-                </div>
-                <div className="text-slate-400">Upcoming</div>
-              </motion.div>
-            </div>
-          </div>
-        </div> */}
       </div>
     </Layout>
   );

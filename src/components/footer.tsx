@@ -35,6 +35,7 @@ export default function Footer() {
     { name: "Roadmap", href: "/roadmap" },
     // { name: "Blog", href: "/blog" },
     { name: "Contact", href: "/contact" },
+    { name: "FAQ'S", href: "/faqs" },
   ];
   const legalLinks = [
     { name: "Privacy Policy", href: "/privacy-policy" },
