@@ -30,128 +30,149 @@ const roadmapData: Milestone[] = [
   {
     quarter: "Q3 2023",
     status: "completed",
-    title: "Research & Development",
+    title: "Blockchain Architecture & Consensus Mechanism Development",
     description:
-      "One year intensive R&D phase initiated to build the foundational technology for tokenizing real-world assets.",
-    features: ["Foundational Tech", "Asset Tokenization", "Intensive R&D"],
+      "Development of a robust PoS consensus mechanism, modular architecture, and interoperability for seamless asset transfer.",
+    features: ["PoS Consensus", "Interoperability", "Modular Architecture"],
   },
   {
     quarter: "Q4 2023",
     status: "completed",
-    title: "Conceptualization & Prototyping",
+    title: "Smart Contract & Tokenization Protocol Development",
     description:
-      "Core concepts refined and a functional prototype developed to validate our innovative approach.",
-    features: [
-      "Core Concepts",
-      "Functional Prototype",
-      "Innovation Validation",
-    ],
+      "Advanced smart contracts with ERC-721, ERC-1155, and ERC-20 standards; Oracle integration for real-world asset pricing.",
+    features: ["ERC Standards", "Asset-backed Tokens", "Oracle Integration"],
   },
   {
     quarter: "Q1 2024",
     status: "completed",
     title: "Private Investor Funding Secured",
     description:
-      "Successfully closed a significant funding round from key private investors, securing our development runway.",
-    features: ["Private Funding", "Development Runway", "Key Investors"],
+      "Series A funding round closed to expand technical infrastructure and developer ecosystem.",
+    features: [
+      "Series A Funding",
+      "Infrastructure Expansion",
+      "Developer Ecosystem",
+    ],
   },
   {
     quarter: "Q2 2024",
     status: "completed",
-    title: "Board of Directors Established",
+    title: "Governance Framework & DAO Design",
     description:
-      "Assembled a comprehensive board of directors with deep expertise in real estate, finance, and blockchain.",
+      "DAO integration with smart governance contracts to manage staking, voting, and proposals.",
+    features: ["DAO Integration", "Smart Governance", "Staking Mechanisms"],
+  },
+  {
+    quarter: "Q3 2024",
+    status: "completed",
+    title: "Testnet Launch (V1.0)",
+    description:
+      "Launch of Areal Chain Testnet with PoS validators, real asset tokenization trials, and cross-chain IBC support.",
+    features: ["Testnet V1.0", "PoS Validators", "Cross-chain IBC"],
+  },
+  {
+    quarter: "Q3 2024",
+    status: "completed",
+    title: "Institutional Onboarding & Strategic Partnerships",
+    description:
+      "Partnerships secured with real estate developers and DeFi protocols for RWA adoption.",
     features: [
-      "Board Formation",
-      "Real Estate Expertise",
-      "Blockchain Leadership",
+      "Institutional Partnerships",
+      "DeFi Integration",
+      "RWA Adoption",
     ],
   },
   {
-    quarter: "Q3 2024",
-    status: "completed",
-    title: "Featured in Major News Channels",
+    quarter: "Q4 2024",
+    status: "in-progress",
+    title: "Enhanced Asset Class Expansion",
     description:
-      "Gained significant media traction, with features in several prominent financial and tech news outlets.",
-    features: ["Media Coverage", "Financial News", "Tech Features"],
-  },
-  {
-    quarter: "Q3 2024",
-    status: "completed",
-    title: "Showcased at Crypto Expo Dubai",
-    description:
-      "Successfully presented Areal's vision and technology at one of the world's leading crypto events, generating high interest.",
-    features: ["Crypto Expo", "Vision Presentation", "High Interest"],
+      "Expansion into luxury, IP, metals, and carbon credits. Launch of Areal NFT Marketplace and ArealPay.",
+    features: ["Asset Class Expansion", "NFT Marketplace", "ArealPay Launch"],
   },
   {
     quarter: "Q4 2024",
     status: "in-progress",
-    title: "Platform Alpha Launch",
+    title: "Governance and DAO Model Rollout",
     description:
-      "Rolling out an exclusive alpha version of the platform to our early investors and partners for feedback.",
-    features: ["Alpha Release", "Early Access", "Partner Feedback"],
-  },
-  {
-    quarter: "Q4 2024",
-    status: "in-progress",
-    title: "Global Marketing Campaign Kick-off",
-    description:
-      "Initiating a multi-channel marketing campaign to build global awareness ahead of our public launch.",
-    features: ["Global Campaign", "Multi-channel", "Awareness Building"],
+      "Deployment of DAO model with automated KYC/AML and full regulatory compliance.",
+    features: ["DAO Rollout", "Regulatory Compliance", "Automated KYC/AML"],
   },
   {
     quarter: "Q1 2025",
     status: "upcoming",
     title: "Public Platform Launch (V1.0)",
     description:
-      "The official public launch of the Areal platform, opening up real-world asset tokenization to everyone.",
-    features: ["Public Launch", "Global Access", "Tokenization for All"],
+      "Launch of Areal Chain Mainnet with sharding and dynamic fee structures.",
+    features: ["Mainnet Launch", "Sharding", "Gasless Transactions"],
   },
   {
     quarter: "Q1 2025",
     status: "upcoming",
-    title: "First RWA Listing",
+    title: "First Real-World Asset (RWA) Tokenization",
     description:
-      "Onboarding and listing the very first tokenized real-world asset on the Areal platform.",
-    features: ["First Listing", "Asset Onboarding", "RWA Token"],
+      "Initial tokenization and trading of real estate and commodity-backed assets.",
+    features: ["First RWA", "Token Trading", "Commodity Backing"],
   },
   {
     quarter: "Q2 2025",
     status: "upcoming",
-    title: "Areal Marketplace Launch",
+    title: "ArealPay Integration for Tokenized Transactions",
     description:
-      "Introducing a secondary marketplace for the peer-to-peer trading of tokenized assets, boosting liquidity.",
-    features: ["Secondary Market", "P2P Trading", "Liquidity Boost"],
-  },
-  {
-    quarter: "Q2 2025",
-    status: "upcoming",
-    title: "ArealPay Integration",
-    description:
-      "Launch of our native payment solution to streamline transactions within the ecosystem.",
-    features: [
-      "Native Payments",
-      "Streamlined Transactions",
-      "Ecosystem Integration",
-    ],
+      "Deployment of ArealPay with escrow, fiat conversion, and smart contract settlements.",
+    features: ["Escrow Services", "Fiat Integration", "Smart Settlements"],
   },
   {
     quarter: "Q3 2025",
     status: "upcoming",
-    title: "Mobile App Release (iOS & Android)",
+    title: "Decentralized Identity (DID) Integration",
     description:
-      "Bringing the full power of the Areal platform to your fingertips with dedicated mobile applications.",
-    features: ["Mobile App", "iOS & Android", "Full Platform Access"],
+      "Launch of DID system with zk-SNARKs, privacy compliance, and multi-sig wallets.",
+    features: ["DID Protocol", "zk-SNARKs Privacy", "Multi-sig Wallets"],
   },
   {
     quarter: "Q4 2025",
     status: "upcoming",
-    title: "Expansion into New Asset Classes",
+    title: "Web3 Asset Management & UI Revamp",
     description:
-      "Expanding beyond real estate to include tokenization of other valuable real-world assets like art and commodities.",
-    features: ["New Asset Classes", "Art Tokenization", "Commodity Expansion"],
+      "Decentralized Web3 interface for asset management with analytics and improved UI/UX.",
+    features: ["Web3 Tools", "Asset Analytics", "UI/UX Overhaul"],
+  },
+  {
+    quarter: "Q1 2026",
+    status: "upcoming",
+    title: "AI & ML Integration for Asset Valuation",
+    description:
+      "AI-driven valuation models and NLP-powered smart contracts for ease of access.",
+    features: ["AI Valuation", "ML Predictions", "NLP Contracts"],
+  },
+  {
+    quarter: "Q2 2026",
+    status: "upcoming",
+    title: "Real-Time Cross-Chain Asset Transfer",
+    description:
+      "Optimized atomic swaps, bridges, and liquidity pools across major blockchain ecosystems.",
+    features: ["Atomic Swaps", "Blockchain Bridges", "Cross-chain Liquidity"],
+  },
+  {
+    quarter: "Q3 2026",
+    status: "upcoming",
+    title: "Tokenization of Carbon Credits & Water Rights",
+    description:
+      "Marketplace launch for environmental assets with ESG compliance and partner collaboration.",
+    features: ["Carbon Credits", "Water Rights", "ESG Integration"],
+  },
+  {
+    quarter: "Q4 2026",
+    status: "upcoming",
+    title: "Universal Areal Identity (uID) for Global Compliance",
+    description:
+      "Launch of uID for global KYC/AML sync, Layer 2 scaling, and multi-currency support.",
+    features: ["uID Launch", "Layer 2 Scaling", "Multi-currency Support"],
   },
 ];
+
 
 const statusConfig = {
   completed: {
