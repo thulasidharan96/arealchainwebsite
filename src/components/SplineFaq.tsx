@@ -1,13 +1,12 @@
 "use client";
 import Spline from "@splinetool/react-spline";
 
-export default function SplineCompany() {
+export default function SplineFaq() {
   return (
     <div className="flex items-center justify-center w-full h-full relative">
       <div className="fixed top-0 left-0 w-full h-full z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
-          <Spline scene="https://prod.spline.design/fQcOFJPZE6k33bt9/scene.splinecode" />
-          {/* <Spline scene="https://prod.spline.design/2L7NBSXOdcTCDb-e/scene.splinecode" /> */}
+          <Spline scene="https://prod.spline.design/OyBfAuXag8MTXD5K/scene.splinecode" />
         </div>
       </div>
     </div>

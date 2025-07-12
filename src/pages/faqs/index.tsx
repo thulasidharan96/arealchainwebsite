@@ -9,6 +9,7 @@ import {
 } from "@/src/components/ui/accordion";
 import { Search, ChevronDown, MessageCircle, Mail, Phone } from "lucide-react";
 import { faq_Data } from "@/src/data/faq_data";
+import SplineFaq from "@/src/components/SplineFaq";
 
 export default function FAQ() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -49,140 +50,143 @@ export default function FAQ() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        {/* Hero Section */}
-        <motion.section
-          className="py-20 px-4"
-          initial="initial"
-          animate="animate"
-          variants={staggerContainer}
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.h1
-              className="text-5xl font-bold text-white mb-6"
-              variants={fadeInUp}
+      <div className="relative z-0 bg-black">
+        <SplineFaq />
+        <div className="relative z-10">
+          <div className="min-h-screen bg-transparent">
+            {/* Hero Section */}
+            <motion.section
+              className="py-20 px-4"
+              initial="initial"
+              animate="animate"
+              variants={staggerContainer}
             >
-              Frequently Asked Questions
-            </motion.h1>
-            <motion.p
-              className="text-xl text-gray-400 mb-8"
-              variants={fadeInUp}
-            >
-              Before You Ask, We've Tokenized the Answer.
-            </motion.p>
-
-            {/* Search Bar */}
-            <motion.div
-              className="relative max-w-2xl mx-auto mb-8"
-              variants={fadeInUp}
-            >
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Search for answers..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#F4B448] focus:ring-2 focus:ring-[#F4B448]/20"
-              />
-            </motion.div>
-          </div>
-        </motion.section>
-
-        {/* Category Filter */}
-        <motion.section
-          className="px-4 mb-12"
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          <div className="max-w-6xl mx-auto">
-            <motion.div
-              className="flex flex-wrap justify-center gap-4"
-              variants={fadeInUp}
-            >
-              {faqCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                    selectedCategory === category.id
-                      ? "bg-[#F4B448] text-black"
-                      : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white"
-                  }`}
+              <div className="max-w-4xl mx-auto text-center">
+                <motion.h1
+                  className="text-5xl font-bold text-white mb-6"
+                  variants={fadeInUp}
                 >
-                  {category.label}
-                  <span className="ml-2 text-sm opacity-75">
-                    ({category.count})
-                  </span>
-                </button>
-              ))}
-            </motion.div>
-          </div>
-        </motion.section>
-
-        {/* FAQ Content */}
-        <motion.section
-          className="px-4 pb-20"
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          <div className="max-w-4xl mx-auto">
-            {filteredFAQs.length > 0 ? (
-              <motion.div variants={fadeInUp}>
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full space-y-4"
+                  Frequently Asked Questions
+                </motion.h1>
+                <motion.p
+                  className="text-xl text-gray-400 mb-8"
+                  variants={fadeInUp}
                 >
-                  {filteredFAQs.map((item, i) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                  Before You Ask, We've Tokenized the Answer.
+                </motion.p>
+
+                {/* Search Bar */}
+                <motion.div
+                  className="relative max-w-2xl mx-auto mb-8 backdrop-blur-3xl"
+                  variants={fadeInUp}
+                >
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Search for answers..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-[#F4B448] focus:ring-2 focus:ring-[#F4B448]/20"
+                  />
+                </motion.div>
+              </div>
+            </motion.section>
+
+            {/* Category Filter */}
+            <motion.section
+              className="px-4 mb-12"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <div className="max-w-6xl mx-auto">
+                <motion.div
+                  className="flex flex-wrap justify-center gap-4"
+                  variants={fadeInUp}
+                >
+                  {faqCategories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`px-6 py-3 rounded-full font-medium transition-all duration-300 backdrop-blur-3xl ${
+                        selectedCategory === category.id
+                          ? "bg-[#F4B448] text-black"
+                          : "bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white"
+                      }`}
                     >
-                      <AccordionItem
-                        value={`item-${item.id}`}
-                        className="bg-gray-800/50 rounded-xl border border-gray-700 data-[state=open]:border-[#F4B448]/50 data-[state=open]:bg-gray-800/70 transition-all duration-300"
-                      >
-                        <AccordionTrigger className="p-6 text-left font-semibold text-white hover:no-underline hover:text-[#F4B448] transition-colors group">
-                          <div className="flex items-center justify-between w-full">
-                            <span className="text-lg">{item.question}</span>
-                          </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-6 pb-6">
-                          <div className="text-gray-300 leading-relaxed text-base">
-                            {item.answer}
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </motion.div>
+                      {category.label}
+                      <span className="ml-2 text-sm opacity-75">
+                        ({category.count})
+                      </span>
+                    </button>
                   ))}
-                </Accordion>
-              </motion.div>
-            ) : (
-              <motion.div className="text-center py-16" variants={fadeInUp}>
-                <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-2">
-                  No results found
-                </h3>
-                <p className="text-gray-400">
-                  Try adjusting your search terms or browse different
-                  categories.
-                </p>
-              </motion.div>
-            )}
-          </div>
-        </motion.section>
+                </motion.div>
+              </div>
+            </motion.section>
 
-        {/* Contact Support Section */}
-        {/* <motion.section
+            {/* FAQ Content */}
+            <motion.section
+              className="px-4 pb-20"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+            >
+              <div className="max-w-4xl mx-auto">
+                {filteredFAQs.length > 0 ? (
+                  <motion.div variants={fadeInUp}>
+                    <Accordion
+                      type="single"
+                      collapsible
+                      className="w-full space-y-4"
+                    >
+                      {filteredFAQs.map((item, i) => (
+                        <motion.div
+                          key={item.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: i * 0.1 }}
+                        >
+                          <AccordionItem
+                            value={`item-${item.id}`}
+                            className="bg-gray-800/50 backdrop-blur-xl rounded-xl border border-gray-700 data-[state=open]:border-[#F4B448]/50 data-[state=open]:bg-gray-800/70 transition-all duration-300"
+                          >
+                            <AccordionTrigger className="p-6 text-left font-semibold text-white hover:no-underline hover:text-[#F4B448] transition-colors group">
+                              <div className="flex items-center justify-between w-full">
+                                <span className="text-lg">{item.question}</span>
+                              </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-6 pb-6">
+                              <div className="text-gray-300 leading-relaxed text-base">
+                                {item.answer}
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </motion.div>
+                      ))}
+                    </Accordion>
+                  </motion.div>
+                ) : (
+                  <motion.div className="text-center py-16" variants={fadeInUp}>
+                    <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Search className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-2">
+                      No results found
+                    </h3>
+                    <p className="text-gray-400">
+                      Try adjusting your search terms or browse different
+                      categories.
+                    </p>
+                  </motion.div>
+                )}
+              </div>
+            </motion.section>
+
+            {/* Contact Support Section */}
+            {/* <motion.section
           className="py-20 px-4 bg-gray-900/50"
           initial="initial"
           whileInView="animate"
@@ -253,8 +257,8 @@ export default function FAQ() {
           </div>
         </motion.section> */}
 
-        {/* Quick Links Section */}
-        {/* <motion.section
+            {/* Quick Links Section */}
+            {/* <motion.section
           className="py-16 px-4"
           initial="initial"
           whileInView="animate"
@@ -317,6 +321,8 @@ export default function FAQ() {
             </motion.div>
           </div>
         </motion.section> */}
+          </div>
+        </div>
       </div>
     </Layout>
   );

@@ -74,7 +74,7 @@ export default function Contact() {
   return (
     <Layout>
       <div className="relative z-0">
-        <SplineConntact /> {/* fixed, always in background */}
+        <SplineConntact /> 
         <div className="relative z-10">
           <div className="min-h-screen bg-transparent">
             <div className="pt-32 pb-20 px-4">

@@ -202,8 +202,8 @@ export default function Company(): JSX.Element {
   return (
     <Layout>
       <div className="relative z-0">
-        <SplineCube />
-        <div className="relative z-10">
+        <SplineCompany />
+        <div className="relative z-10 backdrop-blur-sm">
           {/* Hero Section */}
           <div className="pt-32 pb-20 px-4">
             <div className="max-w-7xl mx-auto">
@@ -288,8 +288,8 @@ export default function Company(): JSX.Element {
                   >
                     {stats.map((stat, index) => (
                       <motion.div key={index} variants={staggerItem}>
-                        <Card className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 group">
-                          <CardContent className="p-6">
+                        <Card className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70  transition-all duration-300 hover:-translate-y-1 group">
+                          <CardContent className="p-6 backdrop-blur-3xl">
                             <div className="flex justify-center mb-3">
                               <stat.icon className="w-8 h-8 text-[#F4B448] group-hover:scale-110 transition-transform duration-300" />
                             </div>
@@ -310,7 +310,7 @@ export default function Company(): JSX.Element {
                     {features.map((feature, index) => (
                       <motion.div key={index} variants={staggerItem}>
                         <Card className="bg-gray-900/30 border-gray-800 hover:bg-gray-900/50 transition-all duration-300 hover:-translate-y-1 group">
-                          <CardContent className="p-6">
+                          <CardContent className="p-6 backdrop-blur-3xl">
                             <div className="flex items-start space-x-4">
                               <div className="flex-shrink-0">
                                 <div className="w-10 h-10 bg-[#F4B448]/20 rounded-lg flex items-center justify-center group-hover:bg-[#F4B448]/30 group-hover:scale-110 transition-all duration-300">
@@ -474,16 +474,16 @@ export default function Company(): JSX.Element {
 
                   {/* Founder Content */}
                   <motion.div
-                    className="flex flex-col justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0"
+                    className="flex flex-col bg-black/50 p-4 rounded-2xl justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0 backdrop-blur-3xl"
                     variants={bounceUp}
                   >
                     <h3 className="text-white text-2xl font-semibold">
                       Sripriya Kalyanasundaram
                     </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">
+                    <p className="text-gray-200 text-sm leading-relaxed">
                       Founder & CEO | Areal Chain
                     </p>
-                    <ul className="text-gray-400 text-sm space-y-2">
+                    <ul className="text-gray-200 text-sm space-y-2">
                       <li>
                         Sripriya Kalyanasundaram is the visionary Founder and
                         CEO of Areal Chain, leading the charge in the
@@ -505,7 +505,7 @@ export default function Company(): JSX.Element {
                         href="https://www.linkedin.com/in/sripriya-kalyanasundaram-7964b28/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-transparent hover:bg-[#004182] text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-colors duration-200"
+                        className="inline-flex items-center gap-2 bg-transparent hover:bg-gray-800/50 text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-colors duration-200"
                       >
                         <img
                           src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
