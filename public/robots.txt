@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /dashboard
+
+# Host
+Host: https://arealchain.com
+
+# Sitemaps
+Sitemap: https://arealchain.com/sitemap.xml

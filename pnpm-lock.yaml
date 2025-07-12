@@ -161,6 +161,9 @@ importers:
       next-auth:
         specifier: ^4.24.11
         version: 4.24.11(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(nodemailer@7.0.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      next-sitemap:
+        specifier: ^4.2.3
+        version: 4.2.3(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       next-themes:
         specifier: ^0.4.4
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -265,6 +268,9 @@ packages:
 
   '@coinbase/wallet-sdk@4.3.3':
     resolution: {integrity: sha512-h8gMLQNvP5TIJVXFOyQZaxbi1Mg5alFR4Z2/PEIngdyXZEoQGcVhzyQGuDa3t9zpllxvqfAaKfzDhsfCo+nhSQ==}
+
+  '@corex/deepmerge@4.0.43':
+    resolution: {integrity: sha512-N8uEMrMPL0cu/bdboEWpQYb/0i2K5Qn8eCsxzOmxSggJbbQte7ljMRoXm917AbntqTGOzdTu+vP3KOOzoC70HQ==}
 
   '@ecies/ciphers@0.2.3':
     resolution: {integrity: sha512-tapn6XhOueMwht3E2UzY0ZZjYokdaw9XtL9kEyjhQ/Fb9vL9xTFbOaI+fV0AWvTpYu4BNloC6getKW6NtSg4mA==}
@@ -533,6 +539,9 @@ packages:
   '@metamask/utils@9.3.0':
     resolution: {integrity: sha512-w8CVbdkDrVXFJbfBSlDfafDR6BAkpDmv1bC1UJVCoVny5tW2RKAdn9i68Xf7asYT4TnUhl/hN4zfUiKQq9II4g==}
     engines: {node: '>=16.0.0'}
+
+  '@next/env@13.5.11':
+    resolution: {integrity: sha512-fbb2C7HChgM7CemdCY+y3N1n8pcTKdqtQLbC7/EQtPdLvlMUT9JX/dBYl8MMZAtYG4uVMyPFHXckb68q/NRwqg==}
 
   '@next/env@15.2.4':
     resolution: {integrity: sha512-+SFtMgoiYP3WoSswuNmxJOCwi06TdWE733D+WPjpXIe4LXGULwEaofiiAy6kbS0+XjM5xF5n3lKuBwN2SnqD9g==}
@@ -2724,6 +2733,9 @@ packages:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  minimist@1.2.8:
+    resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+
   minipass@7.1.2:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -2786,6 +2798,13 @@ packages:
         optional: true
       nodemailer:
         optional: true
+
+  next-sitemap@4.2.3:
+    resolution: {integrity: sha512-vjdCxeDuWDzldhCnyFCQipw5bfpl4HmZA7uoo3GAaYGjGgfL4Cxb1CiztPuWGmS+auYs7/8OekRS8C2cjdAsjQ==}
+    engines: {node: '>=14.18'}
+    hasBin: true
+    peerDependencies:
+      next: '*'
 
   next-themes@0.4.6:
     resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
@@ -3922,6 +3941,8 @@ snapshots:
       eventemitter3: 5.0.1
       preact: 10.26.9
 
+  '@corex/deepmerge@4.0.43': {}
+
   '@ecies/ciphers@0.2.3(@noble/ciphers@1.3.0)':
     dependencies:
       '@noble/ciphers': 1.3.0
@@ -4288,6 +4309,8 @@ snapshots:
       uuid: 9.0.1
     transitivePeerDependencies:
       - supports-color
+
+  '@next/env@13.5.11': {}
 
   '@next/env@15.2.4': {}
 
@@ -7350,6 +7373,8 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
+  minimist@1.2.8: {}
+
   minipass@7.1.2: {}
 
   mipd@0.0.7(typescript@5.8.3):
@@ -7400,6 +7425,14 @@ snapshots:
       uuid: 8.3.2
     optionalDependencies:
       nodemailer: 7.0.3
+
+  next-sitemap@4.2.3(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)):
+    dependencies:
+      '@corex/deepmerge': 4.0.43
+      '@next/env': 13.5.11
+      fast-glob: 3.3.3
+      minimist: 1.2.8
+      next: 15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   next-themes@0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:

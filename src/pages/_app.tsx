@@ -120,7 +120,19 @@ export default function App({ Component, pageProps }: AppProps) {
                     rel="stylesheet"
                   />
                   <link rel="icon" href="/favicon.png" />
-                  <title>Layer 1 Blockchain for RWA</title>
+                  <title>ArealChain</title>
+                  <meta
+                    name="description"
+                    content="Own fractional real estate tokens with ArealChain. Fast, secure, and decentralized Layer 1 RWA platform."
+                  />
+                  <meta
+                    property="og:title"
+                    content="ArealChain – Tokenize Real Estate"
+                  />
+                  <meta
+                    property="og:description"
+                    content="Invest in tokenized real estate and access global properties."
+                  />
                 </Head>
 
                 {showSplash && <SplashScreen isFinishing={isFinishing} />}
