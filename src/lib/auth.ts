@@ -15,7 +15,9 @@ declare module "next-auth" {
 
 // Secure temporary token for pending OTP verification
 const createPendingToken = (email: string, password: string): string => {
-  const secret = process.env.NEXTAUTH_SECRET || "fallback-secret";
+  const secret =
+    process.env.NEXTAUTH_SECRET ||
+    "03e5eadf91e14f8fcfa57905434a19f841fbdc06e9cc6a7d7cdc860695bf900f";
   return jwt.sign(
     {
       email,
@@ -31,7 +33,9 @@ const verifyPendingToken = (
   token: string
 ): { email: string; password: string } | null => {
   try {
-    const secret = process.env.NEXTAUTH_SECRET || "fallback-secret";
+    const secret =
+      process.env.NEXTAUTH_SECRET ||
+      "03e5eadf91e14f8fcfa57905434a19f841fbdc06e9cc6a7d7cdc860695bf900f";
     const decoded = jwt.verify(token, secret) as any;
 
     if (decoded.type === "pending_otp") {
