@@ -99,7 +99,7 @@ const SplashScreen = ({ isFinishing }: SplashScreenProps) => {
                 ease: "easeInOut", // Smooth ease-in-out transition
               }}
             >
-              <h1>Welcome to the Future of Investing!</h1>
+              <h1>Access Real Assets. Anytime. Anywhere</h1>
             </motion.div>
 
             {/* Subheading with Simple Fade-in */}
@@ -113,7 +113,7 @@ const SplashScreen = ({ isFinishing }: SplashScreenProps) => {
                 ease: "easeInOut", // Smooth ease-in-out transition
               }}
             >
-              <p>We’re building something amazing, just for you.</p>
+              {/* <p>We’re building something amazing, just for you.</p> */}
             </motion.div>
 
             {/* Percentage Bar Loader at the Bottom */}
