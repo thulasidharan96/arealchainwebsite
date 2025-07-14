@@ -628,7 +628,7 @@ export default function Home() {
       </div>
 
       {/* Partners Section */}
-      <section ref={partnersRef} className="py-20 px-4 ">
+      <section id="partners" ref={partnersRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
             Partner and Collaborators
