@@ -49,7 +49,7 @@ export default function Footer() {
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
               <Image
-                src="/Logo1.png"
+                src="/Logo1.avif"
                 alt="Areal Logo"
                 width={120}
                 height={40}

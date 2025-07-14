@@ -69,7 +69,7 @@ const HeaderMain: React.FC = () => {
     <header className="bg-gray-900 border-b border-gray-800 px-4 py-3 sm:px-6 md:px-8 lg:px-10 flex flex-wrap sm:flex-nowrap justify-between items-center gap-4">
       <div className="flex items-center">
         <Image
-          src="/coin/text.png"
+          src="/coin/text.avif"
           alt="Logo"
           width={80}
           height={80}

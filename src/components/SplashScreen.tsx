@@ -59,7 +59,7 @@ const SplashScreen = ({ isFinishing }: SplashScreenProps) => {
                 }}
               >
                 <Image
-                  src="/coin/coin.png"
+                  src="/coin/coin.avif"
                   alt="Splash Coin"
                   width={250}
                   height={250}
@@ -79,7 +79,7 @@ const SplashScreen = ({ isFinishing }: SplashScreenProps) => {
                 }}
               >
                 <Image
-                  src="/coin/text.png"
+                  src="/coin/text.avif"
                   alt="Splash Text"
                   width={500}
                   height={250}

@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
         {/* Logo */}
         <div className="mb-4">
           <div className="w-14 h-14 flex items-center justify-center">
-            <Image src="/coin/coin.png" alt="Logo" width={100} height={100} />
+            <Image src="/coin/coin.avif" alt="Logo" width={100} height={100} />
           </div>
         </div>
 

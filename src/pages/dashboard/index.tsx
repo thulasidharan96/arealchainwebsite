@@ -93,7 +93,7 @@ const Dashboard = () => {
                   onClick={() => router.push("/buy")}
                 >
                   <Image
-                    src="/coin/coin.png"
+                    src="/coin/coin.avif"
                     alt="Buy ARL"
                     width={20}
                     height={20}

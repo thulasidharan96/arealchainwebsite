@@ -428,7 +428,7 @@ const BuyPage = () => {
               <div className="text-center mb-6 lg:mb-8">
                 <div className="inline-flex items-center justify-center w-12 h-12 lg:w-16 lg:h-16 rounded-full mb-4">
                   <Image
-                    src="/coin/coin.png"
+                    src="/coin/coin.avif"
                     alt="Logo"
                     width={64}
                     height={64}
@@ -540,7 +540,7 @@ const BuyPage = () => {
                     <div className="absolute right-3 lg:right-4 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
                       <div className="w-8 h-8 lg:w-8 lg:h-8  rounded-full flex items-center justify-center">
                         <Image
-                          src="/coin/coin.png"
+                          src="/coin/coin.avif"
                           alt="Coin"
                           width={24}
                           height={24}
@@ -595,7 +595,7 @@ const BuyPage = () => {
                   <span className="flex items-center justify-center space-x-2">
                     <span>
                       <Image
-                        src="/coin/coin.png"
+                        src="/coin/coin.avif"
                         alt="Coin"
                         width={24}
                         height={24}

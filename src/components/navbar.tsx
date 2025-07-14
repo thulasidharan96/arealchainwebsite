@@ -41,7 +41,12 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="/Logo1.png" alt="Areal Logo" width={150} height={150} />
+            <Image
+              src="/Logo1.avif"
+              alt="Areal Logo"
+              width={150}
+              height={150}
+            />
           </Link>
 
           {/* Desktop Navigation */}
