@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/wagmi.config";
 import { AuthProvider } from "../providers/auth-provider";
 import { WalletProvider } from "@/src/contexts/WalletContext";
+import SmoothScroll from "../components/SmoothScroll";
 
 const queryClient = new QueryClient();
 
@@ -22,10 +23,6 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   useEffect(() => {
-    // Always show the splash screen on a hard reload.
-    // The empty dependency array ensures this only runs on the initial app mount,
-    // not on subsequent page navigations.
-
     // Start the fade-out transition after the text animation
     const finishTimer = setTimeout(() => {
       setIsFinishing(true);
@@ -114,32 +111,36 @@ export default function App({ Component, pageProps }: AppProps) {
               disableTransitionOnChange
             >
               <WalletProvider>
-                <Head>
-                  <link
-                    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-                    rel="stylesheet"
-                  />
-                  <link rel="icon" href="/favicon.png" />
-                  <title>ArealChain</title>
-                  <meta
-                    name="description"
-                    content="Own fractional real estate tokens with ArealChain. Fast, secure, and decentralized Layer 1 RWA platform."
-                  />
-                  <meta
-                    property="og:title"
-                    content="ArealChain – Tokenize Real Estate"
-                  />
-                  <meta
-                    property="og:description"
-                    content="Invest in tokenized real estate and access global properties."
-                  />
-                </Head>
+                <SmoothScroll>
+                  <Head>
+                    <link
+                      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+                      rel="stylesheet"
+                    />
+                    <link rel="icon" href="/favicon.png" />
+                    <title>ArealChain</title>
+                    <meta
+                      name="description"
+                      content="Own fractional real estate tokens with ArealChain. Fast, secure, and decentralized Layer 1 RWA platform."
+                    />
+                    <meta
+                      property="og:title"
+                      content="ArealChain – Tokenize Real Estate"
+                    />
+                    <meta
+                      property="og:description"
+                      content="Invest in tokenized real estate and access global properties."
+                    />
+                  </Head>
 
-                {showSplash && <SplashScreen isFinishing={isFinishing} />}
+                  {showSplash && <SplashScreen isFinishing={isFinishing} />}
 
-                <div style={{ visibility: showSplash ? "hidden" : "visible" }}>
-                  <Component {...pageProps} />
-                </div>
+                  <div
+                    style={{ visibility: showSplash ? "hidden" : "visible" }}
+                  >
+                    <Component {...pageProps} />
+                  </div>
+                </SmoothScroll>
               </WalletProvider>
             </ThemeProvider>
           </QueryClientProvider>
