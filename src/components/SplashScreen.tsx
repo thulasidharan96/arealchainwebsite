@@ -340,11 +340,6 @@ const SplashScreen = ({ isFinishing, onComplete }: SplashScreenProps) => {
                     }}
                   />
                 </div>
-                <div className="flex justify-center mt-2">
-                  <span className="text-white text-xs sm:text-sm font-medium">
-                    {progress}%
-                  </span>
-                </div>
               </motion.div>
             </motion.div>
           </motion.div>

@@ -15,6 +15,7 @@ import {
 import { properties } from "@/src/data/properties";
 import { motion, easeOut, Variants } from "framer-motion";
 import { Button } from "../components/ui/button";
+import Collaborators from "../components/landing/Collaborators";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -33,19 +34,6 @@ export default function Home() {
   const AccreditersRef = useRef(null);
   const faqRef = useRef(null);
   const ctaRef = useRef(null);
-
-  const partners = [
-    { name: "Binance", src: "/partners/binance.png" },
-    { name: "Chainlink", src: "/partners/chainlink.png" },
-    { name: "Polygon", src: "/partners/polygon.png" },
-    { name: "coingecko", src: "/partners/coingecko.png" },
-    { name: "Coinbase", src: "/partners/coinbase.png" },
-    { name: "Google", src: "/partners/google.png" },
-    { name: "Meta", src: "/partners/meta.png" },
-    { name: "GitHub", src: "/partners/github.png" },
-    { name: "AWS", src: "/partners/aws.png" },
-    { name: "Microsoft", src: "/partners/microsoft.png" },
-  ];
 
   const Accredited = [
     // { name: "Costa Ricae", src: "/Accrediters/Costa_Rica.png" },
@@ -629,33 +617,7 @@ export default function Home() {
 
       {/* Partners Section */}
       <section id="partners" ref={partnersRef} className="py-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
-            Partner and Collaborators
-          </h2>
-          <p className="text-gray-400 mb-12 opacity-0">
-            Building the Future of Crypto Real Estate with our Network of
-            Trusted Blockchain Partners
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 items-center justify-center">
-            {partners.map((partner, i) => (
-              <div
-                key={i}
-                className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-20 cursor-pointer"
-                onMouseEnter={handleCardHover}
-                onMouseLeave={handleCardLeave}
-              >
-                <Image
-                  src={partner.src}
-                  alt={partner.name}
-                  width={200}
-                  height={200}
-                  className="max-h-10 object-contain transition-transform duration-300"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <Collaborators />
       </section>
 
       {/* Section Separator */}
@@ -707,9 +669,6 @@ export default function Home() {
       {/* Final CTA Section */}
       <section ref={ctaRef} className="py-20 px-4 mb-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* <p className="text-gray-400 mb-4 opacity-0">
-            Don't miss out on the future of crypto real estate investment.
-          </p> */}
           <h2 className="text-3xl font-bold text-white mb-4 opacity-0">
             The Opportunity to Invest in Real Assets on Blockchain is Here
           </h2>

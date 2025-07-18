@@ -1,5 +1,6 @@
 import Layout from "@/src/components/layout";
 import TwitterFeed from "@/src/components/TwitterFeed"; // Import the new component
+import DiscordMessages from "@/src/components/DiscordMessages";
 import {
   Card,
   CardContent,
@@ -202,7 +203,7 @@ export default function Company(): JSX.Element {
   return (
     <Layout>
       <div className="relative z-0">
-        <SplineCompany />
+        <SplineCube />
         <div className="relative z-10 backdrop-blur-sm">
           {/* Hero Section */}
           <div className="pt-32 pb-20 px-4">
@@ -563,7 +564,8 @@ export default function Company(): JSX.Element {
                 variants={fadeInUp}
               >
                 <div className="max-w-full mx-auto">
-                  <TwitterFeed />
+                  {/* <TwitterFeed /> */}
+                  <DiscordMessages />
                 </div>
               </motion.div>
             </div>
