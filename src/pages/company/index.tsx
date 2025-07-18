@@ -507,10 +507,12 @@ export default function Company(): JSX.Element {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 bg-transparent hover:bg-gray-800/50 text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-colors duration-200"
                       >
-                        <img
+                        <Image
                           src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
                           alt="LinkedIn"
                           className="w-5 h-5"
+                          width={20}
+                          height={20}
                         />
                         Connect on LinkedIn
                       </a>

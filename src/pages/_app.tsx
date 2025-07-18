@@ -22,22 +22,32 @@ export default function App({ Component, pageProps }: AppProps) {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    // Start the fade-out transition after the text animation
-    const finishTimer = setTimeout(() => {
-      setIsFinishing(true);
-    }, 2000); // Duration of the zoom-out animation
+  // Handle splash screen completion
+  const handleSplashComplete = () => {
+    setIsFinishing(true);
 
-    // Hide the splash screen component completely after the fade-out
-    const hideTimer = setTimeout(() => {
+    // Hide the splash screen after fade-out animation
+    setTimeout(() => {
       setShowSplash(false);
-    }, 2500); // 2s text animation + 0.5s container fade-out
+    }, 500); // Keep this to match the fade-out duration in SplashScreen
+  };
+
+  // Fallback timer in case splash screen doesn't complete naturally
+  useEffect(() => {
+    // Maximum time to show splash screen (fallback)
+    const maxSplashTime = 8000; // 8 seconds maximum
+
+    const fallbackTimer = setTimeout(() => {
+      if (showSplash) {
+        console.log("Splash screen fallback timeout reached");
+        handleSplashComplete();
+      }
+    }, maxSplashTime);
 
     return () => {
-      clearTimeout(finishTimer);
-      clearTimeout(hideTimer);
+      clearTimeout(fallbackTimer);
     };
-  }, []); // The empty dependency array is key here
+  }, [showSplash]);
 
   useEffect(() => {
     // Do not run the counter animation while the splash screen is visible
@@ -133,10 +143,19 @@ export default function App({ Component, pageProps }: AppProps) {
                     />
                   </Head>
 
-                  {showSplash && <SplashScreen isFinishing={isFinishing} />}
+                  {showSplash && (
+                    <SplashScreen
+                      isFinishing={isFinishing}
+                      onComplete={handleSplashComplete}
+                    />
+                  )}
 
                   <div
-                    style={{ visibility: showSplash ? "hidden" : "visible" }}
+                    className={`transition-opacity duration-500 ${
+                      showSplash
+                        ? "opacity-0 pointer-events-none"
+                        : "opacity-100"
+                    }`}
                   >
                     <Component {...pageProps} />
                   </div>

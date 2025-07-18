@@ -18,6 +18,7 @@ import {
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
+import Image from "next/image";
 
 type Tweet = {
   id: string;
@@ -414,7 +415,9 @@ const TwitterFeed: React.FC<TwitterFeedProps> = ({ className = "" }) => {
                         key={mediaIndex}
                         className="relative overflow-hidden rounded-lg border border-gray-600"
                       >
-                        <img
+                        <Image
+                          width={800}
+                          height={450}
                           src={img}
                           alt="Tweet media"
                           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
