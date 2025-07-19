@@ -6,7 +6,11 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Textarea } from "@/src/components/ui/textarea";
 import { CheckCircle2, Lock, ChevronDown } from "lucide-react";
-import SplineConntact from "@/src/components/SplineContact";
+import dynamic from "next/dynamic";
+
+const SplineConntact = dynamic(() => import("@/src/components/SplineContact"), {
+  ssr: false,
+});
 
 const contactTypes = [
   { value: "retail-customer", label: "Retail Customer" },
@@ -74,7 +78,7 @@ export default function Contact() {
   return (
     <Layout>
       <div className="relative z-0">
-        <SplineConntact /> 
+        <SplineConntact />
         <div className="relative z-10">
           <div className="min-h-screen bg-transparent">
             <div className="pt-32 pb-20 px-4">

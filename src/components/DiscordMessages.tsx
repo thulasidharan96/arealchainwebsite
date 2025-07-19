@@ -10,6 +10,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "./ui/dialog";
+import Image from "next/image";
 
 interface Message {
   id: string;
@@ -61,10 +62,12 @@ export default function DiscordMessages() {
               </DialogHeader>
               <div className="text-[#F4B448] mb-4">{msg.content}</div>
               {msg.url && (
-                <img
+                <Image
                   src={msg.url}
                   alt="Discord Attachment"
                   className="rounded w-full h-auto border"
+                  width={250}
+                  height={250}
                 />
               )}
             </DialogContent>

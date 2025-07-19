@@ -47,6 +47,7 @@ export default function Navbar() {
               width={150}
               height={150}
               priority
+              sizes="(max-width: 768px) 40px, 50px"
             />
           </Link>
 

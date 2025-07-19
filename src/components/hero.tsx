@@ -1,5 +1,7 @@
 import { Button } from "@/src/components/ui/button";
-import SplineViewer from "./SplineViewer";
+import dynamic from "next/dynamic";
+
+const SplineViewer = dynamic(() => import("./SplineViewer"), { ssr: false });
 
 export default function Hero() {
   return (

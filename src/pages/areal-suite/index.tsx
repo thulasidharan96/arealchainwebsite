@@ -9,7 +9,14 @@ import {
 import { Button } from "@/src/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import SplineViewerChain from "@/src/components/SplineViewerChain";
+import dynamic from "next/dynamic";
+
+const SplineViewerChain = dynamic(
+  () => import("@/src/components/SplineViewerChain"),
+  {
+    ssr: false,
+  }
+);
 
 export default function ArealSuite() {
   const products = [

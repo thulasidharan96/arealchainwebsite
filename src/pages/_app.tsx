@@ -1,116 +1,105 @@
 import "@/src/styles/globals.css";
 import type { AppProps } from "next/app";
-import { ThemeProvider } from "@/src/components/theme-provider";
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import SplashScreen from "@/src/components/SplashScreen";
+import { ThemeProvider } from "@/src/components/theme-provider";
 import { WagmiProvider } from "wagmi";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { config } from "@/wagmi.config";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "../providers/auth-provider";
 import { WalletProvider } from "@/src/contexts/WalletContext";
-import SmoothScroll from "../components/SmoothScroll";
+import { useSplashScreen } from "@/src/hooks/useSplashScreen";
+
+// Dynamically import heavy components
+const SplashScreen = dynamic(() => import("@/src/components/SplashScreen"), {
+  ssr: false,
+});
+const SmoothScroll = dynamic(() => import("@/src/components/SmoothScroll"), {
+  ssr: false,
+});
 
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [showSplash, setShowSplash] = useState(true);
-  const [isFinishing, setIsFinishing] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  useEffect(() => setMounted(true), []);
+
+  const { showSplash, isFinishing, onCompleteWrapper } = useSplashScreen(() => {
+    // Optional callback logic on splash complete
+  });
+
+  // IntersectionObserver Counter Animation (if needed)
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Handle splash screen completion
-  const handleSplashComplete = () => {
-    setIsFinishing(true);
-
-    // Hide the splash screen after fade-out animation
-    setTimeout(() => {
-      setShowSplash(false);
-    }, 500); // Keep this to match the fade-out duration in SplashScreen
-  };
-
-  // Fallback timer in case splash screen doesn't complete naturally
-  useEffect(() => {
-    // Maximum time to show splash screen (fallback)
-    const maxSplashTime = 8000; // 8 seconds maximum
-
-    const fallbackTimer = setTimeout(() => {
-      if (showSplash) {
-        console.log("Splash screen fallback timeout reached");
-        handleSplashComplete();
-      }
-    }, maxSplashTime);
-
-    return () => {
-      clearTimeout(fallbackTimer);
-    };
-  }, [showSplash]);
-
-  useEffect(() => {
-    // Do not run the counter animation while the splash screen is visible
     if (showSplash) return;
 
-    // Improved counter animation using IntersectionObserver
     const counters = document.querySelectorAll<HTMLElement>(".counter");
-    if (counters.length === 0) return;
-
     const observers: IntersectionObserver[] = [];
 
     counters.forEach((counter) => {
       const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && !counter.dataset.animated) {
+        ([entry]) => {
+          if (entry.isIntersecting && !counter.dataset.animated) {
             counter.dataset.animated = "true";
+
             const target = parseFloat(
               counter.getAttribute("data-value") || "0"
             );
-
-            // Determine the number of decimal places from the target value
-            const targetString = counter.getAttribute("data-value") || "0";
-            const decimalPlaces = targetString.includes(".")
-              ? targetString.split(".")[1].length
-              : 0;
+            const decimalPlaces =
+              (counter.getAttribute("data-value") || "0").split(".")[1]
+                ?.length || 0;
 
             let current = 0;
-            const duration = 1500; // Animation duration in ms
-            const stepTime = 1000 / 60; // Assume 60 fps
-            const totalSteps = duration / stepTime;
-            const increment = target / totalSteps;
+            const duration = 1500;
+            const step = target / (duration / (1000 / 60));
 
-            const updateCounter = () => {
-              current += increment;
+            const animate = () => {
+              current += step;
               if (current < target) {
                 counter.innerText = current.toFixed(decimalPlaces);
-                requestAnimationFrame(updateCounter);
+                requestAnimationFrame(animate);
               } else {
                 counter.innerText = target.toFixed(decimalPlaces);
               }
             };
-            updateCounter();
+
+            animate();
             observer.unobserve(counter);
           }
         },
         { threshold: 0.1 }
       );
+
       observer.observe(counter);
       observers.push(observer);
     });
 
-    // Cleanup function to disconnect all observers on component unmount
-    return () => {
-      observers.forEach((observer) => observer.disconnect());
-    };
-  }, [pageProps, showSplash]); // Re-run on page navigation or when splash is hidden
+    return () => observers.forEach((obs) => obs.disconnect());
+  }, [pageProps, showSplash]);
 
-  if (!mounted) {
-    return null;
-  }
+  if (!mounted) return null;
 
   return (
     <>
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <link rel="icon" href="/favicon.png" />
+        <title>ArealChain</title>
+        <meta
+          name="description"
+          content="Own fractional real estate tokens with ArealChain. Fast, secure, and decentralized Layer 1 RWA platform."
+        />
+        <meta property="og:title" content="ArealChain – Tokenize Real Estate" />
+        <meta
+          property="og:description"
+          content="Invest in tokenized real estate and access global properties."
+        />
+      </Head>
+
       <AuthProvider>
         <WagmiProvider config={config}>
           <QueryClientProvider client={queryClient}>
@@ -122,31 +111,10 @@ export default function App({ Component, pageProps }: AppProps) {
             >
               <WalletProvider>
                 <SmoothScroll>
-                  <Head>
-                    <link
-                      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-                      rel="stylesheet"
-                    />
-                    <link rel="icon" href="/favicon.png" />
-                    <title>ArealChain</title>
-                    <meta
-                      name="description"
-                      content="Own fractional real estate tokens with ArealChain. Fast, secure, and decentralized Layer 1 RWA platform."
-                    />
-                    <meta
-                      property="og:title"
-                      content="ArealChain – Tokenize Real Estate"
-                    />
-                    <meta
-                      property="og:description"
-                      content="Invest in tokenized real estate and access global properties."
-                    />
-                  </Head>
-
                   {showSplash && (
                     <SplashScreen
                       isFinishing={isFinishing}
-                      onComplete={handleSplashComplete}
+                      onComplete={onCompleteWrapper}
                     />
                   )}
 

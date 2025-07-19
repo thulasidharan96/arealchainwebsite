@@ -14,8 +14,13 @@ import {
   getAnnouncementsByCategory,
 } from "@/src/lib/announcementData";
 import type { Announcement } from "@/src/lib/announcementData";
-import SplineAnnouncement from "@/src/components/SplineAnnouncement";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const SplineAnnouncement = dynamic(
+  () => import("@/src/components/SplineAnnouncement"),
+  { ssr: false }
+);
 
 export default function Announcement() {
   const [selectedCategory, setSelectedCategory] = useState("All");

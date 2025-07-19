@@ -23,7 +23,11 @@ import { motion, useInView } from "framer-motion";
 import { JSX, useEffect, useRef, useState } from "react";
 import SplineCompany from "@/src/components/SplineCompany";
 import { useRouter } from "next/router";
-import SplineCube from "@/src/components/SplineCube";
+import dynamic from "next/dynamic";
+
+const SplineCube = dynamic(() => import("@/src/components/SplineCube"), {
+  ssr: false,
+});
 
 interface TeamMember {
   name: string;

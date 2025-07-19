@@ -1,32 +1,22 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export const useSplashScreen = (minDisplayTime: number = 3000) => {
-  const [isLoading, setIsLoading] = useState(true);
+export function useSplashScreen(onComplete: () => void, maxTime = 8000) {
+  const [showSplash, setShowSplash] = useState(true);
   const [isFinishing, setIsFinishing] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsFinishing(true);
+    const fallback = setTimeout(() => {
+      if (showSplash) onCompleteWrapper();
+    }, maxTime);
 
-      // Give time for exit animation
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 600);
-    }, minDisplayTime);
+    return () => clearTimeout(fallback);
+  }, [showSplash]);
 
-    return () => clearTimeout(timer);
-  }, [minDisplayTime]);
-
-  const completeSplash = () => {
+  const onCompleteWrapper = () => {
     setIsFinishing(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 600);
+    setTimeout(() => setShowSplash(false), 500);
+    onComplete();
   };
 
-  return {
-    isLoading,
-    isFinishing,
-    completeSplash,
-  };
-};
+  return { showSplash, isFinishing, onCompleteWrapper };
+}

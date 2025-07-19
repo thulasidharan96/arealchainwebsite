@@ -9,7 +9,11 @@ import {
 } from "@/src/components/ui/accordion";
 import { Search, ChevronDown, MessageCircle, Mail, Phone } from "lucide-react";
 import { faq_Data } from "@/src/data/faq_data";
-import SplineFaq from "@/src/components/SplineFaq";
+import dynamic from "next/dynamic";
+
+const SplineFaq = dynamic(() => import("@/src/components/SplineFaq"), {
+  ssr: false,
+});
 
 export default function FAQ() {
   const [searchTerm, setSearchTerm] = useState("");

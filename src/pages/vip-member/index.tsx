@@ -6,7 +6,11 @@ import { Input } from "@/src/components/ui/input";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
 import { CheckCircle2, Lock, Star } from "lucide-react";
-import SplineVIP from "@/src/components/SplineVIP";
+import dynamic from "next/dynamic";
+
+const SplineVIP = dynamic(() => import("@/src/components/SplineVIP"), {
+  ssr: false,
+});
 
 export default function VipMember() {
   const benefits = [
