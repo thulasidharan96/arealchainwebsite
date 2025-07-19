@@ -29,7 +29,7 @@ export default async function handler(
     );
 
     const raw = await discordRes.text();
-    console.log("📥 Discord raw response:", raw);
+    // console.log("📥 Discord raw response:", raw);
 
     if (!discordRes.ok) {
       console.error("❌ Discord API failed:", discordRes.status, raw);
@@ -46,10 +46,9 @@ export default async function handler(
     }
 
     const messages = data.map((msg: any) => ({
-      id: msg.id,
       content: msg.content,
-      author: msg.author.username,
       createdAt: msg.timestamp,
+      url: msg.attachments?.[0]?.url || null,
     }));
 
     return res.status(200).json(messages);
