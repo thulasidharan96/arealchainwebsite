@@ -46,6 +46,7 @@ export default function Navbar() {
               alt="Areal Logo"
               width={150}
               height={150}
+              priority
             />
           </Link>
 
