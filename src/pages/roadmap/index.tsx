@@ -1,29 +1,25 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useRef, useEffect } from "react";
+import React from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import type { MouseEvent } from "react";
 import { CheckCircle2, Loader2, Circle, Zap, Star } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Layout from "@/src/components/layout";
 import { cn } from "@/src/lib/utils";
 import { Badge } from "@/src/components/ui/badge";
 import { FloatingParticles } from "@/src/components/FloatingParticles";
 
-// GSAP imports (these would normally be from CDN)
-declare global {
-  interface Window {
-    gsap: any;
-    ScrollTrigger: any;
-  }
-}
+// Register GSAP plugin
+gsap.registerPlugin(ScrollTrigger);
 
 interface Milestone {
   quarter: string;
   status: "completed" | "in-progress" | "upcoming";
   title: string;
   description: string;
-  features?: string[]; // Added back features as per original roadmapData structure
+  features?: string[];
 }
 
 const roadmapData: Milestone[] = [
@@ -173,7 +169,6 @@ const roadmapData: Milestone[] = [
   },
 ];
 
-
 const statusConfig = {
   completed: {
     icon: CheckCircle2,
@@ -201,12 +196,9 @@ const statusConfig = {
   },
 };
 
-interface GSAPAnimatedComponentProps {
-  gsapLoaded: boolean;
-}
-
-const MilestoneCard = ({ milestone }: { milestone: Milestone }) => {
+const MilestoneCard = React.memo(({ milestone }: { milestone: Milestone }) => {
   const config = statusConfig[milestone.status];
+
   return (
     <div
       className={cn(
@@ -227,238 +219,111 @@ const MilestoneCard = ({ milestone }: { milestone: Milestone }) => {
       </p>
     </div>
   );
-};
+});
 
-interface AsteriskAnimationProps extends GSAPAnimatedComponentProps {
-  scrollContainerRef: React.RefObject<HTMLDivElement>;
+MilestoneCard.displayName = "MilestoneCard";
+
+interface AsteriskAnimationProps {
+  scrollContainerRef: React.RefObject<HTMLDivElement | null>;
 }
 
-const AsteriskAnimation = ({
-  gsapLoaded,
-  scrollContainerRef,
-}: AsteriskAnimationProps) => {
-  const asteriskRef = useRef<HTMLDivElement>(null);
+const AsteriskAnimation = React.memo(
+  ({ scrollContainerRef }: AsteriskAnimationProps) => {
+    const asteriskRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!gsapLoaded || !asteriskRef.current || !scrollContainerRef.current)
-      return;
+    useEffect(() => {
+      if (!asteriskRef.current || !scrollContainerRef.current) return;
 
-    const gsap = window.gsap;
-    const ScrollTrigger = window.ScrollTrigger;
-    const asterisks = gsap.utils.toArray(
-      asteriskRef.current.querySelectorAll(".asterisk")
+      const asterisks = gsap.utils.toArray(
+        asteriskRef.current.querySelectorAll(".asterisk")
+      );
+
+      // Set initial state
+      gsap.set(asterisks, { opacity: 0, scale: 0 });
+
+      // Create timeline
+      const tl = gsap.timeline({ paused: true });
+      asterisks.forEach((asterisk: any, index: number) => {
+        tl.to(
+          asterisk,
+          {
+            opacity: 1,
+            scale: 1,
+            rotation: 360,
+            duration: 0.5,
+            ease: "back.out(1.7)",
+          },
+          index * 0.05
+        );
+      });
+
+      // Create ScrollTrigger for asterisk animation
+      const scrollTrigger = ScrollTrigger.create({
+        trigger: scrollContainerRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+        animation: tl,
+      });
+
+      return () => {
+        scrollTrigger.kill();
+      };
+    }, [scrollContainerRef]);
+
+    const asteriskPositions = useMemo(
+      () =>
+        Array.from({ length: 20 }, () => ({
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+        })),
+      []
     );
 
-    // Kill any existing ScrollTriggers for asterisks to prevent duplicates
-    ScrollTrigger.getAll().forEach((st: any) => {
-      if (
-        st.trigger === scrollContainerRef.current &&
-        st.vars.id === "asterisk-animation"
-      ) {
-        st.kill();
-      }
-    });
+    return (
+      <div ref={asteriskRef} className="absolute inset-0 pointer-events-none">
+        {asteriskPositions.map((position, index) => (
+          <Star
+            key={index}
+            className="asterisk absolute w-4 h-4 text-amber-400"
+            style={position}
+          />
+        ))}
+      </div>
+    );
+  }
+);
 
-    gsap.set(asterisks, { opacity: 0, scale: 0 }); // Ensure initial state is hidden
+AsteriskAnimation.displayName = "AsteriskAnimation";
 
-    const tl = gsap.timeline({ paused: true }); // Create a paused timeline
-    asterisks.forEach((asterisk: Element, index: number) => {
-      tl.to(
-        asterisk,
-        {
-          opacity: 1,
-          scale: 1,
-          rotation: 360,
-          duration: 0.5,
-          ease: "back.out(1.7)",
-        },
-        index * 0.05 // Stagger the appearance
-      );
-    });
-
-    // Create ScrollTrigger to link timeline to horizontal scroll
-    const asteriskST = ScrollTrigger.create({
-      id: "asterisk-animation", // Give it an ID for easier killing
-      trigger: scrollContainerRef.current,
-      horizontal: true, // Listen to horizontal scroll
-      scrub: true, // Link timeline progress to scroll progress
-      start: "left left", // Start when the left edge of the scrollable content hits the left edge of its container
-      end: "right right", // End when the right edge of the scrollable content hits the right edge of its container
-      animation: tl, // Link this timeline to the ScrollTrigger
-      // markers: true, // Uncomment for debugging
-    });
-
-    return () => {
-      asteriskST.kill(); // Clean up ScrollTrigger on unmount
-    };
-  }, [gsapLoaded, scrollContainerRef]); // Depend on gsapLoaded and scrollContainerRef
-
-  return (
-    <div ref={asteriskRef} className="absolute inset-0 pointer-events-none">
-      {Array.from({ length: 20 }).map((_, index) => (
-        <Star
-          key={index}
-          className={`asterisk absolute w-4 h-4 text-amber-400`}
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+type TimelineItem =
+  | { type: "year"; year: string }
+  | { type: "milestone"; data: Milestone };
 
 export default function HorizontalRoadmap() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const timelineInnerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
   const progressLineRef = useRef<HTMLDivElement>(null);
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [gsapLoaded, setGsapLoaded] = useState(false);
+  // Memoize timeline items
+  const timelineItems = useMemo((): TimelineItem[] => {
+    const items: TimelineItem[] = [];
+    let currentYear: string | null = null;
 
-  // Load GSAP and ScrollTrigger
-  useEffect(() => {
-    const loadGSAP = async () => {
-      if (typeof window === "undefined") return;
-
-      if (!window.gsap) {
-        const script = document.createElement("script");
-        script.src =
-          "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js";
-        script.onload = () => {
-          const scrollTriggerScript = document.createElement("script");
-          scrollTriggerScript.src =
-            "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js";
-          scrollTriggerScript.onload = () => {
-            if (window.gsap && window.ScrollTrigger) {
-              window.gsap.registerPlugin(window.ScrollTrigger);
-              setGsapLoaded(true);
-            }
-          };
-          document.head.appendChild(scrollTriggerScript);
-        };
-        document.head.appendChild(script);
-      } else {
-        setGsapLoaded(true);
+    roadmapData.forEach((milestone) => {
+      const year = milestone.quarter.split(" ")[1];
+      if (year !== currentYear) {
+        currentYear = year;
+        items.push({ type: "year", year });
       }
-    };
-    loadGSAP();
+      items.push({ type: "milestone", data: milestone });
+    });
+
+    return items;
   }, []);
 
-  // Manual horizontal scrolling using mouse wheel
-  useEffect(() => {
-    const element = scrollContainerRef.current;
-    if (!element) return;
-
-    const onWheel = (e: WheelEvent) => {
-      if (e.deltaY === 0) return;
-      e.preventDefault(); // Prevent vertical page scroll
-      element.scrollTo({
-        left: element.scrollLeft + e.deltaY,
-        behavior: "auto", // or 'smooth' for smoother scroll
-      });
-    };
-
-    element.addEventListener("wheel", onWheel, { passive: false });
-    return () => {
-      element.removeEventListener("wheel", onWheel);
-    };
-  }, []);
-
-  // Manual horizontal scrolling using drag
-  const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
-    const ele = scrollContainerRef.current;
-    if (!ele) return;
-    setIsDragging(true);
-    setStartX(e.pageX - ele.offsetLeft);
-    setScrollLeft(ele.scrollLeft);
-    ele.style.cursor = "grabbing";
-    ele.style.userSelect = "none";
-  };
-
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.style.cursor = "grab";
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.style.cursor = "grab";
-      scrollContainerRef.current.style.removeProperty("user-select");
-    }
-  };
-
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!isDragging || !scrollContainerRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollContainerRef.current.offsetLeft;
-    const walk = (x - startX) * 2.5; // multiplier for faster scrolling
-    scrollContainerRef.current.scrollLeft = scrollLeft - walk;
-
-    // Update progress line on drag
-    updateProgressLine();
-  };
-
-  // Update progress line based on scroll position
-  const updateProgressLine = () => {
-    const scrollContainer = scrollContainerRef.current;
-    const progressLine = progressLineRef.current;
-    const timelineInner = timelineInnerRef.current;
-
-    if (scrollContainer && progressLine && timelineInner) {
-      const scrollWidth =
-        timelineInner.scrollWidth - scrollContainer.offsetWidth;
-      if (scrollWidth > 0) {
-        const scrollProgress = scrollContainer.scrollLeft / scrollWidth;
-        progressLine.style.transform = `scaleX(${scrollProgress})`;
-      } else {
-        progressLine.style.transform = "scaleX(0)"; // No scroll needed, hide progress
-      }
-    }
-  };
-
-  // Effect to update progress line on scroll (for wheel/programmatic scroll)
-  useEffect(() => {
-    const element = scrollContainerRef.current;
-    if (!element) return;
-
-    const handleScroll = () => {
-      updateProgressLine();
-    };
-
-    element.addEventListener("scroll", handleScroll);
-    // Initial update
-    updateProgressLine();
-
-    return () => {
-      element.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  type TimelineItem =
-    | { type: "year"; year: string }
-    | { type: "milestone"; data: Milestone };
-
-  const timelineItems: TimelineItem[] = [];
-  let currentYear: string | null = null;
-
-  roadmapData.forEach((milestone) => {
-    const year = milestone.quarter.split(" ")[1];
-    if (year !== currentYear) {
-      currentYear = year;
-      timelineItems.push({ type: "year", year });
-    }
-    timelineItems.push({ type: "milestone", data: milestone });
-  });
-
-  // Calculate dynamic width for the timelineInner to ensure all content fits
-  const calculateTimelineInnerWidth = () => {
+  // Memoize timeline width calculation
+  const timelineWidth = useMemo(() => {
     let totalWidth = 0;
     timelineItems.forEach((item) => {
       if (item.type === "year") {
@@ -467,18 +332,70 @@ export default function HorizontalRoadmap() {
         totalWidth += 320; // w-80
       }
     });
-    // Add horizontal padding from the scrollContainerInner
-    totalWidth += 2 * 80; // px-20 = 80px on each side
+    return totalWidth;
+  }, [timelineItems]);
 
-    return `${totalWidth}px`;
-  };
+  // GSAP ScrollTrigger horizontal scroll setup
+  useEffect(() => {
+    if (!containerRef.current || !timelineRef.current) return;
+
+    const container = containerRef.current;
+    const timeline = timelineRef.current;
+    const progressLine = progressLineRef.current;
+
+    // Calculate scroll distance
+    const scrollDistance = timelineWidth - window.innerWidth + 160; // 160px for padding
+
+    // Main horizontal scroll animation
+    const horizontalScroll = gsap.to(timeline, {
+      x: -scrollDistance,
+      ease: "none",
+    });
+
+    // Progress line animation
+    const progressAnimation = gsap.to(progressLine, {
+      scaleX: 1,
+      ease: "none",
+    });
+
+    // Create ScrollTrigger for horizontal scrolling
+    const scrollTriggerInstance = ScrollTrigger.create({
+      trigger: container,
+      start: "top top",
+      end: () => `+=${scrollDistance}`,
+      scrub: 1,
+      pin: true,
+      animation: horizontalScroll,
+      onUpdate: (self) => {
+        // Update progress line
+        if (progressLine) {
+          gsap.set(progressLine, { scaleX: self.progress });
+        }
+      },
+      invalidateOnRefresh: true,
+    });
+
+    // Refresh ScrollTrigger on window resize
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      scrollTriggerInstance.kill();
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [timelineWidth]);
 
   let milestoneCounter = 0;
 
   return (
     <Layout>
-      <div className="min-h-screen bg-transparent overflow-x-hidden">
+      <div className="bg-transparent">
         <FloatingParticles />
+
+        {/* Header section */}
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
@@ -491,48 +408,30 @@ export default function HorizontalRoadmap() {
               </h1>
               <p className="text-gray-400 text-xl max-w-3xl mx-auto">
                 Our journey to revolutionize real estate through blockchain
-                technology. Use your scroll wheel or drag to explore our
-                progress.
+                technology. Scroll down to explore our progress.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Outer container for horizontal scroll (h-screen for visible area) */}
-        <div
-          ref={scrollContainerRef}
-          className="no-scrollbar w-full overflow-x-auto cursor-grab relative p-8"
-          onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
-        >
-          {/* Asterisk Animation - now receives scrollContainerRef */}
-          {scrollContainerRef.current && (
-            <AsteriskAnimation
-              gsapLoaded={gsapLoaded}
-              scrollContainerRef={
-                scrollContainerRef as React.RefObject<HTMLDivElement>
-              }
-            />
-          )}
+        {/* Horizontal scrolling roadmap section */}
+        <div ref={containerRef} className="relative h-screen overflow-hidden">
+          <AsteriskAnimation scrollContainerRef={containerRef} />
 
-          {/* Main horizontal timeline content - increased height for visibility */}
           <div
-            ref={timelineInnerRef}
-            className="relative inline-flex items-center h-[650px] py-10 px-20" // Adjusted height and padding
-            style={{ width: calculateTimelineInnerWidth() }} // Dynamic width for content
+            ref={timelineRef}
+            className="flex items-center h-full px-20"
+            style={{ width: `${timelineWidth}px` }}
           >
-            {/* Horizontal timeline line (static background) */}
+            {/* Timeline line */}
             <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-600 -translate-y-1/2">
-              {/* Animated progress fill for the global line */}
               <div
                 ref={progressLineRef}
-                className="h-full bg-gradient-to-r from-green-500 via-[#F4B448] to-gray-500 origin-left scale-x-0 transition-transform duration-75 ease-out"
+                className="h-full bg-gradient-to-r from-green-500 via-[#F4B448] to-gray-500 origin-left scale-x-0"
               />
             </div>
 
-            {/* Individual timeline items (year markers and milestones) */}
+            {/* Timeline items */}
             {timelineItems.map((item, index) => {
               if (item.type === "year") {
                 return (
@@ -540,9 +439,7 @@ export default function HorizontalRoadmap() {
                     key={`year-${item.year}-${index}`}
                     className="relative flex-shrink-0 w-28 h-full flex flex-col items-center justify-center z-10 mx-4"
                   >
-                    {/* Dot on the timeline for the year */}
-                    <div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gray-700 ring-8 ring-gray-900"></div>
-                    {/* Year text */}
+                    <div className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-gray-700 ring-8 ring-gray-900" />
                     <div className="absolute bottom-[calc(50%+6rem)] bg-[#F4B448] text-black font-bold text-xl px-4 py-1 rounded-lg shadow-lg shadow-[#F4B448]/20">
                       {item.year}
                     </div>
@@ -553,11 +450,11 @@ export default function HorizontalRoadmap() {
               milestoneCounter++;
               const milestone = item.data;
               const config = statusConfig[milestone.status];
-              const isAbove = milestoneCounter % 2 !== 0; // Alternate card position
+              const isAbove = milestoneCounter % 2 !== 0;
 
               return (
                 <div
-                  key={`milestone-${index}`}
+                  key={`milestone-${milestone.quarter}-${milestone.title}`}
                   className="relative flex-shrink-0 w-80 h-full flex flex-col items-center justify-center"
                 >
                   {/* Milestone dot */}
@@ -580,7 +477,7 @@ export default function HorizontalRoadmap() {
                       "absolute",
                       isAbove
                         ? "bottom-[calc(50%+2.5rem)]"
-                        : "top-[calc(50%+2.5rem)]" // Adjusted spacing
+                        : "top-[calc(50%+2.5rem)]"
                     )}
                   >
                     <MilestoneCard milestone={milestone} />
