@@ -65,12 +65,12 @@ const advisors: AdvisorMember[] = [
   {
     name: "Mr. Adrian Oleary",
     role: "Advisory Board Member",
-    image: "/team/adrian.jpeg", // save this uploaded image as public/team/adrian.jpg
+    image: "/team/adrian.jpg", // save this uploaded image as public/team/adrian.jpg
   },
   {
     name: "Mr. James Capps",
     role: "Managing Director at BlackRock",
-    image: "/team/james.jpeg", // save this uploaded image as public/team/james.jpg
+    image: "/team/james.jpg", // save this uploaded image as public/team/james.jpg
   },
 ];
 
