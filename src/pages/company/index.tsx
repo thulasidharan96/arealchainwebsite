@@ -37,6 +37,12 @@ interface TeamMember {
 
 interface AdvisorMember {
   name: string;
+  role?: string;
+  image: string;
+}
+
+interface AdvisorMember {
+  name: string;
 }
 
 const teamMembers: TeamMember[] = [
@@ -56,18 +62,16 @@ const teamMembers: TeamMember[] = [
 ];
 
 const advisors: AdvisorMember[] = [
-  { name: "Brock Pierce" },
-  { name: "Brian D Evans" },
-  { name: "Adrian Zdunzcyk" },
-  { name: "Darknight" },
-  { name: "Charles Lamoulen" },
-  { name: "Laurent Rouach" },
-  { name: "Marco Houwen" },
-  { name: "Parul Gujral" },
-  { name: "Claus Skaaning" },
-  { name: "Lex Schreuder" },
-  { name: "Adam Blazsek" },
-  { name: "Volodymyr Havrylyuk-Jensen" },
+  {
+    name: "Mr. Adrian Oleary",
+    role: "Advisory Board Member",
+    image: "/team/adrian.jpeg", // save this uploaded image as public/team/adrian.jpg
+  },
+  {
+    name: "Mr. James Capps",
+    role: "Managing Director at BlackRock",
+    image: "/team/james.jpeg", // save this uploaded image as public/team/james.jpg
+  },
 ];
 
 const stats = [
@@ -523,6 +527,64 @@ export default function Company(): JSX.Element {
                       </a>
                     </div>
                   </motion.div>
+                </motion.div>
+              </motion.div>
+
+              {/* Advisory Board Section */}
+              <motion.div
+                className="mb-20"
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                variants={staggerContainer}
+              >
+                <motion.h2
+                  className="text-3xl font-bold text-white mb-4 text-center"
+                  variants={fadeInUp}
+                >
+                  Meet Our Advisory Board
+                </motion.h2>
+                <motion.div
+                  className="w-24 h-1 bg-[#F4B448] mx-auto mb-10"
+                  variants={scaleUp}
+                ></motion.div>
+
+                {/* Dynamic grid center based on number of advisors */}
+                <motion.div
+                  className={`grid gap-10 max-w-7xl mx-auto place-items-center ${
+                    advisors.length === 1
+                      ? "grid-cols-1"
+                      : advisors.length === 2
+                      ? "grid-cols-1 sm:grid-cols-2"
+                      : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+                  }`}
+                  variants={staggerContainer}
+                >
+                  {advisors.map((advisor, index) => (
+                    <motion.div
+                      key={index}
+                      className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 group"
+                      variants={staggerItem}
+                    >
+                      <Image
+                        src={advisor.image}
+                        alt={advisor.name}
+                        width={400}
+                        height={400}
+                        className="w-full h-64 object-cover"
+                      />
+                      <div className="p-6 text-center">
+                        <h3 className="text-xl font-semibold text-white mb-1">
+                          {advisor.name}
+                        </h3>
+                        {advisor.role && (
+                          <p className="text-gray-400 text-sm">
+                            {advisor.role}
+                          </p>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
                 </motion.div>
               </motion.div>
 
