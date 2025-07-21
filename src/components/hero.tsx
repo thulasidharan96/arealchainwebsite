@@ -1,10 +1,11 @@
-import { Button } from "@/src/components/ui/button";
+"use client";
+
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Button } from "@/src/components/ui/button";
 
-// Lazy load SplineViewer for better initial page load
 const SplineViewer = dynamic(() => import("./SplineViewer"), {
   ssr: false,
   loading: () => (
@@ -14,183 +15,131 @@ const SplineViewer = dynamic(() => import("./SplineViewer"), {
   ),
 });
 
-// Register GSAP plugins
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export default function Hero() {
-  // Refs for animation targets
-  const heroRef = useRef(null);
-  const leftContentRef = useRef(null);
-  const rightContentRef = useRef(null);
-  const videoSectionRef = useRef(null);
-  const blobsRef = useRef(null);
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const leftContentRef = useRef<HTMLDivElement | null>(null);
+  const rightContentRef = useRef<HTMLDivElement | null>(null);
+  const videoSectionRef = useRef<HTMLDivElement | null>(null);
+  const blobsRef = useRef<HTMLDivElement | null>(null);
+  const tlRefs = useRef<gsap.core.Timeline[]>([]);
 
-  // Timeline refs for cleanup
-  const tlRefs = useRef([]);
-
-  // Optimized button click handlers
-  const handleCreateWealthClick = useCallback(() => {
-    window.location.href = "/contact";
-  }, []);
-
-  const handleRoadmapClick = useCallback(() => {
-    window.location.href = "/roadmap";
-  }, []);
-
-  const handleYouTubeClick = useCallback(() => {
+  const handleCreateWealthClick = () => (window.location.href = "/contact");
+  const handleRoadmapClick = () => (window.location.href = "/roadmap");
+  const handleYouTubeClick = () =>
     window.open(
       "https://www.youtube.com/@ArealChain",
       "_blank",
       "noopener,noreferrer"
     );
-  }, []);
 
-  useEffect(() => {
-    // Set initial states for all animated elements
-    gsap.set(
-      [
-        leftContentRef.current?.children || [],
-        rightContentRef.current,
-        videoSectionRef.current?.children || [],
-      ],
-      {
-        opacity: 0,
-        y: 50,
-        force3D: true,
-      }
-    );
-
-    // Set initial state for background blobs
-    gsap.set(blobsRef.current?.children || [], {
-      opacity: 0,
-      scale: 0.8,
-      force3D: true,
-    });
-
-    // Create main hero timeline
-    const heroTl = gsap.timeline({
-      delay: 0.2, // Small delay for smoother entry
-    });
-
-    // Animate background blobs first
-    heroTl
-      .to(blobsRef.current?.children || [], {
-        opacity: 1,
-        scale: 1,
-        duration: 1.5,
-        stagger: 0.2,
-        ease: "power2.out",
-        force3D: true,
-      })
-      // Animate left content
-      .to(
-        leftContentRef.current?.children || [],
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.15,
-          ease: "power3.out",
-          force3D: true,
-        },
-        0.3
-      )
-      // Animate right content (3D viewer)
-      .to(
-        rightContentRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power2.out",
-          force3D: true,
-        },
-        0.6
-      );
-
-    tlRefs.current.push(heroTl);
-
-    // Video section scroll animation
-    const videoScrollTrigger = ScrollTrigger.create({
-      trigger: videoSectionRef.current,
-      start: "top 85%",
-      once: true,
-      onEnter: () => {
-        const videoTl = gsap.timeline();
-
-        videoTl.to(videoSectionRef.current?.children || [], {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.2,
-          ease: "power2.out",
-          force3D: true,
-        });
-
-        tlRefs.current.push(videoTl);
-      },
-    });
-
-    // Floating animation for background blobs
-    const floatingTl = gsap.timeline({ repeat: -1, yoyo: true });
-    floatingTl.to(blobsRef.current?.children || [], {
-      y: "+=20",
-      rotation: "+=5",
-      duration: 4,
-      stagger: 0.5,
-      ease: "sine.inOut",
-      force3D: true,
-    });
-
-    tlRefs.current.push(floatingTl);
-
-    // Gradient animation for the AREAL text
-    const gradientTl = gsap.timeline({ repeat: -1 });
-    gradientTl.to(".animate-gradient", {
-      backgroundPosition: "200% center",
-      duration: 3,
-      ease: "none",
-    });
-
-    tlRefs.current.push(gradientTl);
-
-    // Enhanced cleanup
-    return () => {
-      // Kill ScrollTriggers
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-
-      // Kill all timelines
-      tlRefs.current.forEach((tl) => {
-        if (tl && tl.kill) {
-          tl.kill();
-        }
-      });
-      tlRefs.current = [];
-
-      // Clear any remaining tweens
-      gsap.killTweensOf("*");
-    };
-  }, []);
-
-  // Optimized hover handlers for buttons
-  const handleButtonHover = useCallback((e) => {
+  const handleButtonHover = (e: React.MouseEvent<HTMLElement>) =>
     gsap.to(e.currentTarget, {
       scale: 1.05,
       duration: 0.3,
       ease: "power2.out",
       overwrite: true,
     });
-  }, []);
 
-  const handleButtonLeave = useCallback((e) => {
+  const handleButtonLeave = (e: React.MouseEvent<HTMLElement>) =>
     gsap.to(e.currentTarget, {
       scale: 1,
       duration: 0.3,
       ease: "power2.out",
       overwrite: true,
     });
+
+  useEffect(() => {
+    requestIdleCallback(() => {
+      const leftChildren = leftContentRef.current?.children || [];
+      const right = rightContentRef.current;
+      const videoChildren = videoSectionRef.current?.children || [];
+      const blobs = blobsRef.current?.children || [];
+
+      gsap.set([...leftChildren, right, ...videoChildren], {
+        opacity: 0,
+        y: 50,
+      });
+      gsap.set(blobs, { opacity: 0, scale: 0.8 });
+
+      const heroTl = gsap.timeline({ delay: 0.2 });
+      heroTl
+        .to(blobs, {
+          opacity: 1,
+          scale: 1,
+          duration: 1.5,
+          stagger: 0.2,
+          ease: "power2.out",
+        })
+        .to(
+          leftChildren,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out",
+          },
+          0.3
+        )
+        .to(
+          right,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power2.out",
+          },
+          0.6
+        );
+
+      tlRefs.current.push(heroTl);
+
+      ScrollTrigger.create({
+        trigger: videoSectionRef.current,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          const videoTl = gsap.timeline();
+          videoTl.to(videoChildren, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out",
+          });
+          tlRefs.current.push(videoTl);
+        },
+      });
+
+      const floatTl = gsap.timeline({ repeat: -1, yoyo: true });
+      floatTl.to(blobs, {
+        y: "+=20",
+        rotation: "+=5",
+        duration: 4,
+        stagger: 0.5,
+        ease: "sine.inOut",
+      });
+      tlRefs.current.push(floatTl);
+
+      const gradientTl = gsap.timeline({ repeat: -1 });
+      gradientTl.to(".animate-gradient", {
+        backgroundPosition: "200% center",
+        duration: 3,
+        ease: "none",
+      });
+      tlRefs.current.push(gradientTl);
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      tlRefs.current.forEach((tl) => tl.kill());
+      tlRefs.current = [];
+      gsap.killTweensOf("*");
+    };
   }, []);
 
   return (
@@ -198,31 +147,28 @@ export default function Hero() {
       ref={heroRef}
       className="hero-section relative min-h-screen w-full bg-transparent overflow-hidden mt-20 md:mt-16 lg:mt-16"
     >
-      {/* Background blobs with optimized animations */}
+      {/* Blobs */}
       <div ref={blobsRef} className="absolute inset-0 z-0">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#F4B448]/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl"></div>
       </div>
 
-      {/* Main content */}
+      {/* Hero Content */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between min-h-[80vh] px-4 sm:px-8 md:px-12 max-w-7xl mx-auto gap-10">
-        {/* Left content */}
         <div ref={leftContentRef} className="w-full lg:w-1/2 text-left">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3 leading-tight">
-            Transforming the World's <br /> Assets with{" "}
+            Transforming the World's <br /> Assets with
           </h1>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-tight">
             <span className="text-transparent bg-clip-text animate-gradient bg-gradient-to-r from-yellow-400 via-[#F4B448] to-yellow-400 bg-[length:200%_200%]">
               AREAL
             </span>
           </h1>
-
           <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-8 max-w-xl">
             AREAL is a Layer-1 Blockchain that makes it easy to buy and sell
-            real-world assets in a click. It's built for an open, permissionless
-            financial system where anyone can participate.
+            real-world assets in a click. Built for an open, permissionless
+            financial system.
           </p>
-
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               size="lg"
@@ -246,7 +192,6 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right: Spline Viewer */}
         <div
           ref={rightContentRef}
           className="w-full lg:w-1/2 flex justify-center items-center"
@@ -255,7 +200,7 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Video Section with optimized loading */}
+      {/* Video Section */}
       <div
         ref={videoSectionRef}
         className="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 pb-12 pt-8"
@@ -268,13 +213,12 @@ export default function Hero() {
         >
           See What's Happening at AREAL
         </h2>
-
         <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833] transition-all duration-300 hover:shadow-[0_0_35px_#F4B44850]">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/uywf3RlK5aE?autoplay=1&mute=1&loop=1&playlist=uywf3RlK5aE&controls=0&modestbranding=1&showinfo=0&rel=0&preload=metadata"
+            src="https://www.youtube.com/embed/uywf3RlK5aE?autoplay=1&mute=1&loop=1&playlist=uywf3RlK5aE&controls=0&modestbranding=1&showinfo=0&rel=0"
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             loading="lazy"
             title="AREAL Blockchain Introduction Video"
