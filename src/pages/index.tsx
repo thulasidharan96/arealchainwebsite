@@ -3,7 +3,7 @@ import Hero from "@/src/components/hero";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -25,20 +25,20 @@ if (typeof window !== "undefined") {
 export default function Home() {
   const router = useRouter();
 
-  // Refs for animation targets
-  const heroRef = useRef(null);
-  const statsRef = useRef(null);
-  const projectsRef = useRef(null);
-  const suiteRef = useRef(null);
-  const partnersRef = useRef(null);
-  const AccreditersRef = useRef(null);
-  const faqRef = useRef(null);
-  const ctaRef = useRef(null);
+  // Refs for animation targets with proper typing
+  const heroRef = useRef<HTMLElement>(null);
+  const statsRef = useRef<HTMLElement>(null);
+  const projectsRef = useRef<HTMLElement>(null);
+  const suiteRef = useRef<HTMLElement>(null);
+  const partnersRef = useRef<HTMLElement>(null);
+  const AccreditersRef = useRef<HTMLElement>(null);
+  const faqRef = useRef<HTMLElement>(null);
+  const ctaRef = useRef<HTMLElement>(null);
 
-  const Accredited = [
-    // { name: "Costa Ricae", src: "/Accrediters/Costa_Rica.png" },
-    { name: "VARA", src: "/Accrediters/vara.png" },
-  ];
+  // Animation timeline refs for better cleanup
+  const tlRefs = useRef<gsap.core.Timeline[]>([]);
+
+  const Accredited = [{ name: "VARA", src: "/Accrediters/vara.png" }];
 
   interface ProductClickEvent {
     (product: string): void;
@@ -99,234 +99,51 @@ export default function Home() {
     },
   ];
 
-  useEffect(() => {
-    // Set initial states
-    gsap.set(
-      [
-        ".fade-in-up",
-        ".fade-in-left",
-        ".fade-in-right",
-        ".bounce-in",
-        ".stat-card",
-        ".project-card",
-        ".suite-card",
-        ".partner-logo",
-        ".faq-item",
-      ],
-      {
-        opacity: 0,
-        y: 30,
-      }
-    );
-
-    // Hero Animation
-    gsap.to(heroRef.current, {
-      opacity: 1,
-      duration: 1,
+  // Optimized hover handlers using useCallback with proper typing
+  const handleCardHover = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    gsap.to(e.currentTarget, {
+      scale: 1.05,
+      duration: 0.3,
       ease: "power2.out",
+      overwrite: true,
     });
-
-    // Stats Section
-    ScrollTrigger.create({
-      trigger: statsRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        if (statsRef.current) {
-          gsap.to(statsRef.current.querySelector("h2"), {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: "power2.out",
-          });
-        }
-
-        gsap.to(".stat-card", {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "back.out(1.2)",
-          delay: 0.2,
-        });
-      },
-    });
-
-    // Projects Section
-    ScrollTrigger.create({
-      trigger: projectsRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        gsap.to(projectsRef.current.querySelector("h2"), {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-        });
-
-        gsap.to(".project-card", {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-          delay: 0.2,
-        });
-      },
-    });
-
-    // Suite Section
-    ScrollTrigger.create({
-      trigger: suiteRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        gsap.to(suiteRef.current.querySelectorAll("h2, p"), {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-        });
-
-        gsap.to(".suite-card", {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-          delay: 0.3,
-        });
-      },
-    });
-
-    // Partners Section
-    ScrollTrigger.create({
-      trigger: partnersRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        gsap.to(partnersRef.current.querySelectorAll("h2, p"), {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-        });
-
-        gsap.to(".partner-logo", {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.4,
-          stagger: 0.05,
-          ease: "back.out(1.2)",
-          delay: 0.2,
-        });
-      },
-    });
-
-    ScrollTrigger.create({
-      trigger: AccreditersRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        gsap.to(AccreditersRef.current.querySelectorAll("h2, p"), {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-        });
-
-        gsap.to(".partner-logo", {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.4,
-          stagger: 0.05,
-          ease: "back.out(1.2)",
-          delay: 0.2,
-        });
-      },
-    });
-
-    // FAQ Section
-    ScrollTrigger.create({
-      trigger: faqRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        gsap.to(faqRef.current.querySelectorAll("h2, p"), {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-        });
-
-        gsap.to(".faq-item", {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-          delay: 0.2,
-        });
-      },
-    });
-
-    // CTA Section
-    ScrollTrigger.create({
-      trigger: ctaRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        gsap.to(ctaRef.current.querySelectorAll("p, h2, button"), {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          ease: "power2.out",
-        });
-      },
-    });
-
-    // Cleanup
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
   }, []);
 
-  // Optimized hover handlers
-  const handleCardHover = (e: { currentTarget: gsap.TweenTarget }) => {
-    gsap.to(e.currentTarget, {
-      scale: 1.05,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  };
-
-  const handleCardLeave = (e: { currentTarget: gsap.TweenTarget }) => {
+  const handleCardLeave = useCallback((e: React.MouseEvent<HTMLElement>) => {
     gsap.to(e.currentTarget, {
       scale: 1,
       duration: 0.3,
       ease: "power2.out",
+      overwrite: true,
     });
-  };
+  }, []);
 
-  const handleButtonHover = (e: { currentTarget: gsap.TweenTarget }) => {
-    gsap.to(e.currentTarget, {
-      scale: 1.05,
-      duration: 0.2,
-      ease: "power2.out",
-    });
-  };
+  const handleButtonHover = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      gsap.to(e.currentTarget, {
+        scale: 1.05,
+        duration: 0.2,
+        ease: "power2.out",
+        overwrite: true,
+      });
+    },
+    []
+  );
 
-  const handleButtonLeave = (e: { currentTarget: gsap.TweenTarget }) => {
-    gsap.to(e.currentTarget, {
-      scale: 1,
-      duration: 0.2,
-      ease: "power2.out",
-    });
-  };
+  const handleButtonLeave = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      gsap.to(e.currentTarget, {
+        scale: 1,
+        duration: 0.2,
+        ease: "power2.out",
+        overwrite: true,
+      });
+    },
+    []
+  );
 
-  // Animation variants
-  const fadeInUp = {
+  // Animation variants for Framer Motion with proper typing
+  const fadeInUp: Variants = {
     initial: { opacity: 0, y: 60 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
   };
@@ -344,7 +161,7 @@ export default function Home() {
     },
   };
 
-  const staggerContainer = {
+  const staggerContainer: Variants = {
     initial: {},
     animate: {
       transition: {
@@ -365,6 +182,208 @@ export default function Home() {
     },
   };
 
+  useEffect(() => {
+    // Enhanced ScrollTrigger configuration for better performance
+    ScrollTrigger.config({
+      limitCallbacks: true,
+      sync: true,
+    });
+
+    // Batch DOM queries for better performance with proper typing
+    const statCards = gsap.utils.toArray<Element>(".stat-card");
+    const projectCards = gsap.utils.toArray<Element>(".project-card");
+    const suiteCards = gsap.utils.toArray<Element>(".suite-card");
+    const partnerLogos = gsap.utils.toArray<Element>(".partner-logo");
+    const faqItemElements = gsap.utils.toArray<Element>(".faq-item");
+
+    // Set initial states with optimized selectors
+    const elementsToAnimate: Element[] = [
+      ...statCards,
+      ...projectCards,
+      ...suiteCards,
+      ...partnerLogos,
+      ...faqItemElements,
+    ];
+
+    gsap.set(elementsToAnimate, {
+      opacity: 0,
+      y: 30,
+      force3D: true,
+    });
+
+    // Optimized hero animation
+    if (heroRef.current) {
+      const heroTl = gsap.timeline();
+      heroTl.to(heroRef.current, {
+        opacity: 1,
+        duration: 1,
+        ease: "power2.out",
+        force3D: true,
+      });
+      tlRefs.current.push(heroTl);
+    }
+
+    // Create a more efficient animation function with proper typing
+    const createScrollAnimation = (
+      trigger: HTMLElement | null,
+      elements: Element[],
+      headerSelector?: string,
+      delay = 0
+    ): ScrollTrigger | null => {
+      if (!trigger) return null;
+
+      return ScrollTrigger.create({
+        trigger,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline();
+
+          // Animate header first if exists
+          if (headerSelector) {
+            const header = trigger.querySelector(headerSelector);
+            if (header) {
+              tl.to(header, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                force3D: true,
+              });
+            }
+          }
+
+          // Animate elements with stagger
+          if (elements.length > 0) {
+            tl.to(
+              elements,
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: "power2.out",
+                force3D: true,
+              },
+              delay
+            );
+          }
+
+          tlRefs.current.push(tl);
+        },
+      });
+    };
+
+    // Stats Section
+    createScrollAnimation(statsRef.current, statCards, "h2", 0.2);
+
+    // Projects Section
+    createScrollAnimation(projectsRef.current, projectCards, "h2", 0.2);
+
+    // Suite Section
+    if (suiteRef.current) {
+      ScrollTrigger.create({
+        trigger: suiteRef.current,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          if (suiteRef.current) {
+            const tl = gsap.timeline();
+            const headers = Array.from(
+              suiteRef.current.querySelectorAll("h2, p")
+            );
+
+            tl.to(headers, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              stagger: 0.1,
+              ease: "power2.out",
+              force3D: true,
+            }).to(
+              suiteCards,
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.08,
+                ease: "power2.out",
+                force3D: true,
+              },
+              0.3
+            );
+
+            tlRefs.current.push(tl);
+          }
+        },
+      });
+    }
+
+    // Partners Section
+    createScrollAnimation(partnersRef.current, partnerLogos, "h2, p", 0.2);
+
+    // Accreditors Section
+    if (AccreditersRef.current) {
+      const accreditorLogos = gsap.utils.toArray<Element>(
+        AccreditersRef.current.querySelectorAll(".partner-logo")
+      );
+      createScrollAnimation(
+        AccreditersRef.current,
+        accreditorLogos,
+        "h2, p",
+        0.2
+      );
+    }
+
+    // FAQ Section
+    createScrollAnimation(faqRef.current, faqItemElements, "h2, p", 0.2);
+
+    // CTA Section
+    if (ctaRef.current) {
+      ScrollTrigger.create({
+        trigger: ctaRef.current,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          if (ctaRef.current) {
+            const elements = Array.from(
+              ctaRef.current.querySelectorAll("p, h2, button")
+            );
+            const tl = gsap.timeline();
+
+            tl.to(elements, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              stagger: 0.1,
+              ease: "power2.out",
+              force3D: true,
+            });
+
+            tlRefs.current.push(tl);
+          }
+        },
+      });
+    }
+
+    // Enhanced cleanup function
+    return () => {
+      // Kill all ScrollTriggers
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+
+      // Kill all custom timelines
+      tlRefs.current.forEach((tl) => {
+        if (tl && tl.kill) {
+          tl.kill();
+        }
+      });
+      tlRefs.current = [];
+
+      // Clear any remaining tweens
+      gsap.killTweensOf("*");
+    };
+  }, []);
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -382,7 +401,7 @@ export default function Home() {
         className="py-20 px-4"
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.3, margin: "-100px" }}
         variants={staggerContainer}
       >
         <div className="max-w-6xl mx-auto text-center">
@@ -399,12 +418,12 @@ export default function Home() {
             {specialStats.map((item, i) => (
               <motion.div
                 key={i}
-                className="bg-gray-800/60 p-6 rounded-xl"
+                className="bg-gray-800/60 p-6 rounded-xl stat-card"
                 variants={bounceIn}
                 whileHover={{
                   scale: 1.05,
                   boxShadow: "0 10px 30px rgba(244, 180, 72, 0.3)",
-                  transition: { type: "spring", stiffness: 300 },
+                  transition: { type: "spring", stiffness: 300, damping: 20 },
                 }}
               >
                 <motion.h3
@@ -431,12 +450,6 @@ export default function Home() {
               </motion.div>
             ))}
           </motion.div>
-          {/* <motion.h2
-            className="text-3xl font-bold text-center text-white mt-8"
-            variants={fadeInUp}
-          >
-            Simple Secure SeamLess
-          </motion.h2> */}
         </div>
       </motion.section>
 
@@ -445,8 +458,8 @@ export default function Home() {
         <div className="h-px bg-[#F4B448]/30"></div>
       </div>
 
-      {/*  Accredited Section */}
-      <section ref={AccreditersRef} className="py-20 px-4 ">
+      {/* Accredited Section */}
+      <section ref={AccreditersRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
             Accredited With
@@ -464,7 +477,6 @@ export default function Home() {
                   alt={Accrediter.name}
                   width={200}
                   height={200}
-                  // className="max-h-20 object-contain transition-transform duration-300"
                 />
               </div>
             ))}
@@ -531,9 +543,9 @@ export default function Home() {
               Suite.
             </h2>
             <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-8 opacity-0">
-              The World’s First End-to-End Blockchain Ecosystem for Real Assets
-              is Now Live. In the words of our CEO: “Simple, Secure, Seamless —
-              That’s the Areal promise.
+              The World's First End-to-End Blockchain Ecosystem for Real Assets
+              is Now Live. In the words of our CEO: "Simple, Secure, Seamless —
+              That's the Areal promise.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-8">
               {[
@@ -633,7 +645,7 @@ export default function Home() {
               FAQ
             </h2>
             <p className="text-gray-400 opacity-0">
-              Before You Ask, We’ve Tokenized the Answer.
+              Before You Ask, We've Tokenized the Answer.
             </p>
           </div>
           <div>
@@ -673,7 +685,7 @@ export default function Home() {
             The Opportunity to Invest in Real Assets on Blockchain is Here
           </h2>
           <h2 className="text-3xl font-bold text-white mb-8 opacity-0">
-            Don’t Miss the Opportunity
+            Don't Miss the Opportunity
           </h2>
           <button
             className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-4 rounded-lg text-lg opacity-0"
