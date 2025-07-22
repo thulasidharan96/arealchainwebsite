@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
     "/faqs",
     "/robots.txt",
     "/sitemap-0.xml",
+    "/whitepaper",
   ];
 
   const isPublicPath = publicPaths.some(
@@ -88,6 +89,6 @@ export const config = {
      * 5. /*.{png,jpg,jpeg,gif,webp,ico,svg} (image files)
      * 6. /favicon.ico, /sitemap.xml (public files)
      */
-    "/((?!api/auth|_next|static|public|.*\\.(?:png|avif|mp4|jpg|jpeg|gif|webp|ico|svg)$|favicon\\.ico|sitemap\\.xml).*)",
+    "/((?!api/auth|_next|static|public|.*.(?:png|avif|mp4|pdf|jpg|jpeg|gif|webp|ico|svg)$|favicon.ico|sitemap.xml).*)",
   ],
 };

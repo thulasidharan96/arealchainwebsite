@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Shield,
   Zap,
+  Linkedin,
 } from "lucide-react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
@@ -24,6 +25,7 @@ import { JSX, useEffect, useRef, useState } from "react";
 import SplineCompany from "@/src/components/SplineCompany";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const SplineCube = dynamic(() => import("@/src/components/SplineCube"), {
   ssr: false,
@@ -39,10 +41,7 @@ interface AdvisorMember {
   name: string;
   role?: string;
   image: string;
-}
-
-interface AdvisorMember {
-  name: string;
+  linkedin: string;
 }
 
 const teamMembers: TeamMember[] = [
@@ -64,23 +63,43 @@ const teamMembers: TeamMember[] = [
 const advisors: AdvisorMember[] = [
   {
     name: "Mr. Adrian Oleary",
-    role: "Advisory Board Member",
-    image: "/team/adrian.jpg", // save this uploaded image as public/team/adrian.jpg
+    role: "Head of Product Quality @ Light & Wonder",
+    image: "/team/adrian.jpg",
+    linkedin: "https://www.linkedin.com/in/adrianoleary/",
   },
   {
     name: "Mr. James Capps",
-    role: "Managing Director at BlackRock",
-    image: "/team/james.jpg", // save this uploaded image as public/team/james.jpg
+    role: "Managing Director @ BlackRock",
+    image: "/team/james.jpg",
+    linkedin: "https://www.linkedin.com/in/capps/",
+  },
+  {
+    name: "Mr. Raghu Subramanian",
+    role: "Executive Chairman @ Actyv.ai",
+    image: "/team/raghu.jpg",
+    linkedin: "https://www.linkedin.com/in/raghu0101/",
   },
 ];
 
-const stats = [
+interface Stat {
+  number: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const stats: Stat[] = [
   { number: "60+", label: "Employees", icon: Users },
   { number: "2+", label: "Continents", icon: Globe },
   { number: "10+", label: "Countries", icon: MapPin },
 ];
 
-const features = [
+interface Feature {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+}
+
+const features: Feature[] = [
   {
     icon: Building2,
     title: "Real Estate Innovation",
@@ -101,7 +120,12 @@ const features = [
   },
 ];
 
-const mediaLogos = [
+interface MediaLogo {
+  name: string;
+  src: string;
+}
+
+const mediaLogos: MediaLogo[] = [
   { name: "Forbes", src: "/media/forbes.png" },
   { name: "Gulf Time", src: "/media/gulf-time.png" },
   { name: "Gulf News", src: "/media/gulf-news.png" },
@@ -246,8 +270,8 @@ export default function Company(): JSX.Element {
                   className="text-gray-400 text-xl max-w-3xl mx-auto"
                   variants={fadeInUp}
                 >
-                  At Areal, we’re not just building blockchain infrastructure —
-                  we’re reshaping how the world invests in real-world assets.
+                  At Areal, we're not just building blockchain infrastructure —
+                  we're reshaping how the world invests in real-world assets.
                 </motion.p>
               </motion.div>
 
@@ -550,7 +574,7 @@ export default function Company(): JSX.Element {
                 ></motion.div>
 
                 {/* Dynamic grid center based on number of advisors */}
-                <motion.div
+                <div
                   className={`grid gap-10 max-w-7xl mx-auto place-items-center ${
                     advisors.length === 1
                       ? "grid-cols-1"
@@ -558,12 +582,11 @@ export default function Company(): JSX.Element {
                       ? "grid-cols-1 sm:grid-cols-2"
                       : "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
                   }`}
-                  variants={staggerContainer}
                 >
                   {advisors.map((advisor, index) => (
                     <motion.div
                       key={index}
-                      className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 group"
+                      className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-[1.03]"
                       variants={staggerItem}
                     >
                       <Image
@@ -578,14 +601,27 @@ export default function Company(): JSX.Element {
                           {advisor.name}
                         </h3>
                         {advisor.role && (
-                          <p className="text-gray-400 text-sm">
+                          <p className="text-gray-400 text-sm mb-2">
                             {advisor.role}
                           </p>
+                        )}
+                        {advisor.linkedin && (
+                          <Link
+                            href={advisor.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 text-blue-400 hover:text-blue-500 transition-colors"
+                          >
+                            <Linkedin className="w-4 h-4" />
+                            <span className="text-sm font-medium">
+                              LinkedIn
+                            </span>
+                          </Link>
                         )}
                       </div>
                     </motion.div>
                   ))}
-                </motion.div>
+                </div>
               </motion.div>
 
               {/* Video Section */}
