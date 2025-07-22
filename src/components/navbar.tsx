@@ -110,15 +110,18 @@ export default function Navbar() {
             >
               Roadmap
             </Link>
-            <Link
-              href="/whitepaper"
-              className={`text-sm font-medium transition-colors ${
-                isActive("/whitepaper")
-                  ? "text-[#F4B448]"
-                  : "text-gray-300 hover:text-[#F4B448]"
-              }`}
-            >
-              Whitepaper
+            <Link href="/whitepaper" legacyBehavior>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`text-sm font-medium transition-colors ${
+                  isActive("/whitepaper")
+                    ? "text-[#F4B448]"
+                    : "text-gray-300 hover:text-[#F4B448]"
+                }`}
+              >
+                Whitepaper
+              </a>
             </Link>
             <Link
               href="/announcement"

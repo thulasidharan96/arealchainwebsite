@@ -64,19 +64,19 @@ const advisors: AdvisorMember[] = [
   {
     name: "Mr. Adrian Oleary",
     role: "Head of Product Quality @ Light & Wonder",
-    image: "/team/adrian.jpg",
+    image: "/team/adrian.jpeg",
     linkedin: "https://www.linkedin.com/in/adrianoleary/",
   },
   {
     name: "Mr. James Capps",
     role: "Managing Director @ BlackRock",
-    image: "/team/james.jpg",
+    image: "/team/james.jpeg",
     linkedin: "https://www.linkedin.com/in/capps/",
   },
   {
     name: "Mr. Raghu Subramanian",
     role: "Executive Chairman @ Actyv.ai",
-    image: "/team/raghu.jpg",
+    image: "/team/raghu.jpeg",
     linkedin: "https://www.linkedin.com/in/raghu0101/",
   },
 ];
@@ -575,7 +575,7 @@ export default function Company(): JSX.Element {
 
                 {/* Dynamic grid center based on number of advisors */}
                 <div
-                  className={`grid gap-10 max-w-7xl mx-auto place-items-center ${
+                  className={`grid gap-10 max-w-7xl mx-auto ${
                     advisors.length === 1
                       ? "grid-cols-1"
                       : advisors.length === 2
@@ -586,15 +586,15 @@ export default function Company(): JSX.Element {
                   {advisors.map((advisor, index) => (
                     <motion.div
                       key={index}
-                      className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-[1.03]"
+                      className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] flex flex-col justify-self-center" // Add flex classes
                       variants={staggerItem}
                     >
                       <Image
                         src={advisor.image}
                         alt={advisor.name}
                         width={400}
-                        height={400}
-                        className="w-full h-64 object-cover"
+                        height={300}
+                        className="w-full h-[300px] object-cover flex-shrink-0" // Add flex-shrink-0
                       />
                       <div className="p-6 text-center">
                         <h3 className="text-xl font-semibold text-white mb-1">
