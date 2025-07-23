@@ -111,8 +111,7 @@ export default function SplashScreen({
           onError={() => setShowFallback(true)}
           style={{ maxHeight: "100dvh", maxWidth: "100dvw" }}
         >
-          <source src="/arlintro.mp4" type="video/mp4" />
-          <source src="/arlintro.webm" type="video/webm" />
+          <source src="/intro.mp4" type="video/mp4" />
         </video>
       ) : (
         // Fallback splash
