@@ -1,7 +1,29 @@
 {
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/whitepaper",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
+      "source": "/ArealChain_Whitepaper.pdf",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "ALLOWALL"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        }
+      ]
+    },
+    {
+      "source": "/((?!whitepaper|ArealChain_Whitepaper\\.pdf).*)",
       "headers": [
         {
           "key": "X-Frame-Options",
