@@ -82,7 +82,7 @@ const advisors: AdvisorMember[] = [
   {
     name: "Mr. Raghu Subramanian",
     role: "Executive Chairman @ Actyv.ai",
-    image: "/team/raghu.jpeg",
+    image: "/team/raghu.jpg",
     linkedin: "https://www.linkedin.com/in/raghu0101/",
   },
 ];
