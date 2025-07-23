@@ -1,0 +1,29 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.vercel.app *.spline.design *.googletagmanager.com *.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: *.unsplash.com *.vercel.app *.githubusercontent.com *.spline.design *.ytimg.com *.youtube.com *.google-analytics.com *.googletagmanager.com; font-src 'self' data:; connect-src 'self' *.vercel.app *.spline.design *.google-analytics.com *.analytics.google.com *.googletagmanager.com arealchain-api.troniextechnologies.com arl-bd.onrender.com; frame-src 'self' *.youtube.com *.youtube-nocookie.com *.spline.design; object-src 'self' *.spline.design;"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), autoplay=(self *.youtube.com *.youtube-nocookie.com)"
+        }
+      ]
+    }
+  ]
+}
