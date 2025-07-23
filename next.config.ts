@@ -4,12 +4,17 @@ const nextConfig: NextConfig = {
   // Enable React strict mode
   reactStrictMode: true,
 
+  // Build configuration
+  eslint: {
+    ignoreDuringBuilds: process.env.NODE_ENV === "development",
+  },
+  typescript: {
+    ignoreBuildErrors: process.env.NODE_ENV === "development",
+  },
+
   // Image optimization configuration
   images: {
-    // Enable optimization for production
     unoptimized: process.env.NODE_ENV === "development",
-
-    // Specify allowed domains explicitly
     remotePatterns: [
       {
         protocol: "https",
@@ -19,12 +24,17 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.arealchain.com",
       },
-      // Add other trusted domains as needed
       {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "**", // Allow all HTTPS domains
+      },
     ],
+    // Keep domains for backward compatibility
+    domains: ["localhost"],
   },
 
   // Build-time optimizations
@@ -32,18 +42,44 @@ const nextConfig: NextConfig = {
     optimizeCss: true,
   },
 
-  // Compression
+  // Enable compression
   compress: true,
 
-  // Environment-specific settings
-  ...(process.env.NODE_ENV === "development" && {
-    eslint: {
-      ignoreDuringBuilds: true,
-    },
-    typescript: {
-      ignoreBuildErrors: true,
-    },
-  }),
+  // Custom headers for PDF handling
+  async headers() {
+    return [
+      {
+        source: "/ArealChain_Whitepaper.pdf",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/pdf",
+          },
+          {
+            key: "Content-Disposition",
+            value: 'inline; filename="ArealChain_Whitepaper.pdf"',
+          },
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/whitepaper",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "SAMEORIGIN",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
