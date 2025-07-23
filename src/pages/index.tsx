@@ -3,7 +3,7 @@ import Hero from "@/src/components/hero";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -13,7 +13,6 @@ import {
   AccordionTrigger,
 } from "@/src/components/ui/accordion";
 import { properties } from "@/src/data/properties";
-import { motion, easeOut, Variants } from "framer-motion";
 import { Button } from "../components/ui/button";
 import Collaborators from "../components/landing/Collaborators";
 
@@ -25,7 +24,7 @@ if (typeof window !== "undefined") {
 export default function Home() {
   const router = useRouter();
 
-  // Refs for animation targets with proper typing
+  // Refs for animation targets
   const heroRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLElement>(null);
   const projectsRef = useRef<HTMLElement>(null);
@@ -35,16 +34,9 @@ export default function Home() {
   const faqRef = useRef<HTMLElement>(null);
   const ctaRef = useRef<HTMLElement>(null);
 
-  // Animation timeline refs for better cleanup
-  const tlRefs = useRef<gsap.core.Timeline[]>([]);
-
   const Accredited = [{ name: "VARA", src: "/Accrediters/vara.png" }];
 
-  interface ProductClickEvent {
-    (product: string): void;
-  }
-
-  const handleProductClick: ProductClickEvent = (product: string): void => {
+  const handleProductClick = (product: string): void => {
     switch (product) {
       case "Areal TaaS":
         router.push("/areal-suite/taas");
@@ -99,288 +91,63 @@ export default function Home() {
     },
   ];
 
-  // Optimized hover handlers using useCallback with proper typing
-  const handleCardHover = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    gsap.to(e.currentTarget, {
-      scale: 1.05,
-      duration: 0.3,
-      ease: "power2.out",
-      overwrite: true,
-    });
-  }, []);
-
-  const handleCardLeave = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    gsap.to(e.currentTarget, {
-      scale: 1,
-      duration: 0.3,
-      ease: "power2.out",
-      overwrite: true,
-    });
-  }, []);
-
-  const handleButtonHover = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      gsap.to(e.currentTarget, {
-        scale: 1.05,
-        duration: 0.2,
-        ease: "power2.out",
-        overwrite: true,
-      });
-    },
-    []
-  );
-
-  const handleButtonLeave = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      gsap.to(e.currentTarget, {
-        scale: 1,
-        duration: 0.2,
-        ease: "power2.out",
-        overwrite: true,
-      });
-    },
-    []
-  );
-
-  // Animation variants for Framer Motion with proper typing
-  const fadeInUp: Variants = {
-    initial: { opacity: 0, y: 60 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: easeOut } },
-  };
-
-  const bounceIn: Variants = {
-    initial: { opacity: 0, scale: 0.3 },
-    animate: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        type: "spring" as const,
-        duration: 0.8,
-        bounce: 0.5,
-      },
-    },
-  };
-
-  const staggerContainer: Variants = {
-    initial: {},
-    animate: {
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const textReveal: Variants = {
-    initial: { opacity: 0, y: 20 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: easeOut,
-      },
-    },
-  };
-
   useEffect(() => {
-    // Enhanced ScrollTrigger configuration for better performance
-    ScrollTrigger.config({
-      limitCallbacks: true,
-      sync: true,
-    });
+    // Simple fade-in animations on scroll
+    const animateOnScroll = (
+      selector: string,
+      triggerElement: HTMLElement | null
+    ) => {
+      if (!triggerElement) return;
 
-    // Batch DOM queries for better performance with proper typing
-    const statCards = gsap.utils.toArray<Element>(".stat-card");
-    const projectCards = gsap.utils.toArray<Element>(".project-card");
-    const suiteCards = gsap.utils.toArray<Element>(".suite-card");
-    const partnerLogos = gsap.utils.toArray<Element>(".partner-logo");
-    const faqItemElements = gsap.utils.toArray<Element>(".faq-item");
+      const elements = triggerElement.querySelectorAll(selector);
 
-    // Set initial states with optimized selectors
-    const elementsToAnimate: Element[] = [
-      ...statCards,
-      ...projectCards,
-      ...suiteCards,
-      ...partnerLogos,
-      ...faqItemElements,
-    ];
+      gsap.set(elements, { opacity: 0, y: 30 });
 
-    gsap.set(elementsToAnimate, {
-      opacity: 0,
-      y: 30,
-      force3D: true,
-    });
-
-    // Optimized hero animation
-    if (heroRef.current) {
-      const heroTl = gsap.timeline();
-      heroTl.to(heroRef.current, {
-        opacity: 1,
-        duration: 1,
-        ease: "power2.out",
-        force3D: true,
-      });
-      tlRefs.current.push(heroTl);
-    }
-
-    // Create a more efficient animation function with proper typing
-    const createScrollAnimation = (
-      trigger: HTMLElement | null,
-      elements: Element[],
-      headerSelector?: string,
-      delay = 0
-    ): ScrollTrigger | null => {
-      if (!trigger) return null;
-
-      return ScrollTrigger.create({
-        trigger,
-        start: "top 85%",
-        once: true,
+      ScrollTrigger.create({
+        trigger: triggerElement,
+        start: "top 80%",
         onEnter: () => {
-          const tl = gsap.timeline();
-
-          // Animate header first if exists
-          if (headerSelector) {
-            const header = trigger.querySelector(headerSelector);
-            if (header) {
-              tl.to(header, {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                ease: "power2.out",
-                force3D: true,
-              });
-            }
-          }
-
-          // Animate elements with stagger
-          if (elements.length > 0) {
-            tl.to(
-              elements,
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                stagger: 0.08,
-                ease: "power2.out",
-                force3D: true,
-              },
-              delay
-            );
-          }
-
-          tlRefs.current.push(tl);
+          gsap.to(elements, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power2.out",
+          });
         },
       });
     };
 
-    // Stats Section
-    createScrollAnimation(statsRef.current, statCards, "h2", 0.2);
+    // Apply animations to each section
+    animateOnScroll(".stat-card", statsRef.current);
+    animateOnScroll(".project-card", projectsRef.current);
+    animateOnScroll(".suite-card", suiteRef.current);
+    animateOnScroll(".partner-logo", partnersRef.current);
+    animateOnScroll(".partner-logo", AccreditersRef.current);
+    animateOnScroll(".faq-item", faqRef.current);
 
-    // Projects Section
-    createScrollAnimation(projectsRef.current, projectCards, "h2", 0.2);
+    // Animate section headers
+    const headers = document.querySelectorAll("section h2, section p");
+    gsap.set(headers, { opacity: 0, y: 20 });
 
-    // Suite Section
-    if (suiteRef.current) {
+    headers.forEach((header) => {
       ScrollTrigger.create({
-        trigger: suiteRef.current,
+        trigger: header,
         start: "top 85%",
-        once: true,
         onEnter: () => {
-          if (suiteRef.current) {
-            const tl = gsap.timeline();
-            const headers = Array.from(
-              suiteRef.current.querySelectorAll("h2, p")
-            );
-
-            tl.to(headers, {
-              opacity: 1,
-              y: 0,
-              duration: 0.6,
-              stagger: 0.1,
-              ease: "power2.out",
-              force3D: true,
-            }).to(
-              suiteCards,
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                stagger: 0.08,
-                ease: "power2.out",
-                force3D: true,
-              },
-              0.3
-            );
-
-            tlRefs.current.push(tl);
-          }
+          gsap.to(header, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          });
         },
       });
-    }
+    });
 
-    // Partners Section
-    createScrollAnimation(partnersRef.current, partnerLogos, "h2, p", 0.2);
-
-    // Accreditors Section
-    if (AccreditersRef.current) {
-      const accreditorLogos = gsap.utils.toArray<Element>(
-        AccreditersRef.current.querySelectorAll(".partner-logo")
-      );
-      createScrollAnimation(
-        AccreditersRef.current,
-        accreditorLogos,
-        "h2, p",
-        0.2
-      );
-    }
-
-    // FAQ Section
-    createScrollAnimation(faqRef.current, faqItemElements, "h2, p", 0.2);
-
-    // CTA Section
-    if (ctaRef.current) {
-      ScrollTrigger.create({
-        trigger: ctaRef.current,
-        start: "top 85%",
-        once: true,
-        onEnter: () => {
-          if (ctaRef.current) {
-            const elements = Array.from(
-              ctaRef.current.querySelectorAll("p, h2, button")
-            );
-            const tl = gsap.timeline();
-
-            tl.to(elements, {
-              opacity: 1,
-              y: 0,
-              duration: 0.6,
-              stagger: 0.1,
-              ease: "power2.out",
-              force3D: true,
-            });
-
-            tlRefs.current.push(tl);
-          }
-        },
-      });
-    }
-
-    // Enhanced cleanup function
+    // Cleanup
     return () => {
-      // Kill all ScrollTriggers
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-
-      // Kill all custom timelines
-      tlRefs.current.forEach((tl) => {
-        if (tl && tl.kill) {
-          tl.kill();
-        }
-      });
-      tlRefs.current = [];
-
-      // Clear any remaining tweens
-      gsap.killTweensOf("*");
     };
   }, []);
 
@@ -397,61 +164,30 @@ export default function Home() {
       </div>
 
       {/* Special Stats Section */}
-      <motion.section
-        className="py-20 px-4"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.3, margin: "-100px" }}
-        variants={staggerContainer}
-      >
+      <section ref={statsRef} className="py-20 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <motion.h2
-            className="text-3xl font-bold text-white mb-16"
-            variants={fadeInUp}
-          >
+          <h2 className="text-3xl font-bold text-white mb-16">
             What makes AREAL Special?
-          </motion.h2>
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left"
-            variants={staggerContainer}
-          >
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-white text-left">
             {specialStats.map((item, i) => (
-              <motion.div
+              <div
                 key={i}
-                className="bg-gray-800/60 p-6 rounded-xl stat-card"
-                variants={bounceIn}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 10px 30px rgba(244, 180, 72, 0.3)",
-                  transition: { type: "spring", stiffness: 300, damping: 20 },
-                }}
+                className="stat-card bg-gray-800/60 p-6 rounded-xl hover:scale-105 hover:shadow-xl hover:shadow-[#F4B448]/20 transition-all duration-300"
               >
-                <motion.h3
-                  className="text-4xl font-extrabold text-[#F4B448] mb-2"
-                  initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    type: "spring",
-                    duration: 0.8,
-                    delay: i * 0.1,
-                    bounce: 0.6,
-                  }}
-                >
+                <h3 className="text-4xl font-extrabold text-[#F4B448] mb-2">
                   {item.prefix}
                   <span className="counter" data-value={item.value}>
                     {item.value}
                   </span>
                   {item.suffix}
-                </motion.h3>
-                <motion.p className="text-gray-300" variants={textReveal}>
-                  {item.label}
-                </motion.p>
-              </motion.div>
+                </h3>
+                <p className="text-gray-300">{item.label}</p>
+              </div>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Section Separator */}
       <div className="max-w-7xl mx-auto px-4 py-4">
@@ -461,16 +197,14 @@ export default function Home() {
       {/* Accredited Section */}
       <section ref={AccreditersRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-4 opacity-0">
+          <h2 className="text-2xl font-bold text-white mb-4">
             Accredited With
           </h2>
           <div className="flex flex-row gap-8 items-center justify-center">
             {Accredited.map((Accrediter, i) => (
               <div
                 key={i}
-                className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-[200px] w-[400px] cursor-pointer mt-4"
-                onMouseEnter={handleCardHover}
-                onMouseLeave={handleCardLeave}
+                className="partner-logo bg-gray-800/50 p-4 rounded-lg flex items-center justify-center h-[200px] w-[400px] cursor-pointer mt-4 hover:scale-105 hover:border hover:border-[#F4B448] transition-all duration-300"
               >
                 <Image
                   src={Accrediter.src}
@@ -492,7 +226,7 @@ export default function Home() {
       {/* Featured Projects Section */}
       <section ref={projectsRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center justify-center">
-          <h2 className="text-3xl font-bold text-white mb-12 opacity-0">
+          <h2 className="text-3xl font-bold text-white mb-12">
             Featured Projects
           </h2>
           <div className="flex flex-wrap justify-center gap-8 max-w-7xl mx-auto">
@@ -500,9 +234,7 @@ export default function Home() {
               <div key={property.id} className="project-card">
                 <Link
                   href={`/property/${property.id}`}
-                  className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] transition-colors p-6 text-left w-full max-w-sm block"
-                  onMouseEnter={handleCardHover}
-                  onMouseLeave={handleCardLeave}
+                  className="bg-gray-900/50 border border-gray-800 rounded-xl hover:border-[#F4B448] hover:scale-105 transition-all duration-300 p-6 text-left w-full max-w-sm block"
                 >
                   <div className="aspect-[4/3] w-full overflow-hidden rounded-lg mb-4 relative">
                     <Image
@@ -535,14 +267,14 @@ export default function Home() {
       <section ref={suiteRef} className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-6 opacity-0">
+            <h2 className="text-4xl font-bold text-white mb-6">
               The Areal Suite
             </h2>
-            <h2 className="text-2xl font-bold text-white mb-6 opacity-0">
+            <h2 className="text-2xl font-bold text-white mb-6">
               Unlock the Future of Real-World Assets — All in One Powerful
               Suite.
             </h2>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-8 opacity-0">
+            <p className="text-gray-400 text-lg max-w-3xl mx-auto mb-8">
               The World's First End-to-End Blockchain Ecosystem for Real Assets
               is Now Live. In the words of our CEO: "Simple, Secure, Seamless —
               That's the Areal promise.
@@ -558,18 +290,14 @@ export default function Home() {
                 <button
                   key={product}
                   onClick={() => handleProductClick(product)}
-                  className="bg-gray-800 text-white px-4 py-2 rounded-full transition-colors hover:bg-[#F4B448] hover:text-black"
-                  onMouseEnter={handleButtonHover}
-                  onMouseLeave={handleButtonLeave}
+                  className="bg-gray-800 text-white px-4 py-2 rounded-full transition-all duration-300 hover:bg-[#F4B448] hover:text-black hover:scale-105"
                 >
                   {product}
                 </button>
               ))}
             </div>
             <button
-              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-6 py-3 rounded-lg"
-              onMouseEnter={handleButtonHover}
-              onMouseLeave={handleButtonLeave}
+              className="bg-[#F4B448] hover:bg-[#F4B448]/90 hover:scale-105 text-black font-semibold px-6 py-3 rounded-lg transition-all duration-300"
               onClick={() => router.push("/areal-suite")}
             >
               Explore our Ecosystem →
@@ -599,9 +327,7 @@ export default function Home() {
             ].map((feature, i) => (
               <div
                 key={i}
-                className="suite-card bg-gray-900/50 p-8 rounded-xl border border-gray-800 transition-all duration-300 hover:border-[#F4B448] cursor-pointer"
-                onMouseEnter={handleCardHover}
-                onMouseLeave={handleCardLeave}
+                className="suite-card bg-gray-900/50 p-8 rounded-xl border border-gray-800 hover:border-[#F4B448] hover:scale-105 transition-all duration-300 cursor-pointer"
               >
                 <div className="w-12 h-12 bg-[#F4B448] rounded-lg mb-6 flex items-center justify-center">
                   <svg
@@ -641,10 +367,8 @@ export default function Home() {
       <section ref={faqRef} className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4 opacity-0">
-              FAQ
-            </h2>
-            <p className="text-gray-400 opacity-0">
+            <h2 className="text-3xl font-bold text-white mb-4">FAQ</h2>
+            <p className="text-gray-400">
               Before You Ask, We've Tokenized the Answer.
             </p>
           </div>
@@ -654,7 +378,7 @@ export default function Home() {
                 <div key={i} className="faq-item">
                   <AccordionItem
                     value={`item-${i}`}
-                    className="bg-gray-800/50 rounded-lg border border-gray-700 data-[state=open]:border-[#F4B448]/50"
+                    className="bg-gray-800/50 rounded-lg border border-gray-700 data-[state=open]:border-[#F4B448]/50 hover:border-[#F4B448]/30 transition-colors duration-300"
                   >
                     <AccordionTrigger className="p-6 text-left font-semibold text-white hover:no-underline">
                       {item.question}
@@ -669,7 +393,12 @@ export default function Home() {
           </div>
         </div>
         <div className="flex justify-center mt-4">
-          <Button onClick={() => router.push("/faqs")}>More FAQ</Button>
+          <Button
+            onClick={() => router.push("/faqs")}
+            className="hover:scale-105 transition-transform duration-300"
+          >
+            More FAQ
+          </Button>
         </div>
       </section>
 
@@ -681,17 +410,15 @@ export default function Home() {
       {/* Final CTA Section */}
       <section ref={ctaRef} className="py-20 px-4 mb-10">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4 opacity-0">
+          <h2 className="text-3xl font-bold text-white mb-4">
             The Opportunity to Invest in Real Assets on Blockchain is Here
           </h2>
-          <h2 className="text-3xl font-bold text-white mb-8 opacity-0">
+          <h2 className="text-3xl font-bold text-white mb-8">
             Don't Miss the Opportunity
           </h2>
           <button
-            className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 py-4 rounded-lg text-lg opacity-0"
+            className="bg-[#F4B448] hover:bg-[#F4B448]/90 hover:scale-105 text-black font-semibold px-8 py-4 rounded-lg text-lg transition-all duration-300"
             onClick={() => router.push("/contact")}
-            onMouseEnter={handleButtonHover}
-            onMouseLeave={handleButtonLeave}
           >
             Join the Movement
           </button>

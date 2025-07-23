@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/src/components/ui/button";
@@ -24,8 +24,6 @@ export default function Hero() {
   const leftContentRef = useRef<HTMLDivElement | null>(null);
   const rightContentRef = useRef<HTMLDivElement | null>(null);
   const videoSectionRef = useRef<HTMLDivElement | null>(null);
-  const blobsRef = useRef<HTMLDivElement | null>(null);
-  const tlRefs = useRef<gsap.core.Timeline[]>([]);
 
   const handleCreateWealthClick = () => (window.location.href = "/contact");
   const handleRoadmapClick = () => (window.location.href = "/roadmap");
@@ -36,109 +34,53 @@ export default function Hero() {
       "noopener,noreferrer"
     );
 
-  const handleButtonHover = (e: React.MouseEvent<HTMLElement>) =>
-    gsap.to(e.currentTarget, {
-      scale: 1.05,
-      duration: 0.3,
-      ease: "power2.out",
-      overwrite: true,
-    });
-
-  const handleButtonLeave = (e: React.MouseEvent<HTMLElement>) =>
-    gsap.to(e.currentTarget, {
-      scale: 1,
-      duration: 0.3,
-      ease: "power2.out",
-      overwrite: true,
-    });
-
   useEffect(() => {
-    requestIdleCallback(() => {
-      const leftChildren = leftContentRef.current?.children || [];
-      const right = rightContentRef.current;
-      const videoChildren = videoSectionRef.current?.children || [];
-      const blobs = blobsRef.current?.children || [];
+    // Simple fade-in animations on load and scroll
+    const animateOnLoad = (elements: Element[]) => {
+      gsap.set(elements, { opacity: 0, y: 30 });
 
-      gsap.set([...leftChildren, right, ...videoChildren], {
-        opacity: 0,
-        y: 50,
+      gsap.to(elements, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power2.out",
+        delay: 0.2,
       });
-      gsap.set(blobs, { opacity: 0, scale: 0.8 });
+    };
 
-      const heroTl = gsap.timeline({ delay: 0.2 });
-      heroTl
-        .to(blobs, {
-          opacity: 1,
-          scale: 1,
-          duration: 1.5,
-          stagger: 0.2,
-          ease: "power2.out",
-        })
-        .to(
-          leftChildren,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out",
-          },
-          0.3
-        )
-        .to(
-          right,
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power2.out",
-          },
-          0.6
-        );
+    // Hero content animation on load
+    if (leftContentRef.current && rightContentRef.current) {
+      const leftElements = Array.from(leftContentRef.current.children);
+      const rightElement = rightContentRef.current;
 
-      tlRefs.current.push(heroTl);
+      animateOnLoad([...leftElements, rightElement]);
+    }
+
+    // Video section animation on scroll
+    if (videoSectionRef.current) {
+      const videoElements = Array.from(videoSectionRef.current.children);
+
+      gsap.set(videoElements, { opacity: 0, y: 30 });
 
       ScrollTrigger.create({
         trigger: videoSectionRef.current,
-        start: "top 85%",
-        once: true,
+        start: "top 80%",
         onEnter: () => {
-          const videoTl = gsap.timeline();
-          videoTl.to(videoChildren, {
+          gsap.to(videoElements, {
             opacity: 1,
             y: 0,
-            duration: 0.8,
-            stagger: 0.2,
+            duration: 0.6,
+            stagger: 0.1,
             ease: "power2.out",
           });
-          tlRefs.current.push(videoTl);
         },
       });
+    }
 
-      const floatTl = gsap.timeline({ repeat: -1, yoyo: true });
-      floatTl.to(blobs, {
-        y: "+=20",
-        rotation: "+=5",
-        duration: 4,
-        stagger: 0.5,
-        ease: "sine.inOut",
-      });
-      tlRefs.current.push(floatTl);
-
-      const gradientTl = gsap.timeline({ repeat: -1 });
-      gradientTl.to(".animate-gradient", {
-        backgroundPosition: "200% center",
-        duration: 3,
-        ease: "none",
-      });
-      tlRefs.current.push(gradientTl);
-    });
-
+    // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      tlRefs.current.forEach((tl) => tl.kill());
-      tlRefs.current = [];
-      gsap.killTweensOf("*");
     };
   }, []);
 
@@ -148,9 +90,9 @@ export default function Hero() {
       className="hero-section relative min-h-screen w-full bg-transparent overflow-hidden mt-20 md:mt-16 lg:mt-16"
     >
       {/* Blobs */}
-      <div ref={blobsRef} className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#F4B448]/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-[#F4B448]/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
       </div>
 
       {/* Hero Content */}
@@ -160,7 +102,7 @@ export default function Hero() {
             Transforming the World's <br /> Assets with
           </h1>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-tight">
-            <span className="text-transparent bg-clip-text animate-gradient bg-gradient-to-r from-yellow-400 via-[#F4B448] to-yellow-400 bg-[length:200%_200%]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-[#F4B448] to-yellow-400 animate-pulse">
               AREAL
             </span>
           </h1>
@@ -172,20 +114,16 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               size="lg"
-              className="bg-[#F4B448] hover:bg-[#F4B448]/90 text-black font-semibold px-8 transition-all duration-300"
+              className="bg-[#F4B448] hover:bg-[#F4B448]/90 hover:scale-105 text-black font-semibold px-8 transition-all duration-300"
               onClick={handleCreateWealthClick}
-              onMouseEnter={handleButtonHover}
-              onMouseLeave={handleButtonLeave}
             >
               Create your Wealth with Areal →
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-gray-600 text-gray-300 hover:bg-gray-800 transition-all duration-300"
+              className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:scale-105 transition-all duration-300"
               onClick={handleRoadmapClick}
-              onMouseEnter={handleButtonHover}
-              onMouseLeave={handleButtonLeave}
             >
               View our Roadmap
             </Button>
@@ -206,14 +144,12 @@ export default function Hero() {
         className="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 pb-12 pt-8"
       >
         <h2
-          className="text-3xl sm:text-4xl md:text-4xl font-bold text-white mb-6 text-center cursor-pointer transition-colors duration-300 hover:text-[#F4B448]"
+          className="text-3xl sm:text-4xl md:text-4xl font-bold text-white mb-6 text-center cursor-pointer hover:text-[#F4B448] hover:scale-105 transition-all duration-300"
           onClick={handleYouTubeClick}
-          onMouseEnter={handleButtonHover}
-          onMouseLeave={handleButtonLeave}
         >
           See What's Happening at AREAL
         </h2>
-        <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833] transition-all duration-300 hover:shadow-[0_0_35px_#F4B44850]">
+        <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833] hover:shadow-[0_0_35px_#F4B44850] hover:scale-[1.02] transition-all duration-300">
           <iframe
             className="w-full h-full"
             src="https://www.youtube.com/embed/uywf3RlK5aE?autoplay=1&mute=1&loop=1&playlist=uywf3RlK5aE&controls=0&modestbranding=1&showinfo=0&rel=0"

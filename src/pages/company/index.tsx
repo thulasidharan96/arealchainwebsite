@@ -1,5 +1,5 @@
 import Layout from "@/src/components/layout";
-import TwitterFeed from "@/src/components/TwitterFeed"; // Import the new component
+import TwitterFeed from "@/src/components/TwitterFeed";
 import DiscordMessages from "@/src/components/DiscordMessages";
 import {
   Card,
@@ -20,16 +20,22 @@ import {
   Linkedin,
 } from "lucide-react";
 import Image from "next/image";
-import { motion, useInView } from "framer-motion";
-import { JSX, useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useRef } from "react";
 import SplineCompany from "@/src/components/SplineCompany";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const SplineCube = dynamic(() => import("@/src/components/SplineCube"), {
   ssr: false,
 });
+
+// Register GSAP plugins
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface TeamMember {
   name: string;
@@ -134,84 +140,6 @@ const mediaLogos: MediaLogo[] = [
   { name: "CoinTelegraph", src: "/media/cointelegraph.png" },
 ];
 
-// Scroll Animation variants
-const fadeInUp = {
-  initial: {
-    opacity: 0,
-    y: 60,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.6, -0.05, 0.01, 0.99],
-    },
-  },
-};
-
-const bounceUp = {
-  initial: {
-    opacity: 0,
-    y: 100,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.6, -0.05, 0.01, 0.99],
-      type: "spring",
-      damping: 12,
-      stiffness: 100,
-    },
-  },
-};
-
-const staggerContainer = {
-  initial: {},
-  animate: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const staggerItem = {
-  initial: {
-    opacity: 0,
-    y: 40,
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.6, -0.05, 0.01, 0.99],
-    },
-  },
-};
-
-const scaleUp = {
-  initial: {
-    opacity: 0,
-    scale: 0.8,
-    y: 50,
-  },
-  animate: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: [0.6, -0.05, 0.01, 0.99],
-      type: "spring",
-      damping: 15,
-      stiffness: 120,
-    },
-  },
-};
-
 export default function Company(): JSX.Element {
   const heroRef = useRef<HTMLDivElement>(null);
   const missionRef = useRef<HTMLDivElement>(null);
@@ -220,17 +148,69 @@ export default function Company(): JSX.Element {
   const videoRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
-  const heroInView = useInView(heroRef, { once: true, margin: "-100px" });
-  const missionInView = useInView(missionRef, { once: true, margin: "-50px" });
-  const recognitionInView = useInView(recognitionRef, {
-    once: true,
-    margin: "-50px",
-  });
-  const founderInView = useInView(founderRef, { once: true, margin: "-50px" });
-  const videoInView = useInView(videoRef, { once: true, margin: "-50px" });
-  const ctaInView = useInView(ctaRef, { once: true, margin: "-50px" });
-
   const router = useRouter();
+
+  useEffect(() => {
+    // Simple fade-in animations on scroll
+    const animateOnScroll = (
+      selector: string,
+      triggerElement: HTMLElement | null
+    ) => {
+      if (!triggerElement) return;
+
+      const elements = triggerElement.querySelectorAll(selector);
+
+      gsap.set(elements, { opacity: 0, y: 30 });
+
+      ScrollTrigger.create({
+        trigger: triggerElement,
+        start: "top 80%",
+        onEnter: () => {
+          gsap.to(elements, {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: "power2.out",
+          });
+        },
+      });
+    };
+
+    // Apply animations to each section
+    animateOnScroll(".hero-element", heroRef.current);
+    animateOnScroll(".mission-element", missionRef.current);
+    animateOnScroll(".recognition-element", recognitionRef.current);
+    animateOnScroll(".founder-element", founderRef.current);
+    animateOnScroll(
+      ".advisor-card",
+      document.querySelector(".advisory-section")
+    );
+
+    // Animate section headers
+    const headers = document.querySelectorAll("section h2, .section-title");
+    gsap.set(headers, { opacity: 0, y: 20 });
+
+    headers.forEach((header) => {
+      ScrollTrigger.create({
+        trigger: header,
+        start: "top 85%",
+        onEnter: () => {
+          gsap.to(header, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+          });
+        },
+      });
+    });
+
+    // Cleanup
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   return (
     <Layout>
@@ -240,51 +220,33 @@ export default function Company(): JSX.Element {
           {/* Hero Section */}
           <div className="pt-32 pb-20 px-4">
             <div className="max-w-7xl mx-auto">
-              <motion.div
-                ref={heroRef}
-                className="text-center mb-16"
-                initial="initial"
-                animate={heroInView ? "animate" : "initial"}
-                variants={staggerContainer}
-              >
-                <motion.div variants={fadeInUp}>
+              <div ref={heroRef} className="text-center mb-16">
+                <div className="hero-element">
                   <Badge className="mb-6 bg-[#F4B448]/20 text-[#F4B448] border-[#F4B448]/30 hover:bg-[#F4B448]/30 transition-colors">
                     <Zap className="w-4 h-4 mr-2" />
                     From Vision to Reality
                   </Badge>
-                </motion.div>
-                <motion.h1
-                  className="text-5xl font-bold text-white mb-6"
-                  variants={bounceUp}
-                >
+                </div>
+                <h1 className="hero-element text-5xl font-bold text-white mb-6">
                   AREAL : The Future of Real Assets
-                </motion.h1>
-                <motion.p
-                  className="text-gray-400 text-xl max-w-3xl mx-auto"
-                  variants={fadeInUp}
-                >
+                </h1>
+                <p className="hero-element text-gray-400 text-xl max-w-3xl mx-auto">
                   From Vision to Reality: Powering the Future of Real-World
                   Investments
-                </motion.p>
-                <motion.p
-                  className="text-gray-400 text-xl max-w-3xl mx-auto"
-                  variants={fadeInUp}
-                >
+                </p>
+                <p className="hero-element text-gray-400 text-xl max-w-3xl mx-auto">
                   At Areal, we're not just building blockchain infrastructure —
                   we're reshaping how the world invests in real-world assets.
-                </motion.p>
-              </motion.div>
+                </p>
+              </div>
 
               {/* Mission & Vision */}
-              <motion.div
+              <div
                 ref={missionRef}
                 className="grid lg:grid-cols-2 gap-16 mb-20"
-                initial="initial"
-                animate={missionInView ? "animate" : "initial"}
-                variants={staggerContainer}
               >
-                <motion.div className="group" variants={bounceUp}>
-                  <Card className="h-full bg-gray-900/50 border-gray-800 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                <div className="mission-element group">
+                  <Card className="h-full bg-gray-900/50 border-gray-800 hover:bg-gray-900/70 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                     <CardContent className="p-8">
                       <div className="flex items-center mb-6">
                         <div className="w-12 h-12 bg-[#F4B448] rounded-xl flex items-center justify-center mr-4 group-hover:scale-110 transition-transform duration-300">
@@ -311,17 +273,14 @@ export default function Company(): JSX.Element {
                       </div>
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
 
-                <motion.div className="space-y-8" variants={fadeInUp}>
+                <div className="mission-element space-y-8">
                   {/* Stats */}
-                  <motion.div
-                    className="grid grid-cols-3 gap-6"
-                    variants={staggerContainer}
-                  >
+                  <div className="grid grid-cols-3 gap-6">
                     {stats.map((stat, index) => (
-                      <motion.div key={index} variants={staggerItem}>
-                        <Card className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70  transition-all duration-300 hover:-translate-y-1 group">
+                      <div key={index} className="mission-element">
+                        <Card className="bg-gray-900/50 border-gray-800 text-center hover:bg-gray-900/70 hover:-translate-y-1 hover:scale-105 transition-all duration-300 group">
                           <CardContent className="p-6 backdrop-blur-3xl">
                             <div className="flex justify-center mb-3">
                               <stat.icon className="w-8 h-8 text-[#F4B448] group-hover:scale-110 transition-transform duration-300" />
@@ -334,15 +293,15 @@ export default function Company(): JSX.Element {
                             </div>
                           </CardContent>
                         </Card>
-                      </motion.div>
+                      </div>
                     ))}
-                  </motion.div>
+                  </div>
 
                   {/* Features */}
-                  <motion.div className="space-y-4" variants={staggerContainer}>
+                  <div className="space-y-4">
                     {features.map((feature, index) => (
-                      <motion.div key={index} variants={staggerItem}>
-                        <Card className="bg-gray-900/30 border-gray-800 hover:bg-gray-900/50 transition-all duration-300 hover:-translate-y-1 group">
+                      <div key={index} className="mission-element">
+                        <Card className="bg-gray-900/30 border-gray-800 hover:bg-gray-900/50 hover:-translate-y-1 hover:scale-105 transition-all duration-300 group">
                           <CardContent className="p-6 backdrop-blur-3xl">
                             <div className="flex items-start space-x-4">
                               <div className="flex-shrink-0">
@@ -361,49 +320,31 @@ export default function Company(): JSX.Element {
                             </div>
                           </CardContent>
                         </Card>
-                      </motion.div>
+                      </div>
                     ))}
-                  </motion.div>
-                </motion.div>
-              </motion.div>
+                  </div>
+                </div>
+              </div>
 
               {/* Vision Section */}
-              <motion.div
-                className="text-center mb-20"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={staggerContainer}
-              >
-                <motion.h2
-                  className="text-3xl font-bold text-white mb-4"
-                  variants={fadeInUp}
-                >
+              <div className="text-center mb-20">
+                <h2 className="section-title text-3xl font-bold text-white mb-4">
                   Our Vision
-                </motion.h2>
-                <motion.div
-                  className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
-                  variants={scaleUp}
-                ></motion.div>
-                <motion.p
-                  className="text-gray-400 text-lg max-w-4xl mx-auto mb-8"
-                  variants={fadeInUp}
-                >
+                </h2>
+                <div className="section-title w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
+                <p className="section-title text-gray-400 text-lg max-w-4xl mx-auto mb-8">
                   To become the world's leading blockchain ecosystem for
                   real-world asset tokenization — where anyone, anywhere can
                   invest in tangible, secure, and accessible real estate assets
                   with the ease of digital finance.
-                </motion.p>
-                <motion.p
-                  className="text-gray-400 text-lg max-w-3xl mx-auto mb-8"
-                  variants={fadeInUp}
-                >
+                </p>
+                <p className="section-title text-gray-400 text-lg max-w-3xl mx-auto mb-8">
                   We envision a future where blockchain bridges the gap between
                   traditional investment barriers and modern financial freedom —
                   unlocking new wealth-building opportunities across the globe.
-                </motion.p>
-                <motion.div className="max-w-2xl mx-auto" variants={bounceUp}>
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/70 transition-all duration-300 hover:-translate-y-1">
+                </p>
+                <div className="section-title max-w-2xl mx-auto">
+                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 hover:bg-gray-900/70 hover:-translate-y-1 hover:scale-105 transition-all duration-300">
                     <p className="text-[#F4B448] text-2xl font-bold mb-2">
                       Simple. Secure. Seamless.
                     </p>
@@ -412,90 +353,59 @@ export default function Company(): JSX.Element {
                       AREAL.
                     </p>
                   </div>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
 
               {/* Recognition */}
-              <motion.div
-                ref={recognitionRef}
-                className="text-center mb-20"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={staggerContainer}
-              >
-                <motion.h2
-                  className="text-3xl font-bold text-white mb-4"
-                  variants={fadeInUp}
-                >
+              <div ref={recognitionRef} className="text-center mb-20">
+                <h2 className="section-title text-3xl font-bold text-white mb-4">
                   Areal in the Limelight
-                </motion.h2>
-                <motion.div
-                  className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"
-                  variants={scaleUp}
-                ></motion.div>
-                <motion.p
-                  className="text-gray-400 text-lg max-w-3xl mx-auto mb-12"
-                  variants={fadeInUp}
-                >
+                </h2>
+                <div className="section-title w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
+                <p className="section-title text-gray-400 text-lg max-w-3xl mx-auto mb-12">
                   We've been featured in leading global and regional
                   publications for our innovative approach to real estate
                   tokenization.
-                </motion.p>
-                <motion.div
-                  className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-16 items-center"
-                  variants={staggerContainer}
-                >
+                </p>
+                <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-16 items-center">
                   {mediaLogos.map((media, index) => (
-                    <motion.div
+                    <div
                       key={media.name}
-                      className="flex justify-center items-center h-20 group"
-                      variants={staggerItem}
-                      whileHover={{ scale: 1.1 }}
+                      className="recognition-element flex justify-center items-center h-20 group hover:scale-110 transition-transform duration-300"
                     >
                       <Image
                         src={media.src}
                         alt={media.name}
                         width={250}
                         height={250}
-                        className="w-25 h-25 object-contain transition-all duration-300 group-hover:scale-[1.05]"
+                        className="w-25 h-25 object-contain"
                       />
-                    </motion.div>
+                    </div>
                   ))}
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
 
               {/* Meet the Founder */}
-              <motion.div
+              <div
                 ref={founderRef}
                 className="mb-20 flex flex-col items-center"
-                initial="initial"
-                animate={founderInView ? "animate" : "initial"}
-                variants={staggerContainer}
               >
-                <motion.div className="text-center mb-12" variants={fadeInUp}>
-                  <h2 className="text-3xl font-bold text-white mb-4">
+                <div className="text-center mb-12">
+                  <h2 className="section-title text-3xl font-bold text-white mb-4">
                     Meet the Founder
                   </h2>
-                  <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
-                  <p className="text-gray-400 text-lg max-w-3xl mx-auto">
+                  <div className="section-title w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
+                  <p className="section-title text-gray-400 text-lg max-w-3xl mx-auto">
                     Our founder is the visionary behind Areal, with a deep
                     passion for innovation and technology. Leading the company
                     into the future, they bring unparalleled expertise to the
                     real estate and tech industries.
                   </p>
-                </motion.div>
+                </div>
 
-                <motion.div
-                  className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col flex-col"
-                  variants={staggerContainer}
-                >
+                <div className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col flex-col">
                   {/* Founder Image  */}
-                  <motion.div
-                    className="bg-transparent rounded-lg border border-[#F4B448] overflow-hidden group hover:scale-105 transition-all duration-300"
-                    variants={scaleUp}
-                    whileHover={{ scale: 1.05 }}
-                  >
+                  <div className="founder-element bg-transparent rounded-lg border border-[#F4B448] overflow-hidden group hover:scale-105 transition-all duration-300">
                     <Image
                       src="/team/founder.jpg"
                       alt="Founder"
@@ -503,13 +413,10 @@ export default function Company(): JSX.Element {
                       height={350}
                       className="object-cover"
                     />
-                  </motion.div>
+                  </div>
 
                   {/* Founder Content */}
-                  <motion.div
-                    className="flex flex-col bg-black/50 p-4 rounded-2xl justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0 backdrop-blur-3xl"
-                    variants={bounceUp}
-                  >
+                  <div className="founder-element flex flex-col bg-black/50 p-4 rounded-2xl justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0 backdrop-blur-3xl">
                     <h3 className="text-white text-2xl font-semibold">
                       Sripriya Kalyanasundaram
                     </h3>
@@ -538,7 +445,7 @@ export default function Company(): JSX.Element {
                         href="https://www.linkedin.com/in/sripriya-kalyanasundaram-7964b28/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-transparent hover:bg-gray-800/50 text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-colors duration-200"
+                        className="inline-flex items-center gap-2 bg-transparent hover:bg-gray-800/50 hover:scale-105 text-white font-semibold px-2 py-2 rounded-md mt-2 sm:mt-0 w-full sm:w-auto transition-all duration-300"
                       >
                         <Image
                           src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
@@ -550,28 +457,16 @@ export default function Company(): JSX.Element {
                         Connect on LinkedIn
                       </a>
                     </div>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
+                  </div>
+                </div>
+              </div>
 
               {/* Advisory Board Section */}
-              <motion.div
-                className="mb-20"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={staggerContainer}
-              >
-                <motion.h2
-                  className="text-3xl font-bold text-white mb-4 text-center"
-                  variants={fadeInUp}
-                >
+              <div className="advisory-section mb-20">
+                <h2 className="section-title text-3xl font-bold text-white mb-4 text-center">
                   Meet Our Advisory Board
-                </motion.h2>
-                <motion.div
-                  className="w-24 h-1 bg-[#F4B448] mx-auto mb-10"
-                  variants={scaleUp}
-                ></motion.div>
+                </h2>
+                <div className="section-title w-24 h-1 bg-[#F4B448] mx-auto mb-10"></div>
 
                 {/* Dynamic grid center based on number of advisors */}
                 <div
@@ -584,17 +479,16 @@ export default function Company(): JSX.Element {
                   }`}
                 >
                   {advisors.map((advisor, index) => (
-                    <motion.div
+                    <div
                       key={index}
-                      className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] flex flex-col justify-self-center" // Add flex classes
-                      variants={staggerItem}
+                      className="advisor-card bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden hover:scale-105 hover:border-[#F4B448] transition-all duration-300 flex flex-col justify-self-center"
                     >
                       <Image
                         src={advisor.image}
                         alt={advisor.name}
                         width={400}
                         height={300}
-                        className="w-full h-[300px] object-cover flex-shrink-0" // Add flex-shrink-0
+                        className="w-full h-[300px] object-cover flex-shrink-0"
                       />
                       <div className="p-6 text-center">
                         <h3 className="text-xl font-semibold text-white mb-1">
@@ -610,7 +504,7 @@ export default function Company(): JSX.Element {
                             href={advisor.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center gap-2 text-blue-400 hover:text-blue-500 transition-colors"
+                            className="inline-flex items-center justify-center gap-2 text-blue-400 hover:text-blue-500 hover:scale-105 transition-all duration-300"
                           >
                             <Linkedin className="w-4 h-4" />
                             <span className="text-sm font-medium">
@@ -619,57 +513,18 @@ export default function Company(): JSX.Element {
                           </Link>
                         )}
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
-              </motion.div>
-
-              {/* Video Section */}
-              {/* <motion.div
-                ref={videoRef}
-                className="mb-20"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={bounceUp}
-              >
-                <motion.div className="text-center mb-8" variants={fadeInUp}>
-                  <h2 className="text-3xl font-bold text-white mb-4">
-                    Promotional Videos
-                  </h2>
-                  <div className="w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
-                  <p className="text-gray-400 text-lg">
-                    Learn more about our platform with our informative videos
-                  </p>
-                </motion.div>
-
-                <motion.div className="max-w-4xl mx-auto" variants={scaleUp}>
-                  <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833]">
-                    <iframe
-                      className="w-full h-full"
-                      src="https://www.youtube.com/embed/wu5bA6-weUk?autoplay=1&mute=1&loop=1&playlist=wu5bA6-weUk&controls=0&modestbranding=1&showinfo=0&rel=0"
-                      title="Introducing the identity behind the innovation."
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                </motion.div>
-              </motion.div> */}
+              </div>
 
               {/* Twitter Feed Widget - Now using the new component */}
-              <motion.div
-                className="mb-20"
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true, margin: "-50px" }}
-                variants={fadeInUp}
-              >
+              <div className="mb-20">
                 <div className="max-w-full mx-auto">
                   {/* <TwitterFeed /> */}
                   <DiscordMessages />
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
