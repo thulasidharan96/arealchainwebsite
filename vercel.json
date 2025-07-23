@@ -13,7 +13,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' *.vercel.app *.spline.design *.googletagmanager.com *.google-analytics.com *.gstatic.com 'nonce-{NONCE}'; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: blob: https: *.unsplash.com *.vercel.app *.githubusercontent.com *.spline.design *.ytimg.com *.youtube.com *.google-analytics.com *.googletagmanager.com; connect-src 'self' *.vercel.app *.spline.design *.google-analytics.com *.analytics.google.com *.googletagmanager.com *.metamask.io *.gstatic.com arealchain-api.troniextechnologies.com arl-bd.onrender.com; frame-src 'self' *.youtube.com *.youtube-nocookie.com *.spline.design; object-src 'self' *.spline.design; worker-src 'self' blob:; child-src 'self' blob:;"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' *.vercel.app *.spline.design *.googletagmanager.com *.google-analytics.com *.gstatic.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: blob: https: *.unsplash.com *.vercel.app *.githubusercontent.com *.spline.design *.ytimg.com *.youtube.com *.google-analytics.com *.googletagmanager.com; connect-src 'self' *.vercel.app *.spline.design *.google-analytics.com *.analytics.google.com *.googletagmanager.com *.metamask.io *.gstatic.com arealchain-api.troniextechnologies.com arl-bd.onrender.com; frame-src 'self' *.youtube.com *.youtube-nocookie.com *.spline.design; object-src 'self' *.spline.design; worker-src 'self' blob:; child-src 'self' blob:;"
         },
         {
           "key": "Referrer-Policy",
