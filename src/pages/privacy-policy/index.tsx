@@ -437,7 +437,7 @@ const PrivacyPolicy: FC = () => {
                   <div className="text-slate-300">
                     <p>
                       <strong className="text-white">Email:</strong>{" "}
-                      info@areal.com
+                      info@arealchain.com
                     </p>
                     <p className="mt-2">
                       We will respond to your inquiries as promptly as possible

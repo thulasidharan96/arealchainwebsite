@@ -287,8 +287,8 @@ const TermsAndConditions: FC = () => {
                   <p className="text-slate-300 leading-relaxed">
                     If you have any questions about these Terms & Conditions,
                     please contact us at{" "}
-                    <strong className="text-white">info@areal.com</strong>. We
-                    will respond to your inquiries as promptly as possible.
+                    <strong className="text-white">info@arealchain.com</strong>.
+                    We will respond to your inquiries as promptly as possible.
                   </p>
                 </section>
               </div>
