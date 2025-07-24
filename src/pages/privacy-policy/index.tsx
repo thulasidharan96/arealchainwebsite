@@ -125,8 +125,8 @@ const PrivacyPolicy: FC = () => {
                 <p className="text-slate-300 mt-4 leading-relaxed">
                   This Privacy Policy explains how AREAL collects, uses, and
                   discloses information about you when you use our website
-                  https://www.areal.com and online services (the "Services")
-                  when you interact with us as described below.
+                  https://www.arealchain.com and online services (the
+                  "Services") when you interact with us as described below.
                 </p>
                 <p className="text-slate-300 mt-4 leading-relaxed">
                   We may change this Privacy Policy over time at our sole

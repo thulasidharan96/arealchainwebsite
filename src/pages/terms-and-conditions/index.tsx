@@ -101,7 +101,7 @@ const TermsAndConditions: FC = () => {
                 <p className="text-slate-300 mt-4 leading-relaxed">
                   These Terms and Conditions explain how AREAL operates, the
                   services we provide, and the terms that apply when you use our
-                  website https://www.areal.com and online services (the
+                  website https://www.arealchain.com and online services (the
                   "Services") when you interact with us as described below.
                 </p>
                 <p className="text-slate-300 mt-4 leading-relaxed">
