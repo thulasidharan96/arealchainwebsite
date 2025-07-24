@@ -45,21 +45,6 @@ const nextConfig: NextConfig = {
   // Enable compression
   compress: true,
 
-  transpilePackages: ["@botpress/webchat"],
-
-  // Webpack configuration to handle CSS imports
-  webpack: (config, { isServer }) => {
-    // Handle CSS files from node_modules
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-      };
-    }
-
-    return config;
-  },
-
   // Custom headers for PDF handling
   async headers() {
     return [
