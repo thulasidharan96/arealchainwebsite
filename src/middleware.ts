@@ -20,7 +20,6 @@ export async function middleware(request: NextRequest) {
     "/company",
     "/vip-member",
     "/property",
-    "/announcement",
     "/faqs",
     "/robots.txt",
     "/sitemap-0.xml",

@@ -18,15 +18,22 @@ import {
   Shield,
   Zap,
   Linkedin,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import Image from "next/image";
-import { JSX, useEffect, useRef } from "react";
+import { JSX, useEffect, useRef, useState } from "react";
 import SplineCompany from "@/src/components/SplineCompany";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  getAllAnnouncements,
+  getAnnouncementsByCategory,
+} from "@/src/lib/announcementData";
+import type { Announcement } from "@/src/lib/announcementData";
 
 const SplineCube = dynamic(() => import("@/src/components/SplineCube"), {
   ssr: false,
@@ -148,7 +155,19 @@ export default function Company(): JSX.Element {
   const videoRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
 
+  // Announcement states
+  const [isAnnouncementsOpen, setIsAnnouncementsOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
   const router = useRouter();
+
+  // Get announcements data
+  const allAnnouncements = getAllAnnouncements();
+  const filteredAnnouncements = getAnnouncementsByCategory(selectedCategory);
+
+  const handleCategoryClick = (category: string) => {
+    setSelectedCategory(category);
+  };
 
   useEffect(() => {
     // Simple fade-in animations on scroll
@@ -518,10 +537,106 @@ export default function Company(): JSX.Element {
                 </div>
               </div>
 
-              {/* Twitter Feed Widget - Now using the new component */}
+              {/* Announcements Dropdown Section */}
               <div className="mb-20">
+                <div className="max-w-7xl mx-auto">
+                  <div className="text-center mb-8">
+                    <button
+                      onClick={() =>
+                        setIsAnnouncementsOpen(!isAnnouncementsOpen)
+                      }
+                      className="inline-flex items-center gap-3 bg-gray-900/50 hover:bg-gray-900/70 border border-gray-800 hover:border-[#F4B448]/50 rounded-xl px-8 py-4 text-white font-semibold text-xl transition-all duration-300 hover:scale-105"
+                    >
+                      <span>Latest Announcements</span>
+                      {isAnnouncementsOpen ? (
+                        <ChevronUp className="w-5 h-5 text-[#F4B448]" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-[#F4B448]" />
+                      )}
+                    </button>
+                  </div>
+
+                  {isAnnouncementsOpen && (
+                    <div className="bg-gray-900/30 border border-gray-800 rounded-xl p-8 backdrop-blur-sm">
+                      <div className="text-center mb-8">
+                        <h3 className="text-2xl font-bold text-white mb-4">
+                          Stay Updated with Areal
+                        </h3>
+                        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                          Stay informed with the latest announcements, updates,
+                          and news related to Areal.
+                        </p>
+                      </div>
+
+                      {filteredAnnouncements.length > 0 ? (
+                        <div className="grid lg:grid-cols-2 gap-8">
+                          {filteredAnnouncements.map(
+                            (announcement: Announcement) => (
+                              <Link
+                                href={`${announcement.link}`}
+                                key={announcement.id}
+                              >
+                                <Card className="bg-gray-900/50 border-gray-800 hover:border-[#F4B448]/50 transition-all duration-300 cursor-pointer hover:transform hover:scale-[1.02]">
+                                  <CardHeader className="p-0">
+                                    <div className="aspect-video bg-black rounded-t-lg overflow-hidden p-2">
+                                      <Image
+                                        src={
+                                          announcement.image ||
+                                          "/placeholder.svg"
+                                        }
+                                        alt={announcement.title}
+                                        width={800}
+                                        height={450}
+                                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                      />
+                                    </div>
+                                  </CardHeader>
+                                  <CardContent className="p-6 backdrop-blur-3xl">
+                                    <div className="flex items-center gap-4 mb-4 flex-wrap">
+                                      <Badge className="bg-[#F4B448] text-black">
+                                        {announcement.category}
+                                      </Badge>
+                                      <span className="text-gray-400 text-sm">
+                                        {announcement.date}
+                                      </span>
+                                    </div>
+                                    <CardTitle className="text-white text-xl mb-3 hover:text-[#F4B448] transition-colors line-clamp-2">
+                                      {announcement.title}
+                                    </CardTitle>
+                                    <CardDescription className="text-gray-400 text-base line-clamp-3">
+                                      {announcement.excerpt}
+                                    </CardDescription>
+                                  </CardContent>
+                                </Card>
+                              </Link>
+                            )
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-center py-12">
+                          <p className="text-gray-400 text-lg">
+                            No announcements available at the moment.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Community Updates Section (Previously Twitter Feed) */}
+              <div className="mb-20">
+                <div className="text-center mb-8">
+                  <h2 className="section-title text-3xl font-bold text-white mb-4">
+                    Community Updates
+                  </h2>
+                  <div className="section-title w-24 h-1 bg-[#F4B448] mx-auto mb-6"></div>
+                  {/* <p className="section-title text-gray-400 text-lg max-w-3xl mx-auto">
+                    Stay connected with our community and get the latest updates
+                    from our Discord channel.
+                  </p> */}
+                </div>
                 <div className="max-w-full mx-auto">
-                  {/* <TwitterFeed /> */}
                   <DiscordMessages />
                 </div>
               </div>

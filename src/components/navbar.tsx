@@ -123,7 +123,7 @@ export default function Navbar() {
                 Whitepaper
               </a>
             </Link>
-            <Link
+            {/* <Link
               href="/announcement"
               className={`text-sm font-medium transition-colors ${
                 isActive("/announcement")
@@ -132,7 +132,7 @@ export default function Navbar() {
               }`}
             >
               Announcements
-            </Link>
+            </Link> */}
             <Link
               href="/vip-member"
               className={`text-sm font-medium transition-colors ${
@@ -223,6 +223,14 @@ export default function Navbar() {
                 >
                   Blog
                 </Link> */}
+              <Link href="/whitepaper" legacyBehavior>
+                <a
+                  target="_blank"
+                  className="text-gray-300 hover:text-[#F4B448] font-medium"
+                >
+                  Whitepaper
+                </a>
+              </Link>
               <Link
                 href="/contact"
                 className="text-gray-300 hover:text-[#F4B448] font-medium"

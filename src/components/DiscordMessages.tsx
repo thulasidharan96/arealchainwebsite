@@ -41,7 +41,7 @@ export default function DiscordMessages() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-2xl text-center font-bold mb-4">Announcements</h2>
+      {/* <h2 className="text-2xl text-center font-bold mb-4">Announcements</h2> */}
 
       <div className="space-y-3">
         {messages.map((msg) => (
