@@ -223,78 +223,78 @@ const MilestoneCard = React.memo(({ milestone }: { milestone: Milestone }) => {
 
 MilestoneCard.displayName = "MilestoneCard";
 
-interface AsteriskAnimationProps {
-  scrollContainerRef: React.RefObject<HTMLDivElement | null>;
-}
+// interface AsteriskAnimationProps {
+//   scrollContainerRef: React.RefObject<HTMLDivElement | null>;
+// }
 
-const AsteriskAnimation = React.memo(
-  ({ scrollContainerRef }: AsteriskAnimationProps) => {
-    const asteriskRef = useRef<HTMLDivElement>(null);
+// const AsteriskAnimation = React.memo(
+//   ({ scrollContainerRef }: AsteriskAnimationProps) => {
+//     const asteriskRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-      if (!asteriskRef.current || !scrollContainerRef.current) return;
+//     useEffect(() => {
+//       if (!asteriskRef.current || !scrollContainerRef.current) return;
 
-      const asterisks = gsap.utils.toArray(
-        asteriskRef.current.querySelectorAll(".asterisk")
-      );
+//       const asterisks = gsap.utils.toArray(
+//         asteriskRef.current.querySelectorAll(".asterisk")
+//       );
 
-      // Set initial state
-      gsap.set(asterisks, { opacity: 0, scale: 0 });
+//       // Set initial state
+//       gsap.set(asterisks, { opacity: 0, scale: 0 });
 
-      // Create timeline
-      const tl = gsap.timeline({ paused: true });
-      asterisks.forEach((asterisk: any, index: number) => {
-        tl.to(
-          asterisk,
-          {
-            opacity: 1,
-            scale: 1,
-            rotation: 360,
-            duration: 0.5,
-            ease: "back.out(1.7)",
-          },
-          index * 0.05
-        );
-      });
+//       // Create timeline
+//       const tl = gsap.timeline({ paused: true });
+//       asterisks.forEach((asterisk: any, index: number) => {
+//         tl.to(
+//           asterisk,
+//           {
+//             opacity: 1,
+//             scale: 1,
+//             rotation: 360,
+//             duration: 0.5,
+//             ease: "back.out(1.7)",
+//           },
+//           index * 0.05
+//         );
+//       });
 
-      // Create ScrollTrigger for asterisk animation
-      const scrollTrigger = ScrollTrigger.create({
-        trigger: scrollContainerRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 1,
-        animation: tl,
-      });
+//       // Create ScrollTrigger for asterisk animation
+//       const scrollTrigger = ScrollTrigger.create({
+//         trigger: scrollContainerRef.current,
+//         start: "top bottom",
+//         end: "bottom top",
+//         scrub: 1,
+//         animation: tl,
+//       });
 
-      return () => {
-        scrollTrigger.kill();
-      };
-    }, [scrollContainerRef]);
+//       return () => {
+//         scrollTrigger.kill();
+//       };
+//     }, [scrollContainerRef]);
 
-    const asteriskPositions = useMemo(
-      () =>
-        Array.from({ length: 20 }, () => ({
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-        })),
-      []
-    );
+//     const asteriskPositions = useMemo(
+//       () =>
+//         Array.from({ length: 20 }, () => ({
+//           left: `${Math.random() * 100}%`,
+//           top: `${Math.random() * 100}%`,
+//         })),
+//       []
+//     );
 
-    return (
-      <div ref={asteriskRef} className="absolute inset-0 pointer-events-none">
-        {asteriskPositions.map((position, index) => (
-          <Star
-            key={index}
-            className="asterisk absolute w-4 h-4 text-amber-400"
-            style={position}
-          />
-        ))}
-      </div>
-    );
-  }
-);
+//     return (
+//       <div ref={asteriskRef} className="absolute inset-0 pointer-events-none">
+//         {asteriskPositions.map((position, index) => (
+//           <Star
+//             key={index}
+//             className="asterisk absolute w-4 h-4 text-amber-400"
+//             style={position}
+//           />
+//         ))}
+//       </div>
+//     );
+//   }
+// );
 
-AsteriskAnimation.displayName = "AsteriskAnimation";
+// AsteriskAnimation.displayName = "AsteriskAnimation";
 
 type TimelineItem =
   | { type: "year"; year: string }
@@ -393,7 +393,7 @@ export default function HorizontalRoadmap() {
   return (
     <Layout>
       <div className="bg-transparent">
-        <FloatingParticles />
+        {/* <FloatingParticles /> */}
 
         {/* Header section */}
         <div className="pt-32 pb-20 px-4">
@@ -416,7 +416,7 @@ export default function HorizontalRoadmap() {
 
         {/* Horizontal scrolling roadmap section */}
         <div ref={containerRef} className="relative h-screen overflow-hidden">
-          <AsteriskAnimation scrollContainerRef={containerRef} />
+          {/* <AsteriskAnimation scrollContainerRef={containerRef} /> */}
 
           <div
             ref={timelineRef}
