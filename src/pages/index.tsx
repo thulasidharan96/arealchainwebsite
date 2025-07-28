@@ -34,7 +34,10 @@ export default function Home() {
   const faqRef = useRef<HTMLElement>(null);
   const ctaRef = useRef<HTMLElement>(null);
 
-  const Accredited = [{ name: "VARA", src: "/Accrediters/vara.png" }];
+  const Accredited = [
+    { name: "VARA", src: "/Accrediters/vara.png" },
+    { name: "CERTIK", src: "/Accrediters/Certik.png" },
+  ];
 
   const handleProductClick = (product: string): void => {
     switch (product) {

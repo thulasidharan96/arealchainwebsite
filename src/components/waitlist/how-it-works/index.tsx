@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Layout from "../components/layout";
+import Layout from "@/src/components/layout";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {

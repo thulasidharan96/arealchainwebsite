@@ -171,6 +171,29 @@ const BrandGuidelines: NextPage = () => {
     <Image src="/coin/areal.png" alt="Areal Logo" width={100} height={100} />
   );
 
+  const AbstractBackgrounds = [
+    {
+      name: "BG1",
+      src: "/Backgrounds/bg1.jpg",
+      logo: "/Backgrounds/bg1.jpg",
+    },
+    {
+      name: "BG2",
+      src: "/Backgrounds/bg2.jpg",
+      logo: "/Backgrounds/bg2.jpg",
+    },
+    {
+      name: "BG3",
+      src: "/Backgrounds/bg3.jpg",
+      logo: "/Backgrounds/bg3.jpg",
+    },
+    {
+      name: "BG4",
+      src: "/Backgrounds/bg4.jpg",
+      logo: "/Backgrounds/bg4.jpg",
+    },
+  ];
+
   return (
     <Layout>
       <div
@@ -376,19 +399,27 @@ const BrandGuidelines: NextPage = () => {
               title="Abstract Backgrounds"
               subtitle="The Areal logo is designed to stand out on dynamic and abstract visual fields."
             />
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                "bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900",
-                "bg-gradient-to-br from-orange-900 via-red-900 to-pink-900",
-                "bg-gradient-to-br from-green-900 via-teal-900 to-cyan-900",
-              ].map((bgClass, i) => (
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
+              {AbstractBackgrounds.map((item, i) => (
                 <div
                   key={i}
-                  className={`relative h-80 rounded-3xl border border-gray-800 flex items-center justify-center p-6 ${bgClass} transition-all duration-300 hover:shadow-[0_0_25px_rgba(239,166,56,0.2)]`}
+                  className="relative h-80 rounded-3xl border border-gray-800 overflow-hidden group transition-all duration-300 hover:shadow-[0_0_25px_rgba(239,166,56,0.2)]"
+                  style={{
+                    backgroundImage: `url(${item.src})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
                 >
-                  <div className="absolute inset-0 bg-black/50 rounded-3xl"></div>
-                  <div className="relative z-10">
+                  <div className="absolute inset-0 bg-black/50 rounded-3xl" />
+                  <div className="relative z-10 flex flex-col items-center justify-center h-full text-center">
                     <ArealLogo />
+                    <a
+                      href={item.logo}
+                      download
+                      className="mt-4 px-4 py-2 text-sm bg-white/10 text-white border border-white rounded-xl hover:bg-white/20 transition"
+                    >
+                      Download Logo
+                    </a>
                   </div>
                 </div>
               ))}
