@@ -92,6 +92,11 @@ export default function Footer() {
                     className="text-sm text-gray-400 hover:text-[#F4B448]"
                   >
                     {link.name}
+                    {link.name === "Brand Guidelines" && (
+                      <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#F4B448]/20 text-[#F4B448] border border-[#F4B448]/30">
+                        New
+                      </span>
+                    )}
                   </Link>
                 </li>
               ))}

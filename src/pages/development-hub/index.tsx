@@ -1,5 +1,5 @@
 import Layout from "@/src/components/layout";
-import { useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { NextPage } from "next";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -13,6 +13,7 @@ import {
   FiChevronDown,
   FiEdit,
 } from "react-icons/fi";
+import { toast } from "sonner";
 
 // Register GSAP plugin
 if (typeof window !== "undefined") {
@@ -68,7 +69,7 @@ const ArealDevelopmentHub: NextPage = () => {
   const mainRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const [cursorHover, setCursorHover] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (cursorRef.current) {
@@ -126,21 +127,40 @@ const ArealDevelopmentHub: NextPage = () => {
     setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // In a real application, you would handle the form submission here.
-    // For now, we'll just log it to the console.
-    console.log("Form Submitted:", formState);
-    alert("Thank you for your submission! We will get back to you shortly.");
-    // Reset form
-    setFormState({
-      name: "",
-      email: "",
-      phone: "",
-      project_name: "",
-      project_category: "Real Estate",
-      description: "",
-    });
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/project", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+
+      const data = await res.json();
+      setLoading(false);
+
+      if (res.ok) {
+        toast.success(
+          "Your Form has been submitted. We'll get back to you soon."
+        );
+        setFormState({
+          name: "",
+          email: "",
+          phone: "",
+          project_name: "",
+          project_category: "Real Estate",
+          description: "",
+        });
+      } else {
+        toast.error(`Submission failed: ${data.message || "Try again later."}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
+      toast.error("Network error. Please try again later.");
+    }
   };
 
   return (
