@@ -36,7 +36,7 @@ export default function Footer() {
     { name: "Partner", href: "/#partners" },
     { name: "Contact", href: "/contact" },
     { name: "FAQ'S", href: "/faqs" },
-
+    { name: "Brand Guidelines", href: "/brand-guidelines" },
   ];
   const legalLinks = [
     { name: "Privacy Policy", href: "/privacy-policy" },
