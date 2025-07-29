@@ -367,10 +367,19 @@ export default function Company(): JSX.Element {
                     <p className="text-[#F4B448] text-2xl font-bold mb-2">
                       Simple. Secure. Seamless.
                     </p>
-                    <p className="text-gray-300 text-lg">
+                    <p className="text-gray-300 text-lg ">
                       That's the future of real estate investing — powered by
                       AREAL.
                     </p>
+                    <Link href="/whitepaper" legacyBehavior>
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block bg-[#F4B448] text-black font-semibold mt-4 px-4 py-3 rounded-lg hover:bg-[#e0a53b] transition-all duration-300"
+                      >
+                        Read Our Whitepaper
+                      </a>
+                    </Link>
                   </div>
                 </div>
               </div>

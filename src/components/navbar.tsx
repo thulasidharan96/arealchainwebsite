@@ -110,7 +110,7 @@ export default function Navbar() {
             >
               Roadmap
             </Link>
-            <Link href="/whitepaper" legacyBehavior>
+            {/* <Link href="/whitepaper" legacyBehavior>
               <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -122,7 +122,7 @@ export default function Navbar() {
               >
                 Whitepaper
               </a>
-            </Link>
+            </Link> */}
             {/* <Link
               href="/announcement"
               className={`text-sm font-medium transition-colors ${
