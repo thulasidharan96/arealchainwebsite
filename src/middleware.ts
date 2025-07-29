@@ -26,6 +26,9 @@ export async function middleware(request: NextRequest) {
     "/whitepaper",
     "/brand-guidelines",
     "/development-hub",
+    "/grants",
+    "/hackathon",
+    "/guide-hub",
   ];
 
   const isPublicPath = publicPaths.some(
