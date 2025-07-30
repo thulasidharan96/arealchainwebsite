@@ -152,12 +152,12 @@ export default function Hero() {
         <div className="aspect-video rounded-xl overflow-hidden border-2 border-[#F4B448]/30 shadow-[0_0_25px_#F4B44833] hover:shadow-[0_0_35px_#F4B44850] hover:scale-[1.02] transition-all duration-300">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/uywf3RlK5aE?autoplay=1&mute=1&loop=1&playlist=uywf3RlK5aE&controls=0&modestbranding=1&showinfo=0&rel=0"
+            src="https://www.youtube.com/embed/krllom0Fhxw?autoplay=1&mute=1&loop=1&playlist=krllom0Fhxw&controls=0&modestbranding=1&showinfo=0&rel=0"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             loading="lazy"
-            title="AREAL Blockchain Introduction Video"
+            title="YouTube video"
           ></iframe>
         </div>
       </div>

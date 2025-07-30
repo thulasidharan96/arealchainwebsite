@@ -256,9 +256,9 @@ const ArealHackathonPage = () => {
               <br />
               <span className="text-white">HACKATHON</span>
               <br />
-              <span className="text-4xl md:text-6xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              {/* <span className="text-4xl md:text-6xl bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
                 2025
-              </span>
+              </span> */}
             </h1>
 
             {/* Subtitle */}
@@ -266,18 +266,16 @@ const ArealHackathonPage = () => {
               <span className="text-[#F4B448] font-semibold">48 Hours.</span>
               <span className="text-purple-400 font-semibold">
                 {" "}
-                Unlimited Creativity.
+                Unlimited Creativity
               </span>
               <br />
               Build the future of{" "}
-              <span className="text-[#F4B448] font-semibold">
-                Real Estate
-              </span>{" "}
-              on blockchain.
+              <span className="text-[#F4B448] font-semibold">RWA</span> on
+              blockchain.
             </p>
 
             {/* Countdown Timer */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto mb-12">
+            {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-2xl mx-auto mb-12">
               {Object.entries(timeLeft).map(([unit, value]) => (
                 <div key={unit} className="group">
                   <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-2xl p-6 hover:border-[#F4B448] hover:shadow-2xl hover:shadow-[#F4B448]/25 transition-all duration-300 transform group-hover:scale-105">
@@ -290,10 +288,10 @@ const ArealHackathonPage = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+            {/* <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
               <button className="group bg-gradient-to-r from-[#F4B448] via-orange-500 to-red-500 hover:from-red-500 hover:via-orange-500 hover:to-[#F4B448] text-black font-bold px-10 py-5 rounded-xl text-xl transition-all duration-500 transform hover:scale-110 hover:shadow-2xl hover:shadow-[#F4B448]/25">
                 <Bell className="inline mr-3 w-6 h-6 group-hover:animate-bounce" />
                 Notify Me When Live
@@ -302,10 +300,10 @@ const ArealHackathonPage = () => {
                 Watch Teaser
                 <Play className="inline ml-3 w-6 h-6 group-hover:scale-110 transition-transform" />
               </button>
-            </div>
+            </div> */}
 
             {/* Prize Pool Highlight */}
-            <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-2xl">
+            {/* <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-2xl">
               <Trophy className="w-8 h-8 text-green-400 mr-4" />
               <div>
                 <div className="text-3xl font-black text-green-400">
@@ -315,7 +313,7 @@ const ArealHackathonPage = () => {
                   Total Prize Pool
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </section>
 

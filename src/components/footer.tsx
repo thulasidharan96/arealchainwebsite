@@ -30,15 +30,24 @@ export default function Footer() {
     { name: "ArealPay", href: "/areal-suite/pay" },
     { name: "Areal Marketplace", href: "/areal-suite/marketplace" },
   ];
+
   const companyLinks = [
     { name: "About Us", href: "/company" },
     { name: "Roadmap", href: "/roadmap" },
     { name: "Partner", href: "/#partners" },
     { name: "Contact", href: "/contact" },
     { name: "FAQ'S", href: "/faqs" },
+  ];
+
+  // New section for community and developer related links
+  const communityAndDeveloperLinks = [
     { name: "Brand Guidelines", href: "/brand-guidelines" },
     { name: "Development Hub", href: "/development-hub" },
+    { name: "Grants", href: "/grants" },
+    { name: "Hackathon", href: "/hackathon" },
+    { name: "Guide Hub", href: "/guide-hub" },
   ];
+
   const legalLinks = [
     { name: "Privacy Policy", href: "/privacy-policy" },
     { name: "Terms of Service", href: "/terms-and-conditions" },
@@ -47,7 +56,9 @@ export default function Footer() {
   return (
     <footer className="relative z-50 bg-[#171717] backdrop-blur-md border-t border-gray-800">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+          {" "}
+          {/* Changed grid-cols-5 to grid-cols-6 */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">
               <Image
@@ -62,7 +73,6 @@ export default function Footer() {
               Assets.
             </p>
           </div>
-
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase">
               Products
@@ -80,7 +90,6 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase">
               Company
@@ -93,18 +102,33 @@ export default function Footer() {
                     className="text-sm text-gray-400 hover:text-[#F4B448]"
                   >
                     {link.name}
-                    {(link.name === "Brand Guidelines" ||
-                      link.name === "Development Hub") && (
-                      <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#F4B448]/20 text-[#F4B448] border border-[#F4B448]/30">
-                        New
-                      </span>
-                    )}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-
+          {/* New Community & Developers Section */}
+          <div>
+            <h3 className="text-sm font-semibold text-white tracking-wider uppercase">
+              Community & Developers {/* New section title */}
+            </h3>
+            <ul className="mt-4 space-y-2">
+              {communityAndDeveloperLinks.map((link) => (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-gray-400 hover:text-[#F4B448]"
+                  >
+                    {link.name}
+                    {/* Apply "New" badge to all links in this new section for now, or refine as needed */}
+                    <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#F4B448]/20 text-[#F4B448] border border-[#F4B448]/30">
+                      New
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div>
             <h3 className="text-sm font-semibold text-white tracking-wider uppercase">
               Legal
@@ -140,6 +164,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
+        {/* Newsletter section (commented out in your original code) */}
         {/* <div className="w-full">
           <div className="w-ful mx-auto flex justify-end">
             <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">

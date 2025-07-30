@@ -235,7 +235,7 @@ const ArealGrantsPage = () => {
               the blockchain.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            {/* <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <button className="group bg-gradient-to-r from-[#F4B448] to-yellow-500 hover:from-yellow-500 hover:to-[#F4B448] text-black font-bold px-8 py-4 rounded-xl text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#F4B448]/25">
                 Apply for Grant
                 <ArrowRight className="inline ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -244,7 +244,7 @@ const ArealGrantsPage = () => {
                 View Success Stories
                 <ChevronRight className="inline ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* Floating Elements */}
@@ -260,7 +260,7 @@ const ArealGrantsPage = () => {
           </div>
         </section>
 
-        {/* Stats Section */}
+        {/* Stats Section 
         <section ref={statsRef} className="py-20 px-4 relative">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -282,7 +282,7 @@ const ArealGrantsPage = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section>*/}
 
         {/* Grant Categories Section */}
         <section ref={grantsRef} className="py-20 px-4">
@@ -387,7 +387,7 @@ const ArealGrantsPage = () => {
         </section>
 
         {/* Testimonials */}
-        <section ref={testimonialsRef} className="py-20 px-4">
+        {/* <section ref={testimonialsRef} className="py-20 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
@@ -429,7 +429,7 @@ const ArealGrantsPage = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* CTA Section */}
         <section ref={ctaRef} className="py-20 px-4 relative overflow-hidden">
@@ -437,29 +437,24 @@ const ArealGrantsPage = () => {
 
           <div className="max-w-4xl mx-auto text-center relative z-10">
             <h2 className="text-4xl md:text-6xl font-black text-white mb-8">
-              Ready to Build the <span className="text-[#F4B448]">Future?</span>
+              We’re <span className="text-[#F4B448]">Coming Soon!</span>
             </h2>
 
             <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Join hundreds of innovators who are already transforming real
-              estate with blockchain technology. Your idea could be next.
+              Something groundbreaking is on the horizon. We’re building the
+              next era of RWA innovation powered by blockchain technology.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            {/* <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <button className="group bg-gradient-to-r from-[#F4B448] to-yellow-500 hover:from-yellow-500 hover:to-[#F4B448] text-black font-bold px-10 py-5 rounded-xl text-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-[#F4B448]/25">
-                Apply Now
+                Notify Me
                 <Rocket className="inline ml-2 w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
               <button className="group border-2 border-gray-600 hover:border-[#F4B448] text-white hover:text-[#F4B448] font-semibold px-10 py-5 rounded-xl text-xl transition-all duration-300 transform hover:scale-105">
-                Schedule a Call
+                Learn More
                 <Calendar className="inline ml-2 w-6 h-6 group-hover:scale-110 transition-transform" />
               </button>
-            </div>
-
-            <div className="mt-12 text-sm text-gray-500">
-              Applications close December 31st, 2025 • Funding decisions made
-              within 30 days
-            </div>
+            </div> */}
           </div>
         </section>
 
