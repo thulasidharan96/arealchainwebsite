@@ -158,21 +158,58 @@ export default function Home() {
   return (
     <Layout>
       <Head>
+        {/* Primary Meta Tags */}
         <title>Real World Asset Tokenization in Dubai | Areal Chain</title>
         <meta
           name="description"
-          content="Explore real world asset tokenization in Dubai with Areal Chain, a secure blockchain platform to invest, tokenize, and trade real estate seamlessly."
+          content="Explore real world asset tokenization in Dubai with Areal Chain — a secure blockchain platform to invest, tokenize, and trade real estate seamlessly."
         />
+        <meta
+          name="keywords"
+          content="real world asset tokenization, blockchain Dubai, real estate investment, ArealChain, AREAL, tokenize property, Dubai real estate crypto"
+        />
+        <meta name="author" content="Areal Chain" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://arealchain.com/" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://arealchain.com/" />
         <meta
           property="og:title"
           content="Real World Asset Tokenization in Dubai | Areal Chain"
         />
         <meta
           property="og:description"
-          content="Explore real world asset tokenization in Dubai with Areal Chain, a secure blockchain platform to invest, tokenize, and trade real estate seamlessly."
+          content="Explore real world asset tokenization in Dubai with Areal Chain — a secure blockchain platform to invest, tokenize, and trade real estate seamlessly."
         />
-        <meta property="og:image" content="/coin/coin.avif" />
-        <meta name="robots" content="index, follow" />
+        <meta
+          property="og:image"
+          content="https://arealchain.com/coin/coin.avif"
+        />
+
+        {/* Twitter Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://arealchain.com/" />
+        <meta
+          name="twitter:title"
+          content="Real World Asset Tokenization in Dubai | Areal Chain"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore real world asset tokenization in Dubai with Areal Chain — a secure blockchain platform to invest, tokenize, and trade real estate seamlessly."
+        />
+        <meta
+          name="twitter:image"
+          content="https://arealchain.com/coin/coin.avif"
+        />
+
+        {/* Viewport & Charset (in case _document.tsx doesn't handle it) */}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta charSet="UTF-8" />
+
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* Hero Section */}
       <section ref={heroRef} className="flex justify-center">
