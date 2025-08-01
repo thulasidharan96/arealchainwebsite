@@ -27,13 +27,13 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Initialize Botpress when component mounts
     const initBotpress = () => {
       // Wait for Botpress to be available
       const checkBotpress = () => {
-        if (typeof window !== 'undefined' && (window as any).botpressWebChat) {
-          console.log('Botpress webchat is available');
+        if (typeof window !== "undefined" && (window as any).botpressWebChat) {
+          console.log("Botpress webchat is available");
           // Botpress is loaded and should initialize automatically
         } else {
           // Retry after a short delay
@@ -42,7 +42,7 @@ export default function App({ Component, pageProps }: AppProps) {
       };
       checkBotpress();
     };
-    
+
     // Initialize after mount
     setTimeout(initBotpress, 1000);
   }, []);
@@ -126,20 +126,23 @@ export default function App({ Component, pageProps }: AppProps) {
         src="https://cdn.botpress.cloud/webchat/v3.1/inject.js"
         strategy="afterInteractive"
         onLoad={() => {
-          console.log('Botpress inject script loaded');
+          console.log("Botpress inject script loaded");
         }}
       />
       <Script
         src="https://files.bpcontent.cloud/2025/07/24/06/20250724062946-UBTFYGGR.js"
         strategy="afterInteractive"
         onLoad={() => {
-          console.log('Botpress config script loaded');
+          console.log("Botpress config script loaded");
           // Force re-initialize if needed
-          if (typeof window !== 'undefined' && (window as any).botpressWebChat) {
+          if (
+            typeof window !== "undefined" &&
+            (window as any).botpressWebChat
+          ) {
             try {
               (window as any).botpressWebChat.init();
             } catch (e) {
-              console.log('Botpress already initialized');
+              console.log("Botpress already initialized");
             }
           }
         }}

@@ -34,6 +34,7 @@ import {
   getAnnouncementsByCategory,
 } from "@/src/lib/announcementData";
 import type { Announcement } from "@/src/lib/announcementData";
+import Head from "next/head";
 
 const SplineCube = dynamic(() => import("@/src/components/SplineCube"), {
   ssr: false,
@@ -233,6 +234,24 @@ export default function Company(): JSX.Element {
 
   return (
     <Layout>
+      <Head>
+        <title>Blockchain for Real Estate in Dubai | Areal Chain</title>
+        <meta
+          name="description"
+          content="Areal Chain leverages blockchain for real estate in Dubai, enabling secure, tokenized property investments and global access to real-world asset ownership."
+        />
+        <meta
+          property="og:title"
+          content="Blockchain for Real Estate in Dubai | Areal Chain"
+        />
+        <meta
+          property="og:description"
+          content="Areal Chain leverages blockchain for real estate in Dubai, enabling secure, tokenized property investments and global access to real-world asset ownership."
+        />
+        <meta property="og:image" content="/coin/coin.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="relative z-0">
         <SplineCube />
         <div className="relative z-10 backdrop-blur-sm">

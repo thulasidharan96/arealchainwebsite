@@ -15,6 +15,7 @@ import {
 import { properties } from "@/src/data/properties";
 import { Button } from "../components/ui/button";
 import Collaborators from "../components/landing/Collaborators";
+import Head from "next/head";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -156,6 +157,23 @@ export default function Home() {
 
   return (
     <Layout>
+      <Head>
+        <title>Real World Asset Tokenization in Dubai | Areal Chain</title>
+        <meta
+          name="description"
+          content="Explore real world asset tokenization in Dubai with Areal Chain, a secure blockchain platform to invest, tokenize, and trade real estate seamlessly."
+        />
+        <meta
+          property="og:title"
+          content="Real World Asset Tokenization in Dubai | Areal Chain"
+        />
+        <meta
+          property="og:description"
+          content="Explore real world asset tokenization in Dubai with Areal Chain, a secure blockchain platform to invest, tokenize, and trade real estate seamlessly."
+        />
+        <meta property="og:image" content="/coin/coin.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
       {/* Hero Section */}
       <section ref={heroRef} className="flex justify-center">
         <Hero />

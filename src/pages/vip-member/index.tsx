@@ -7,6 +7,7 @@ import { Checkbox } from "@/src/components/ui/checkbox";
 import { Label } from "@/src/components/ui/label";
 import { CheckCircle2, Lock, Star } from "lucide-react";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 const SplineVIP = dynamic(() => import("@/src/components/SplineVIP"), {
   ssr: false,
@@ -74,6 +75,24 @@ export default function VipMember() {
 
   return (
     <Layout>
+      <Head>
+        <title>Real Estate Investment in Dubai | ROI</title>
+        <meta
+          name="description"
+          content="Real estate investment in Dubai offers high ROI and long-term value. Explore premium properties and start your investment journey with expert support."
+        />
+        <meta
+          property="og:title"
+          content="Real Estate Investment in Dubai | ROI"
+        />
+        <meta
+          property="og:description"
+          content="Real estate investment in Dubai offers high ROI and long-term value. Explore premium properties and start your investment journey with expert support."
+        />
+        <meta property="og:image" content="/properties/property.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="relative z-0">
         <SplineVIP />
         <div className="relative z-10">

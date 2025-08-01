@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const ProductPage = () => {
   const product = {
@@ -55,6 +56,23 @@ const ProductPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Real Estate Tokenization in Dubai | Areal Chain</title>
+        <meta
+          name="description"
+          content="Explore the best real estate tokenization in Dubai. Invest in digital property assets securely with Areal Launchpad. Start your journey today."
+        />
+        <meta
+          property="og:title"
+          content="Real Estate Tokenization in Dubai | Areal Chain"
+        />
+        <meta
+          property="og:description"
+          content="Explore the best real estate tokenization in Dubai. Invest in digital property assets securely with Areal Launchpad. Start your journey today."
+        />
+        <meta property="og:image" content="/coin/coin.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
       <div className="min-h-screen bg-transparent">
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">

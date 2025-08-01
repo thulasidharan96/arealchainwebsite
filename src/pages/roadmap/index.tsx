@@ -10,6 +10,7 @@ import Layout from "@/src/components/layout";
 import { cn } from "@/src/lib/utils";
 import { Badge } from "@/src/components/ui/badge";
 import { FloatingParticles } from "@/src/components/FloatingParticles";
+import Head from "next/head";
 
 // Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -392,6 +393,24 @@ export default function HorizontalRoadmap() {
 
   return (
     <Layout>
+      <Head>
+        <title>Buy Cryptocurrency in Dubai | Secure & Easy Trading</title>
+        <meta
+          name="description"
+          content="Buy cryptocurrency in Dubai through trusted platforms. Start trading Bitcoin, Ethereum & more securely with fast setup & local support. Get started now!"
+        />
+        <meta
+          property="og:title"
+          content="Buy Cryptocurrency in Dubai | Secure & Easy Trading"
+        />
+        <meta
+          property="og:description"
+          content="Buy cryptocurrency in Dubai through trusted platforms. Start trading Bitcoin, Ethereum & more securely with fast setup & local support. Get started now!"
+        />
+        <meta property="og:image" content="/coin/areal.png" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="bg-transparent">
         {/* <FloatingParticles /> */}
 

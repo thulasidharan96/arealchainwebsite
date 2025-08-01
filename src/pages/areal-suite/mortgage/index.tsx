@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const ProductPage = () => {
   const product = {
@@ -55,6 +56,24 @@ const ProductPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Buy Property in Dubai for Investment | Secure ROI</title>
+        <meta
+          name="description"
+          content="Looking to buy property in Dubai for investment? Explore top real estate options with high ROI, tax benefits & investor-friendly policies. Start today!"
+        />
+        <meta
+          property="og:title"
+          content="Buy Property in Dubai for Investment | Secure ROI"
+        />
+        <meta
+          property="og:description"
+          content="Looking to buy property in Dubai for investment? Explore top real estate options with high ROI, tax benefits & investor-friendly policies. Start today!"
+        />
+        <meta property="og:image" content="/properties/property1.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="min-h-screen bg-transparent">
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">
