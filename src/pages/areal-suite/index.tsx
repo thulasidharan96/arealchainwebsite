@@ -55,24 +55,6 @@ export default function ArealSuite() {
 
   return (
     <Layout>
-      <Head>
-        <title>Crypto Real Estate in Dubai | Invest with Areal Suite</title>
-        <meta
-          name="description"
-          content="Discover crypto real estate in Dubai with Areal Suite. Buy, invest, and own tokenized Dubai properties securely using blockchain-powered solutions."
-        />
-        <meta
-          property="og:title"
-          content="Crypto Real Estate in Dubai | Invest with Areal Suite"
-        />
-        <meta
-          property="og:description"
-          content="Discover crypto real estate in Dubai with Areal Suite. Buy, invest, and own tokenized Dubai properties securely using blockchain-powered solutions."
-        />
-        <meta property="og:image" content="/properties/property.avif" />
-        <meta name="robots" content="index, follow" />
-      </Head>
-
       <div className="relative z-0">
         <SplineViewerChain /> {/* fixed, always in background */}
         <div className="relative z-10">
