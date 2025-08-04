@@ -8,7 +8,27 @@ const videoTutorials = [
     title:
       "The Foundation of Digital Real Estate | Own Land Digitally with ArealChain",
     youtube: "http://www.youtube.com/watch?v=px_a1TKWwdo",
-    thumbnail: "https://img.youtube.com/vi/px_a1TKWwdo/maxresdefault.jpg", // Replace with the actual video ID
+    thumbnail: "https://img.youtube.com/vi/px_a1TKWwdo/maxresdefault.jpg",
+  },
+  {
+    id: 2,
+    title:
+      "ArealChain Explained: Simplifying Real Estate Investment with Blockchain",
+    youtube: "https://www.youtube.com/watch?v=TAXlgvbMxZ0",
+    thumbnail: "https://img.youtube.com/vi/TAXlgvbMxZ0/maxresdefault.jpg",
+  },
+  {
+    id: 3,
+    title: "How ArealChain Makes Property Ownership Smart and Transparent",
+    youtube: "https://www.youtube.com/watch?v=L8AnOQoOaOg",
+    thumbnail: "https://img.youtube.com/vi/L8AnOQoOaOg/maxresdefault.jpg",
+  },
+  {
+    id: 4,
+    title:
+      "Revolutionizing Land Ownership with ArealChain's Blockchain Technology",
+    youtube: "https://www.youtube.com/watch?v=-88KVaGqQFA",
+    thumbnail: "https://img.youtube.com/vi/-88KVaGqQFA/maxresdefault.jpg",
   },
 ];
 
