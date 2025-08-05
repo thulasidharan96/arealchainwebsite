@@ -74,7 +74,7 @@ const teamMembers: TeamMember[] = [
 
 const advisors: AdvisorMember[] = [
   {
-    name: "Mr. Adrian Oleary",
+    name: "Mr. Adrian O'leary",
     role: "Head of Product Quality @ Light & Wonder",
     image: "/team/adrian.jpeg",
     linkedin: "https://www.linkedin.com/in/adrianoleary/",
