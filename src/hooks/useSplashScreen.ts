@@ -3,20 +3,31 @@ import { useEffect, useState } from "react";
 export function useSplashScreen(onComplete: () => void, maxTime = 8000) {
   const [showSplash, setShowSplash] = useState(true);
   const [isFinishing, setIsFinishing] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const fallback = setTimeout(() => {
-      if (showSplash) onCompleteWrapper();
+      if (showSplash && !isFinishing) {
+        onCompleteWrapper();
+      }
     }, maxTime);
 
     return () => clearTimeout(fallback);
-  }, [showSplash]);
+  }, [showSplash, isFinishing]);
 
   const onCompleteWrapper = () => {
+    if (isFinishing) return; // Prevent multiple calls
+    
     setIsFinishing(true);
-    setTimeout(() => setShowSplash(false), 500);
-    onComplete();
+    setIsTransitioning(true);
+    
+    // Start transition immediately
+    setTimeout(() => {
+      setShowSplash(false);
+      setIsTransitioning(false);
+      onComplete();
+    }, 300); // Reduced from 500ms for faster transition
   };
 
-  return { showSplash, isFinishing, onCompleteWrapper };
+  return { showSplash, isFinishing, isTransitioning, onCompleteWrapper };
 }

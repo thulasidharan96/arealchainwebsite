@@ -39,12 +39,18 @@
 
 html {
   scroll-behavior: smooth;
+  /* Improve scrolling performance */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 body {
   font-family: "Poppins", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Improve touch scrolling performance */
+  touch-action: pan-x pan-y;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* For roadmap horizontal scroll */
@@ -55,6 +61,24 @@ body {
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+}
+
+/* Improve scrolling performance for all scrollable elements */
+* {
+  /* Enable hardware acceleration for better performance */
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Optimize touch interactions */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    /* Improve touch scrolling on mobile devices */
+    -webkit-overflow-scrolling: touch;
   }
 }
 

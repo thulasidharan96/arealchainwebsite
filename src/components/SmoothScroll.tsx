@@ -12,7 +12,9 @@ export default function SmoothScroll({
       options={{
         lerp: 0.1,
         smoothWheel: true,
+        wheelMultiplier: 1,
         touchMultiplier: 2,
+        infinite: false,
       }}
     >
       {children}

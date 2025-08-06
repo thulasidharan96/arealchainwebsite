@@ -47,7 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
     setTimeout(initBotpress, 1000);
   }, []);
 
-  const { showSplash, isFinishing, onCompleteWrapper } = useSplashScreen(() => {
+  const { showSplash, isFinishing, isTransitioning, onCompleteWrapper } = useSplashScreen(() => {
     // Optional callback logic on splash complete
   });
 
@@ -119,6 +119,8 @@ export default function App({ Component, pageProps }: AppProps) {
           property="og:description"
           content="Invest in tokenized real estate and access global properties."
         />
+        {/* Preload video for faster splash screen */}
+        <link rel="preload" as="video" href="/intro.mp4" type="video/mp4" />
       </Head>
 
       {/* Botpress Webchat Scripts */}
@@ -167,8 +169,8 @@ export default function App({ Component, pageProps }: AppProps) {
                   )}
 
                   <div
-                    className={`transition-opacity duration-500 ${
-                      showSplash
+                    className={`transition-opacity duration-300 ${
+                      showSplash || isTransitioning
                         ? "opacity-0 pointer-events-none"
                         : "opacity-100"
                     }`}

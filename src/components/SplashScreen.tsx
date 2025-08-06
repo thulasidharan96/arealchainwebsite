@@ -41,7 +41,8 @@ export default function SplashScreen({
     const handleComplete = () => {
       if (completedRef.current) return;
       completedRef.current = true;
-      setTimeout(() => onComplete?.(), 300);
+      // Immediate transition to prevent black screen
+      setTimeout(() => onComplete?.(), 100);
     };
 
     const handleVideoEnd = () => handleComplete();
@@ -57,7 +58,7 @@ export default function SplashScreen({
         console.log("Video loading timeout, showing fallback");
         setShowFallback(true);
       }
-    }, 3000);
+    }, 2000);
 
     video.addEventListener("ended", handleVideoEnd);
     video.addEventListener("error", handleVideoError);
@@ -69,7 +70,7 @@ export default function SplashScreen({
     };
   }, [isFinishing, onComplete]);
 
-  // Fallback progress bar
+  // Fallback progress bar - faster animation
   useEffect(() => {
     if (showFallback && !isFinishing && !completedRef.current) {
       const interval = setInterval(() => {
@@ -78,13 +79,13 @@ export default function SplashScreen({
             clearInterval(interval);
             if (!completedRef.current) {
               completedRef.current = true;
-              setTimeout(() => onComplete?.(), 200);
+              setTimeout(() => onComplete?.(), 100);
             }
             return 100;
           }
-          return prev + 2;
+          return prev + 3; // Increased from 2 for faster progress
         });
-      }, 50);
+      }, 30); // Reduced from 50ms for smoother animation
 
       return () => clearInterval(interval);
     }
@@ -97,7 +98,7 @@ export default function SplashScreen({
   return (
     <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden">
       {!showFallback ? (
-        // Video splash
+        // Video splash - show video first
         <video
           ref={videoRef}
           className={cn(
@@ -114,7 +115,7 @@ export default function SplashScreen({
           <source src="/intro.mp4" type="video/mp4" />
         </video>
       ) : (
-        // Fallback splash
+        // Fallback splash - only show when video fails
         <div className="flex flex-col items-center justify-center gap-6 px-4 text-center">
           <div
             className={cn(
@@ -149,10 +150,10 @@ export default function SplashScreen({
             Access Real Assets. Anytime. Anywhere
           </h1>
 
-          {/* Simple progress bar */}
-          <div className="w-64 max-w-full bg-gray-800 rounded-full h-1">
+          {/* Progress bar - only shown in fallback */}
+          <div className="w-64 max-w-full bg-gray-800 rounded-full h-1.5">
             <div
-              className="h-full bg-white rounded-full transition-all duration-300 ease-out"
+              className="h-full bg-white rounded-full transition-all duration-200 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
