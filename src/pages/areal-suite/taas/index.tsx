@@ -55,6 +55,24 @@ const ProductPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Tokenization as a Service in Dubai | Areal Chain</title>
+        <meta
+          name="description"
+          content="Areal Chain offers tokenization as a service in Dubai for real-world assets. Launch secure, compliant, and scalable blockchain-based asset platforms."
+        />
+        <meta
+          property="og:title"
+          content="Tokenization as a Service in Dubai | Areal Chain"
+        />
+        <meta
+          property="og:description"
+          content="Areal Chain offers tokenization as a service in Dubai for real-world assets. Launch secure, compliant, and scalable blockchain-based asset platforms."
+        />
+        <meta property="og:image" content="/coin/coin.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="min-h-screen bg-transparent">
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">

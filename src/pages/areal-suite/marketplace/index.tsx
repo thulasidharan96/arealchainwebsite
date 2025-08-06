@@ -56,6 +56,24 @@ const ProductPage = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>RWA Marketplace in Dubai | Areal Blockchain Platform</title>
+        <meta
+          name="description"
+          content="Buy, sell, and invest in tokenized real-world assets with Areal’s RWA Marketplace in Dubai. Join now to access global property on blockchain instantly."
+        />
+        <meta
+          property="og:title"
+          content="RWA Marketplace in Dubai | Areal Blockchain Platform"
+        />
+        <meta
+          property="og:description"
+          content="Buy, sell, and invest in tokenized real-world assets with Areal’s RWA Marketplace in Dubai. Join now to access global property on blockchain instantly."
+        />
+        <meta property="og:image" content="/coin/coin.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="min-h-screen bg-transparent">
         <div className="pt-32 pb-20 px-4">
           <div className="max-w-7xl mx-auto">

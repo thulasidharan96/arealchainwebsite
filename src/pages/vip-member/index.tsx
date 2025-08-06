@@ -75,6 +75,24 @@ export default function VipMember() {
 
   return (
     <Layout>
+      <Head>
+        <title>Real Estate Investment in Dubai | ROI</title>
+        <meta
+          name="description"
+          content="Real estate investment in Dubai offers high ROI and long-term value. Explore premium properties and start your investment journey with expert support."
+        />
+        <meta
+          property="og:title"
+          content="Real Estate Investment in Dubai | ROI"
+        />
+        <meta
+          property="og:description"
+          content="Real estate investment in Dubai offers high ROI and long-term value. Explore premium properties and start your investment journey with expert support."
+        />
+        <meta property="og:image" content="/properties/property.avif" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="relative z-0">
         <SplineVIP />
         <div className="relative z-10">

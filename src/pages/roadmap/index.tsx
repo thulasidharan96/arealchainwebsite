@@ -393,6 +393,24 @@ export default function HorizontalRoadmap() {
 
   return (
     <Layout>
+      <Head>
+        <title>Buy Cryptocurrency in Dubai | Secure & Easy Trading</title>
+        <meta
+          name="description"
+          content="Buy cryptocurrency in Dubai through trusted platforms. Start trading Bitcoin, Ethereum & more securely with fast setup & local support. Get started now!"
+        />
+        <meta
+          property="og:title"
+          content="Buy Cryptocurrency in Dubai | Secure & Easy Trading"
+        />
+        <meta
+          property="og:description"
+          content="Buy cryptocurrency in Dubai through trusted platforms. Start trading Bitcoin, Ethereum & more securely with fast setup & local support. Get started now!"
+        />
+        <meta property="og:image" content="/coin/areal.png" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+
       <div className="bg-transparent">
         {/* <FloatingParticles /> */}
 
