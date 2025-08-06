@@ -42,6 +42,12 @@ const videoTutorials = [
     youtube: "https://www.youtube.com/watch?v=EnDpFrn49F4",
     thumbnail: "https://img.youtube.com/vi/EnDpFrn49F4/maxresdefault.jpg",
   },
+  {
+    id: 7,
+    title: "Tokenizing Property the Smart Way with ArealChain",
+    youtube: "https://www.youtube.com/watch?v=iK8D5ijD4A8",
+    thumbnail: "https://img.youtube.com/vi/iK8D5ijD4A8/maxresdefault.jpg",
+  },
 ];
 
 const ArealGuideHub = () => {
