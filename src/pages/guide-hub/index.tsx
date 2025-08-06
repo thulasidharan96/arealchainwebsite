@@ -30,6 +30,18 @@ const videoTutorials = [
     youtube: "https://www.youtube.com/watch?v=-88KVaGqQFA",
     thumbnail: "https://img.youtube.com/vi/-88KVaGqQFA/maxresdefault.jpg",
   },
+  {
+    id: 5,
+    title: "Unlocking New Real Estate Possibilities: ArealChain in Action",
+    youtube: "https://www.youtube.com/watch?v=PnXG9i9TfPU",
+    thumbnail: "https://img.youtube.com/vi/PnXG9i9TfPU/maxresdefault.jpg",
+  },
+  {
+    id: 6,
+    title: "From Land to Ledger: How ArealChain Digitizes Real World Assets",
+    youtube: "https://www.youtube.com/watch?v=EnDpFrn49F4",
+    thumbnail: "https://img.youtube.com/vi/EnDpFrn49F4/maxresdefault.jpg",
+  },
 ];
 
 const ArealGuideHub = () => {
