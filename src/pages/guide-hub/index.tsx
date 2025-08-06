@@ -1,6 +1,7 @@
 import React from "react";
 import { Play } from "lucide-react"; // Only Play is needed now
 import Layout from "@/src/components/layout";
+import Image from "next/image";
 
 const videoTutorials = [
   {
@@ -86,9 +87,11 @@ const ArealGuideHub = () => {
                 className="group bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-[#F4B448] transition-all duration-300"
               >
                 <div className="relative aspect-video">
-                  <img
+                  <Image
                     src={video.thumbnail}
                     alt={video.title}
+                    width={500}
+                    height={500}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/20 transition-all">
