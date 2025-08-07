@@ -41,80 +41,78 @@ export default function SplashScreen({
     const handleComplete = () => {
       if (completedRef.current) return;
       completedRef.current = true;
-      setTimeout(() => onComplete?.(), 300);
+      onComplete?.(); // No delay
     };
 
     const handleVideoEnd = () => handleComplete();
-
     const handleVideoError = () => {
-      console.log("Video failed, showing fallback");
       setShowFallback(true);
+      handleComplete(); // No delay
     };
-
-    // Fallback timeout for slow loading
-    const fallbackTimer = setTimeout(() => {
-      if (!video.readyState || video.readyState < 2) {
-        console.log("Video loading timeout, showing fallback");
-        setShowFallback(true);
-      }
-    }, 3000);
 
     video.addEventListener("ended", handleVideoEnd);
     video.addEventListener("error", handleVideoError);
 
+    // Try to play video immediately
+    video.currentTime = 0;
+    video.play().catch(() => {
+      setShowFallback(true);
+      handleComplete();
+    });
+
     return () => {
-      clearTimeout(fallbackTimer);
       video.removeEventListener("ended", handleVideoEnd);
       video.removeEventListener("error", handleVideoError);
     };
   }, [isFinishing, onComplete]);
 
-  // Fallback progress bar
+  // Fallback progress bar - instant or very fast
   useEffect(() => {
     if (showFallback && !isFinishing && !completedRef.current) {
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            if (!completedRef.current) {
-              completedRef.current = true;
-              setTimeout(() => onComplete?.(), 200);
-            }
-            return 100;
-          }
-          return prev + 2;
-        });
-      }, 50);
-
-      return () => clearInterval(interval);
+      setProgress(100);
+      if (!completedRef.current) {
+        completedRef.current = true;
+        onComplete?.(); // No delay
+      }
     }
   }, [showFallback, isFinishing, onComplete]);
+
+  useEffect(() => {
+    if (!showFallback && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch((e) => {
+        // If play fails, fallback
+        setShowFallback(true);
+      });
+    }
+  }, [showFallback]);
 
   if (isFinishing) return null;
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden">
+    <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center w-screen h-screen overflow-hidden">
       {!showFallback ? (
-        // Video splash
+        // Video splash - show video first
         <video
           ref={videoRef}
           className={cn(
-            "w-full h-full object-cover",
+            "max-w-full max-h-full object-contain",
             isMobile && "object-contain"
           )}
           autoPlay
           muted
           playsInline
           preload="auto"
+          onLoadedData={() => videoRef.current?.play()}
           onError={() => setShowFallback(true)}
           style={{ maxHeight: "100dvh", maxWidth: "100dvw" }}
         >
           <source src="/intro.mp4" type="video/mp4" />
         </video>
       ) : (
-        // Fallback splash
+        // Fallback splash - only show when video fails
         <div className="flex flex-col items-center justify-center gap-6 px-4 text-center">
           <div
             className={cn(
@@ -149,10 +147,10 @@ export default function SplashScreen({
             Access Real Assets. Anytime. Anywhere
           </h1>
 
-          {/* Simple progress bar */}
-          <div className="w-64 max-w-full bg-gray-800 rounded-full h-1">
+          {/* Progress bar - only shown in fallback */}
+          <div className="w-64 max-w-full bg-gray-800 rounded-full h-1.5">
             <div
-              className="h-full bg-white rounded-full transition-all duration-300 ease-out"
+              className="h-full bg-white rounded-full transition-all duration-200 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>

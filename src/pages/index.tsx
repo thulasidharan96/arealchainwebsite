@@ -114,7 +114,7 @@ export default function Home() {
           gsap.to(elements, {
             opacity: 1,
             y: 0,
-            duration: 0.6,
+            duration: 0.1,
             stagger: 0.1,
             ease: "power2.out",
           });

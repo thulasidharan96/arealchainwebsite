@@ -458,7 +458,7 @@ const HowItWorksPage = () => {
                 opacity: 1,
                 scale: 1,
                 x: 0,
-                duration: 0.6,
+                duration: 0.1,
                 ease: "power2.out",
               });
             },
@@ -485,7 +485,7 @@ const HowItWorksPage = () => {
         gsap.to(matrixRows, {
           opacity: 1,
           x: 0,
-          duration: 0.6,
+          duration: 0.1,
           stagger: 0.1,
           ease: "power2.out",
         });
