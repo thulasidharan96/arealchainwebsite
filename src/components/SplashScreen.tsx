@@ -41,74 +41,71 @@ export default function SplashScreen({
     const handleComplete = () => {
       if (completedRef.current) return;
       completedRef.current = true;
-      // Immediate transition to prevent black screen
-      setTimeout(() => onComplete?.(), 100);
+      onComplete?.(); // No delay
     };
 
     const handleVideoEnd = () => handleComplete();
-
     const handleVideoError = () => {
-      console.log("Video failed, showing fallback");
       setShowFallback(true);
+      handleComplete(); // No delay
     };
-
-    // Fallback timeout for slow loading
-    const fallbackTimer = setTimeout(() => {
-      if (!video.readyState || video.readyState < 2) {
-        console.log("Video loading timeout, showing fallback");
-        setShowFallback(true);
-      }
-    }, 2000);
 
     video.addEventListener("ended", handleVideoEnd);
     video.addEventListener("error", handleVideoError);
 
+    // Try to play video immediately
+    video.currentTime = 0;
+    video.play().catch(() => {
+      setShowFallback(true);
+      handleComplete();
+    });
+
     return () => {
-      clearTimeout(fallbackTimer);
       video.removeEventListener("ended", handleVideoEnd);
       video.removeEventListener("error", handleVideoError);
     };
   }, [isFinishing, onComplete]);
 
-  // Fallback progress bar - faster animation
+  // Fallback progress bar - instant or very fast
   useEffect(() => {
     if (showFallback && !isFinishing && !completedRef.current) {
-      const interval = setInterval(() => {
-        setProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            if (!completedRef.current) {
-              completedRef.current = true;
-              setTimeout(() => onComplete?.(), 100);
-            }
-            return 100;
-          }
-          return prev + 3; // Increased from 2 for faster progress
-        });
-      }, 30); // Reduced from 50ms for smoother animation
-
-      return () => clearInterval(interval);
+      setProgress(100);
+      if (!completedRef.current) {
+        completedRef.current = true;
+        onComplete?.(); // No delay
+      }
     }
   }, [showFallback, isFinishing, onComplete]);
+
+  useEffect(() => {
+    if (!showFallback && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch((e) => {
+        // If play fails, fallback
+        setShowFallback(true);
+      });
+    }
+  }, [showFallback]);
 
   if (isFinishing) return null;
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden">
+    <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center w-screen h-screen overflow-hidden">
       {!showFallback ? (
         // Video splash - show video first
         <video
           ref={videoRef}
           className={cn(
-            "w-full h-full object-cover",
+            "max-w-full max-h-full object-contain",
             isMobile && "object-contain"
           )}
           autoPlay
           muted
           playsInline
           preload="auto"
+          onLoadedData={() => videoRef.current?.play()}
           onError={() => setShowFallback(true)}
           style={{ maxHeight: "100dvh", maxWidth: "100dvw" }}
         >
