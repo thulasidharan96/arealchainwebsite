@@ -91,7 +91,7 @@ const ArealDevelopmentHub: NextPage = () => {
         gsap.from(section.children, {
           opacity: 0,
           y: 100,
-          duration: 0.1,
+          duration: 1,
           stagger: 0.2,
           ease: "power3.out",
           scrollTrigger: {
