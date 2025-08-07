@@ -46,6 +46,7 @@ export default function Footer() {
     { name: "Grants", href: "/grants" },
     { name: "Hackathon", href: "/hackathon" },
     { name: "Guide Hub", href: "/guide-hub" },
+    { name: "Contest", href: "/contest" },
   ];
 
   const legalLinks = [
@@ -57,7 +58,6 @@ export default function Footer() {
     <footer className="relative z-50 bg-[#171717] backdrop-blur-md border-t border-gray-800">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
-          {" "}
           {/* Changed grid-cols-5 to grid-cols-6 */}
           <div className="space-y-4">
             <Link href="/" className="flex items-center space-x-2">

@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/src/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const SplineViewer = dynamic(() => import("./SplineViewer"), {
   ssr: false,
@@ -20,13 +21,14 @@ if (typeof window !== "undefined") {
 }
 
 export default function Hero() {
+  const router = useRouter();
   const heroRef = useRef<HTMLDivElement | null>(null);
   const leftContentRef = useRef<HTMLDivElement | null>(null);
   const rightContentRef = useRef<HTMLDivElement | null>(null);
   const videoSectionRef = useRef<HTMLDivElement | null>(null);
 
-  const handleCreateWealthClick = () => (window.location.href = "/contact");
-  const handleRoadmapClick = () => (window.location.href = "/roadmap");
+  const handleCreateWealthClick = () => router.push("/contact");
+  const handleRoadmapClick = () => router.push("/roadmap");
   const handleYouTubeClick = () =>
     window.open(
       "https://www.youtube.com/@ArealChain",
@@ -97,38 +99,41 @@ export default function Hero() {
 
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between min-h-[80vh] px-4 sm:px-8 md:px-12 max-w-7xl mx-auto gap-10">
-        <div ref={leftContentRef} className="w-full lg:w-1/2 text-left">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3 leading-tight">
-            Transforming the World's <br /> Assets with
-          </h1>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-tight">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-[#F4B448] to-yellow-400 animate-pulse">
-              AREAL
-            </span>
-          </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-8 max-w-xl">
-            AREAL is a Layer-1 Blockchain that makes it easy to buy and sell
-            real-world assets in a click. Built for an open, permissionless
-            financial system.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              size="lg"
-              className="bg-[#F4B448] hover:bg-[#F4B448]/90 hover:scale-105 text-black font-semibold px-8 transition-all duration-300"
-              onClick={handleCreateWealthClick}
-            >
-              Create your Wealth with Areal →
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:scale-105 transition-all duration-300"
-              onClick={handleRoadmapClick}
-            >
-              View our Roadmap
-            </Button>
-          </div>
-        </div>
+      <div
+  ref={leftContentRef}
+  className="w-full lg:w-1/2 text-left"
+>
+  <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-3 leading-tight">
+    Transforming the World's <br /> Assets with
+  </h1>
+  <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-tight">
+    <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-[#F4B448] to-yellow-400 animate-pulse">
+      AREAL
+    </span>
+  </h1>
+  <p className="text-lg sm:text-xl md:text-2xl text-gray-400 mb-8 max-w-xl">
+    AREAL is a Layer-1 Blockchain that makes it easy to buy and sell
+    real-world assets in a click. Built for an open, permissionless
+    financial system.
+  </p>
+  <div className="flex flex-col sm:flex-row gap-4">
+    <Button
+      size="lg"
+      className="bg-[#F4B448] hover:bg-[#F4B448]/90 hover:scale-105 text-black font-semibold px-8 transition-all duration-300"
+      onClick={handleCreateWealthClick}
+    >
+      Create your Wealth with Areal →
+    </Button>
+    <Button
+      size="lg"
+      variant="outline"
+      className="border-gray-600 text-gray-300 hover:bg-gray-800 hover:scale-105 transition-all duration-300"
+      onClick={handleRoadmapClick}
+    >
+      View our Roadmap
+    </Button>
+  </div>
+</div>
 
         <div
           ref={rightContentRef}
