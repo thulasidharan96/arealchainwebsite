@@ -20,12 +20,30 @@ export default async function handler(
 
   try {
     // Get the JWT token from the request
-    const token = await getToken({ req });
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET, // Ensure secret is passed
+    });
+
+    console.log("Token received:", {
+      hasToken: !!token,
+      tokenKeys: token ? Object.keys(token) : [],
+      accessToken: token?.accessToken ? "present" : "missing",
+    });
 
     if (!token) {
       return res.status(401).json({
         success: false,
         message: "Unauthorized - No valid token found",
+      });
+    }
+
+    // Check if accessToken exists in the token
+    if (!token.accessToken) {
+      console.error("No accessToken found in JWT token");
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized - No access token available",
       });
     }
 
@@ -39,18 +57,42 @@ export default async function handler(
       });
     }
 
+    // Construct the full URL
+    const apiUrl = `${baseUrl}${
+      baseUrl.endsWith("/") ? "" : "/"
+    }user/referral/stats`;
+
+    console.log("Making request to:", apiUrl);
+    console.log(
+      "Using access token:",
+      token.accessToken ? "Token present" : "No token"
+    );
+
     // Make request to external API with auth token
-    const apiResponse = await fetch(`${baseUrl}user/referral/stats`, {
+    const apiResponse = await fetch(apiUrl, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token.accessToken}`,
+        // Add additional headers that might be required
+        Accept: "application/json",
+        "User-Agent": "NextJS-App",
       },
     });
 
+    console.log("API Response status:", apiResponse.status);
+    console.log(
+      "API Response headers:",
+      Object.fromEntries(apiResponse.headers.entries())
+    );
+
     let responseData;
     try {
-      responseData = await apiResponse.json();
+      const responseText = await apiResponse.text();
+      console.log("Raw response:", responseText);
+
+      // Try to parse as JSON
+      responseData = responseText ? JSON.parse(responseText) : {};
     } catch (jsonError) {
       console.error("Failed to parse API response as JSON:", jsonError);
       return res.status(500).json({
@@ -59,10 +101,7 @@ export default async function handler(
       });
     }
 
-    console.log("External API response:", {
-      status: apiResponse.status,
-      data: responseData,
-    });
+    console.log("Parsed response data:", responseData);
 
     // Handle different response scenarios
     if (apiResponse.ok) {
@@ -77,11 +116,23 @@ export default async function handler(
         data: responseData,
       });
     } else {
-      // Error case but we got a response
+      // Handle specific unauthorized case
+      if (apiResponse.status === 401) {
+        console.error(
+          "External API returned 401 - token might be expired or invalid"
+        );
+        return res.status(401).json({
+          success: false,
+          message: "Authentication failed - please sign in again",
+          data: responseData,
+        });
+      }
+
+      // Other error cases
       return res.status(apiResponse.status).json({
         success: false,
         message:
-          responseData.message ||
+          responseData?.message ||
           `Request failed with status: ${apiResponse.status}`,
         data: responseData,
       });
