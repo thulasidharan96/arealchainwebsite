@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from "next-auth/jwt";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/src/lib/auth";
+import api, { apiJSON } from "@/src/pages/api/api";
 
 interface ApiResponse {
   success: boolean;
@@ -19,9 +21,10 @@ export default async function handler(
   }
 
   try {
-    // Get the JWT token from the request
-    const token = await getToken({ req });
-    
+    // Get session on the server (more reliable in API routes than getSession from "next-auth/react")
+    const session = await getServerSession(req, res, authOptions);
+    let token: string | undefined = session?.accessToken as string | undefined;
+
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -29,9 +32,8 @@ export default async function handler(
       });
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-    if (!baseUrl) {
+    // Optional: guard against missing base URL (your axios instance already has it)
+    if (!process.env.NEXT_PUBLIC_API_BASE_URL) {
       console.error("API_BASE_URL not configured");
       return res.status(500).json({
         success: false,
@@ -39,68 +41,62 @@ export default async function handler(
       });
     }
 
-    // Make request to external API with auth token
-    const apiResponse = await fetch(`${baseUrl}user/referral/stats`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token.accessToken}`,
-      },
-    });
+    // Call your backend using the shared axios instance.
+    // We pass the Authorization header explicitly to avoid relying on the interceptor
+    // (interceptors that call getSession() can be flaky in API routes).
+    const { data: responseData, status } = await apiJSON.get(
+      "/user/referral/stats",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    let responseData;
-    try {
-      responseData = await apiResponse.json();
-    } catch (jsonError) {
-      console.error("Failed to parse API response as JSON:", jsonError);
-      return res.status(500).json({
-        success: false,
-        message: "Invalid response from server",
-      });
-    }
+    // Success — add no-cache headers
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
 
-    console.log("External API response:", {
-      status: apiResponse.status,
+    return res.status(200).json({
+      success: true,
+      message: "Referral stats fetched successfully",
       data: responseData,
     });
+  } catch (error: any) {
+    // Axios error details (status/data) if available
+    const status = error?.response?.status as number | undefined;
+    const errData = error?.response?.data;
 
-    // Handle different response scenarios
-    if (apiResponse.ok) {
-      // Success case - add cache control headers
-      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-      res.setHeader('Pragma', 'no-cache');
-      res.setHeader('Expires', '0');
-      
-      return res.status(200).json({
-        success: true,
-        message: "Referral stats fetched successfully",
-        data: responseData,
-      });
-    } else {
-      // Error case but we got a response
-      return res.status(apiResponse.status).json({
-        success: false,
-        message:
-          responseData.message ||
-          `Request failed with status: ${apiResponse.status}`,
-        data: responseData,
-      });
-    }
-  } catch (error) {
-    console.error("Referral stats API error:", error);
+    console.error("Referral stats API error:", {
+      status,
+      data: errData,
+      message: error?.message,
+    });
 
-    // Handle network errors or other fetch failures
-    if (error instanceof TypeError && error.message.includes("fetch")) {
-      return res.status(503).json({
+    if (!status) {
+      // Network/type errors
+      if (
+        error instanceof TypeError &&
+        String(error.message).includes("fetch")
+      ) {
+        return res.status(503).json({
+          success: false,
+          message:
+            "Unable to connect to referral service. Please try again later.",
+        });
+      }
+      return res.status(500).json({
         success: false,
-        message:
-          "Unable to connect to referral service. Please try again later.",
+        message: "Internal server error. Please try again later.",
       });
     }
 
-    return res.status(500).json({
+    // Upstream responded with an error
+    return res.status(status).json({
       success: false,
-      message: "Internal server error. Please try again later.",
+      message: errData?.message || `Request failed with status: ${status}`,
+      data: errData,
     });
   }
 }
