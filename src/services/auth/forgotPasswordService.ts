@@ -1,12 +1,5 @@
-interface SignupData {
-  email: string;
-  username: string;
-  password: string;
-  referralId?: string;
-}
-
-interface VerifyOtpData extends SignupData {
-  otp: string;
+interface ForgotPasswordData {
+  userIdentity: string;
 }
 
 interface ApiResponse {
@@ -21,14 +14,12 @@ const handleApiResponse = async (response: Response): Promise<ApiResponse> => {
   try {
     responseData = await response.json();
   } catch (jsonError) {
-    // If JSON parsing fails, create a generic response
     responseData = {
       success: false,
       message: `Request failed with status: ${response.status}`,
     };
   }
 
-  // If response is not ok, return error structure but don't throw
   if (!response.ok) {
     return {
       success: false,
@@ -37,37 +28,36 @@ const handleApiResponse = async (response: Response): Promise<ApiResponse> => {
     };
   }
 
-  // Normalize successful response
   return {
-    success: responseData.success !== false, // Default to true if not explicitly false
+    success: responseData.success !== false,
     message: responseData.message || "Success",
     data: responseData,
   };
 };
 
-export const signupUser = async ({
-  email,
-  username,
-  password,
-  referralId,
-}: SignupData): Promise<ApiResponse> => {
+export const forgotPassword = async (
+  userIdentity: string
+): Promise<ApiResponse> => {
   try {
-    const response = await fetch("/api/auth/signup", {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    
+    if (!baseUrl) {
+      throw new Error("API base URL not configured");
+    }
+
+    const response = await fetch(`${baseUrl}user/precheck/forgotPassword`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
-        username,
-        password,
-        ...(referralId && { referralId }),
+        userIdentity,
       }),
     });
 
     return await handleApiResponse(response);
   } catch (error) {
-    console.error("Signup service error:", error);
+    console.error("Forgot password service error:", error);
     return {
       success: false,
       message:
@@ -76,29 +66,39 @@ export const signupUser = async ({
   }
 };
 
-export const verifyOtp = async ({
-  email,
-  username,
-  password,
-  otp,
-}: VerifyOtpData): Promise<ApiResponse> => {
+interface ResetPasswordData {
+  userIdentity: string;
+  verifyCode: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+export const resetPassword = async (
+  data: ResetPasswordData
+): Promise<ApiResponse> => {
   try {
-    const response = await fetch("/api/auth/signup", {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    
+    if (!baseUrl) {
+      throw new Error("API base URL not configured");
+    }
+
+    const response = await fetch(`${baseUrl}user/precheck/resetPassword`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
-        username,
-        password,
-        otp,
+        userIdentity: data.userIdentity,
+        verifyCode: data.verifyCode,
+        newPassword: data.newPassword,
+        confirmPassword: data.confirmPassword,
       }),
     });
 
     return await handleApiResponse(response);
   } catch (error) {
-    console.error("OTP verification service error:", error);
+    console.error("Reset password service error:", error);
     return {
       success: false,
       message:

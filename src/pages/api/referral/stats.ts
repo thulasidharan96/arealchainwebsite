@@ -1,12 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-
-interface SignupRequestBody {
-  email: string;
-  username: string;
-  password: string;
-  otp?: string;
-  referralId?: string;
-}
+import { getToken } from "next-auth/jwt";
 
 interface ApiResponse {
   success: boolean;
@@ -18,54 +11,41 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ApiResponse>
 ) {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     return res.status(405).json({
       success: false,
       message: "Method not allowed",
     });
   }
 
-  const { email, username, password, otp, referralId } = req.body as SignupRequestBody;
-
-  // Validate required fields
-  if (!email || !username || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Email, username, and password are required",
-    });
-  }
-
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-  if (!baseUrl) {
-    console.error("API_BASE_URL not configured");
-    return res.status(500).json({
-      success: false,
-      message: "Server configuration error",
-    });
-  }
-
   try {
-    // Prepare request body based on whether OTP is provided
-    const requestBody = {
-      userIdentity: email,
-      username,
-      password,
-      ...(otp && { verifyCode: parseInt(otp) }),
-      ...(referralId && { referralId }),
-    };
+    // Get the JWT token from the request
+    const token = await getToken({ req });
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized - No valid token found",
+      });
+    }
 
-    console.log(
-      "Making request to external API:",
-      `${baseUrl}user/precheck/register`
-    );
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    const apiResponse = await fetch(`${baseUrl}user/precheck/register`, {
-      method: "POST",
+    if (!baseUrl) {
+      console.error("API_BASE_URL not configured");
+      return res.status(500).json({
+        success: false,
+        message: "Server configuration error",
+      });
+    }
+
+    // Make request to external API with auth token
+    const apiResponse = await fetch(`${baseUrl}user/referral/stats`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token.accessToken}`,
       },
-      body: JSON.stringify(requestBody),
     });
 
     let responseData;
@@ -86,12 +66,14 @@ export default async function handler(
 
     // Handle different response scenarios
     if (apiResponse.ok) {
-      // Success case
+      // Success case - add cache control headers
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+      
       return res.status(200).json({
         success: true,
-        message:
-          responseData.message ||
-          (otp ? "Account created successfully" : "OTP sent successfully"),
+        message: "Referral stats fetched successfully",
         data: responseData,
       });
     } else {
@@ -105,14 +87,14 @@ export default async function handler(
       });
     }
   } catch (error) {
-    console.error("Signup API error:", error);
+    console.error("Referral stats API error:", error);
 
     // Handle network errors or other fetch failures
     if (error instanceof TypeError && error.message.includes("fetch")) {
       return res.status(503).json({
         success: false,
         message:
-          "Unable to connect to authentication service. Please try again later.",
+          "Unable to connect to referral service. Please try again later.",
       });
     }
 

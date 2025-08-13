@@ -301,6 +301,16 @@ export default function Login() {
                         )}
                       </button>
                     </div>
+                    <div className="mt-2 text-right">
+                      <button
+                        type="button"
+                        onClick={() => router.push("/forgot-password")}
+                        className="text-[#F4B448] hover:text-[#F4B448]/80 text-sm underline transition-colors"
+                        disabled={loading}
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
                   </div>
 
                   {error && (

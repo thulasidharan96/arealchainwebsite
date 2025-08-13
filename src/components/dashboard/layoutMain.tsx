@@ -11,13 +11,14 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex">
-      <BlobAnimation />
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <BlobAnimation />
+      {/* Main content area with proper spacing for fixed sidebar */}
+      <div className="lg:ml-20 xl:ml-[74px] flex flex-col min-h-screen">
         <HeaderMain />
         <main className="flex-1">
-          <div className="mx-auto rounded-l-lg">
+          <div className="mx-auto p-4" style={{ touchAction: "pan-y" }}>
             {children}
             <Toaster richColors position="top-center" />
           </div>

@@ -30,6 +30,7 @@ export async function middleware(request: NextRequest) {
     "/hackathon",
     "/guide-hub",
     "/contest",
+    "/forgot-password",
   ];
 
   const isPublicPath = publicPaths.some(

@@ -13,6 +13,7 @@ interface FormData {
   username: string;
   password: string;
   otp: string;
+  referralId: string;
 }
 
 export default function Signup() {
@@ -21,6 +22,7 @@ export default function Signup() {
     username: "",
     password: "",
     otp: "",
+    referralId: "",
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -91,8 +93,8 @@ export default function Signup() {
     setSuccess("");
 
     try {
-      const { email, username, password } = formData;
-      const data = await signupUser({ email, username, password });
+      const { email, username, password, referralId } = formData;
+      const data = await signupUser({ email, username, password, referralId });
 
       if (data.success || data.message?.toLowerCase().includes("otp")) {
         setSuccess("OTP sent to your email! Please check your inbox.");
@@ -157,8 +159,8 @@ export default function Signup() {
     setSuccess("");
 
     try {
-      const { email, username, password } = formData;
-      const data = await signupUser({ email, username, password });
+      const { email, username, password, referralId } = formData;
+      const data = await signupUser({ email, username, password, referralId });
 
       if (data.success || data.message?.toLowerCase().includes("otp")) {
         setSuccess("New OTP sent to your email!");
@@ -287,6 +289,26 @@ export default function Signup() {
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
+                </div>
+
+                {/* Referral ID Field */}
+                <div>
+                  <Label
+                    htmlFor="referralId"
+                    className="text-white font-medium mb-2 block"
+                  >
+                    Referral Code <span className="text-gray-500 text-sm">(Optional)</span>
+                  </Label>
+                  <Input
+                    id="referralId"
+                    type="text"
+                    value={formData.referralId}
+                    onChange={handleInputChange("referralId")}
+                    className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:border-[#F4B448] focus:ring-[#F4B448] transition-colors"
+                    placeholder="Enter referral code (optional)"
+                    disabled={showOtpInput || loading}
+                    autoComplete="off"
+                  />
                 </div>
 
                 {/* OTP Field */}
