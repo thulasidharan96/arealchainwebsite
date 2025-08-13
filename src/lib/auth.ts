@@ -13,13 +13,6 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    accessToken?: string;
-    kycStatus?: boolean;
-  }
-}
-
 // Secure temporary token for pending OTP verification
 const createPendingToken = (email: string, password: string): string => {
   const secret =
@@ -131,8 +124,6 @@ export const authOptions: NextAuthOptions = {
             }
 
             const data = await res.json();
-            console.log("Login response data:", JSON.stringify(data, null, 2)); // Debug log
-
             if (data.status === true && data.data?.token) {
               // ✅ SECURE: Only create session AFTER complete 2FA verification
               return {
@@ -182,49 +173,19 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
-      console.log(
-        "JWT Callback - trigger:",
-        trigger,
-        "user:",
-        !!user,
-        "token keys:",
-        Object.keys(token)
-      ); // Debug log
-
+    async jwt({ token, user }) {
       // ✅ SECURE: Only add user data to token after complete verification
       if (user && user.accessToken) {
-        console.log("Adding user data to token:", {
-          hasAccessToken: !!user.accessToken,
-          email: user.email,
-        }); // Debug log
-
         // Ensure user has accessToken (complete auth)
         token.accessToken = user.accessToken;
         token.email = user.email;
         token.name = user.name;
         token.kycStatus = user.kycStatus;
       }
-
-      // Handle session updates if needed
-      if (trigger === "update" && session) {
-        // Allow updating specific token properties
-        if (session.accessToken) {
-          token.accessToken = session.accessToken;
-        }
-      }
-
       return token;
     },
 
     async session({ session, token }) {
-      console.log(
-        "Session Callback - token keys:",
-        Object.keys(token),
-        "hasAccessToken:",
-        !!token.accessToken
-      ); // Debug log
-
       // ✅ SECURE: Only create session with valid token data
       if (token && token.accessToken) {
         session.accessToken = token.accessToken as string;
@@ -234,8 +195,6 @@ export const authOptions: NextAuthOptions = {
           email: token.email as string,
           name: token.name as string,
         };
-      } else {
-        console.log("Warning: No accessToken found in token"); // Debug log
       }
       return session;
     },
@@ -261,9 +220,6 @@ export const authOptions: NextAuthOptions = {
     async signOut(message) {
       // Clear any additional tokens/data on signout
       console.log("User signed out:", message);
-    },
-    async session(message) {
-      console.log("Session event:", message); // Debug log
     },
   },
 };
