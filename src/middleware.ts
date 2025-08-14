@@ -31,6 +31,7 @@ export async function middleware(request: NextRequest) {
     "/guide-hub",
     "/contest",
     "/forgot-password",
+    "/leaderboard",
   ];
 
   const isPublicPath = publicPaths.some(
