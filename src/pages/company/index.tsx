@@ -431,7 +431,7 @@ export default function Company(): JSX.Element {
               </div>
 
               {/* Meet the Founder */}
-              <div
+              {/* <div
                 ref={founderRef}
                 className="mb-20 flex flex-col items-center"
               >
@@ -449,7 +449,6 @@ export default function Company(): JSX.Element {
                 </div>
 
                 <div className="flex md:flex-row lg:flex-row items-center justify-center space-x-12 sm:flex-col flex-col">
-                  {/* Founder Image  */}
                   <div className="founder-element bg-transparent rounded-lg border border-[#F4B448] overflow-hidden group hover:scale-105 transition-all duration-300">
                     <Image
                       src="/team/founder.jpg"
@@ -460,7 +459,7 @@ export default function Company(): JSX.Element {
                     />
                   </div>
 
-                  {/* Founder Content */}
+                  
                   <div className="founder-element flex flex-col bg-black/50 p-4 rounded-2xl justify-center space-y-4 max-w-lg mt-4 sm:mt-10 md:mt-0 lg:mt-0 backdrop-blur-3xl">
                     <h3 className="text-white text-2xl font-semibold">
                       Sripriya Kalyanasundaram
@@ -504,7 +503,7 @@ export default function Company(): JSX.Element {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Advisory Board Section */}
               <div className="advisory-section mb-20">
@@ -564,7 +563,7 @@ export default function Company(): JSX.Element {
               </div>
 
               {/* Announcements Dropdown Section */}
-              <div className="mb-20">
+              {/* <div className="mb-20">
                 <div className="max-w-7xl mx-auto">
                   <div className="text-center mb-8">
                     <button
@@ -648,7 +647,7 @@ export default function Company(): JSX.Element {
                     </div>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               {/* Community Updates Section (Previously Twitter Feed) */}
               <div className="mb-20">
