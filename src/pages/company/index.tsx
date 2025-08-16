@@ -506,13 +506,12 @@ export default function Company(): JSX.Element {
               </div> */}
 
               {/* Advisory Board Section */}
-              <div className="advisory-section mb-20">
+              {/* <div className="advisory-section mb-20">
                 <h2 className="section-title text-3xl font-bold text-white mb-4 text-center">
                   Meet Our Advisory Board
                 </h2>
                 <div className="section-title w-24 h-1 bg-[#F4B448] mx-auto mb-10"></div>
 
-                {/* Dynamic grid center based on number of advisors */}
                 <div
                   className={`grid gap-10 max-w-7xl mx-auto ${
                     advisors.length === 1
@@ -560,7 +559,7 @@ export default function Company(): JSX.Element {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               {/* Announcements Dropdown Section */}
               {/* <div className="mb-20">
